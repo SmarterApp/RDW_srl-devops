@@ -8,5 +8,3 @@
     - common
     - logstash
     - elasticsearch
-    - nginx
-    - kibana
