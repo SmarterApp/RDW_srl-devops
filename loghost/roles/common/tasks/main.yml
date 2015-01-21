@@ -1,0 +1,9 @@
+---
+- name: Copy Logstash Repo
+  copy: src=logstash.repo dest=/etc/yum.repos.d/logstash.repo
+
+- name: Copy Elasticsearch Repo
+  copy: src=elasticsearch.repo dest=/etc/yum.repos.d/elasticsearch.repo
+
+- name: Logstash GPG
+  copy: src=GPG-KEY-elasticsearch dest=/etc/pki/rpm-gpg

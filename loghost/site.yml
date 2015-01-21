@@ -1,0 +1,12 @@
+---
+- name: Install logstash, elasticsearch, nginx and set up Kibana
+  hosts: loghosts
+  user: ansible
+  sudo: yes
+
+  roles: 
+    - common
+    - logstash
+    - elasticsearch
+    - nginx
+    - kibana

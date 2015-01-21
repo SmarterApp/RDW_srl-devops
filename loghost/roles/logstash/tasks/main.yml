@@ -1,0 +1,10 @@
+---
+- name: Install Logstash
+  yum: name=logstash state=present
+
+- name: Configure logstash
+  template: src=logstash.conf dest=/etc/logstash/conf.d/
+  notify: restart logstash  
+
+- name: Chkconfig Logstash
+  action: command /sbin/chkconfig --add logstash 
