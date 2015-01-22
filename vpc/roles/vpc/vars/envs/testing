@@ -1,0 +1,26 @@
+vpc_cidr_block: 10.166.48.0/20
+vpc_resource_tags: { "Environment":"Testing", "Name":"Testing VPC" }
+vpc_subnets:
+  - cidr: 10.166.48.0/22
+    az: us-east-1c
+    resource_tags: { "Environment":"Test", "Tier":"Public", "Name":"Test-Public" }
+  - cidr: 10.166.52.0/22
+    az: us-east-1c
+    resource_tags: { "Environment":"Test", "Tier":"Private", "Name":"Test-Private" }
+  - cidr: 10.166.56.0/22
+    az: us-east-1c
+    resource_tags: { "Environment":"Test", "Tier":"LZ", "Name":"Test-LZ" }
+vpc_internet_gateway: True
+vpc_route_tables:
+          - subnets:
+              - 10.166.48.0/22
+              - 10.166.52.0/22
+            routes:
+              - dest: 0.0.0.0/0
+                gw: igw
+          - subnets:
+              - 10.166.56.0/22
+            routes:
+              - dest: 0.0.0.0/0
+                gw: igw
+vpc_region: us-east-1

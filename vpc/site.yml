@@ -1,0 +1,8 @@
+---
+- name: Create AWS VPC and do stuff with it 
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  roles:
+    - vpc 
