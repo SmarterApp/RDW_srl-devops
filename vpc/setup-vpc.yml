@@ -4,21 +4,21 @@
   gather_facts: False
 
   tasks:
-    - name: Create Testing Environment VPC 
+    - name: Create Testing VPC 
       ec2_vpc:
         state: present
         cidr_block: 10.166.48.0/20
-        resource_tags: { "Environment":"Testing" }
+        resource_tags: { "Environment":"Testing", "Name":"Testing VPC" }
         subnets:
           - cidr: 10.166.48.0/22
             az: us-east-1c 
-            resource_tags: { "Environment":"Testing", "Tier" : "Public" }
+            resource_tags: { "Environment":"Test", "Tier":"Public", "Name":"Test-Public" }
           - cidr: 10.166.52.0/22
             az: us-east-1c
-            resource_tags: { "Environment":"Testing", "Tier" : "Private" }
+            resource_tags: { "Environment":"Test", "Tier":"Private", "Name":"Test-Private" }
           - cidr: 10.166.56.0/22
             az: us-east-1c 
-            resource_tags: { "Environment":"Testing", "Tier" : "LZ" }
+            resource_tags: { "Environment":"Test", "Tier":"LZ", "Name":"Test-LZ" }
         internet_gateway: True
         route_tables:
           - subnets:
