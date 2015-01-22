@@ -6,5 +6,5 @@
   template: src=logstash.conf dest=/etc/logstash/conf.d/
   notify: restart logstash  
 
-- name: Start Elasticsearch
-  service: name=elasticsearch state=started enabled=yes
+- name: Start Logstash 
+  service: name=logstash state=started enabled=yes
