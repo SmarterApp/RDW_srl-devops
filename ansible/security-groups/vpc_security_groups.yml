@@ -122,16 +122,12 @@
             to_port: 24007
             cidr_ip: 10.0.0.0/8
           - proto: tcp
-            from_port: 24008
-            to_port: 24008
+            from_port: 49152
+            to_port: 49152
             cidr_ip: 10.0.0.0/8
           - proto: tcp
-            from_port: 24009
-            to_port: 24009
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 24010
-            to_port: 24010
+            from_port: 49153
+            to_port: 49153
             cidr_ip: 10.0.0.0/8
         rules_egress:
           - proto: tcp
@@ -143,16 +139,12 @@
             to_port: 24007
             cidr_ip: 10.0.0.0/8
           - proto: tcp
-            from_port: 24008
-            to_port: 24008
+            from_port: 49152
+            to_port: 49152
             cidr_ip: 10.0.0.0/8
           - proto: tcp
-            from_port: 24009
-            to_port: 24009
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 24010
-            to_port: 24010
+            from_port: 49153
+            to_port: 49153
             cidr_ip: 10.0.0.0/8
         purge_rules: true
         purge_rules_egress: true
