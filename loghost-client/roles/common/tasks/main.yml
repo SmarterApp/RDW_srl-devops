@@ -1,0 +1,10 @@
+---
+- name: Install Rsyslog 
+  yum: name=rsyslog state=present
+
+- name: Configure Rsyslog
+  template: src=rsyslog.conf dest=/etc/rsyslog.conf
+  notify: restart rsyslog 
+
+- name: Start Rsyslog
+  service: name=rsyslog state=started enabled=yes

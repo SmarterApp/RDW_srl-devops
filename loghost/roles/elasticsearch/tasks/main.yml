@@ -5,6 +5,3 @@
 #The default configuration is fine for ES
 - name: Start Elasticsearch
   service: name=elasticsearch state=started enabled=yes
-
-- name: Chkconfig Elasticsearch 
-  action: command /sbin/chkconfig --add elasticsearch 
