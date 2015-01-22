@@ -1,0 +1,14 @@
+---
+- name: Include the variables specific to the vpc
+  include_vars: envs/{{ environ| default("testing") }}
+- name: Create VPC 
+  ec2_vpc:
+    state: present
+    cidr_block: "{{ vpc_cidr_block }}" 
+    resource_tags: "{{ vpc_resource_tags }}" 
+    subnets: "{{ vpc_subnets }}"
+    internet_gateway: "{{ vpc_internet_gateway| default('True') }}" 
+    route_tables: "{{ vpc_route_tables }}"
+    region: "{{ vpc_region }}" 
+    wait: true
+  register: vpc
