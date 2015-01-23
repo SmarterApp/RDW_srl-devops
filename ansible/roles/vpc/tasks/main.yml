@@ -10,5 +10,5 @@
     internet_gateway: "{{ vpc_internet_gateway| default('True') }}" 
     route_tables: "{{ vpc_route_tables }}"
     region: "{{ vpc_region }}" 
-    wait: true
+    wait: yes 
   register: vpc
