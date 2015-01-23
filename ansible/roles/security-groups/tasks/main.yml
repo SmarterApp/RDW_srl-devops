@@ -1,252 +1,252 @@
-    - name: srl-db security group
-      ec2_group:
-        name: srl-db
-        description: DB Servers
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-          - proto: tcp
-            from_port: 5432
-            to_port: 5432
-            cidr_ip: 10.0.0.0/8
-        rules_egress:
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-db-client security group
-      ec2_group:
-        name: srl-db-client
-        description: Allow DB client access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 5432
-            to_port: 5432
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-db-pgbouncer security group
-      ec2_group:
-        name: srl-db-pgbouncer
-        description: Allow pgbouncer client access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 6432
-            to_port: 6432
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 9999
-            to_port: 9999
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-db-pool security group
-      ec2_group:
-        name: srl-db-pool
-        description: Allow DB Pool access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-          - proto: tcp
-            from_port: 9898
-            to_port: 9898
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 9999
-            to_port: 9999
-            cidr_ip: 10.0.0.0/8
-        rules_egress:
-          - proto: tcp
-            from_port: 9898
-            to_port: 9898
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 9999
-            to_port: 9999
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-db-pool-client security group
-      ec2_group:
-        name: srl-db-pool-client
-        description: Allow DB Pool client access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 6432
-            to_port: 6432
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-db-pool-pcp security group
-      ec2_group:
-        name: srl-db-pool-pcp
-        description: Allow DB Pool PCP access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 9898
-            to_port: 9898
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-glusterfs security group
-      ec2_group:
-        name: srl-glusterfs
-        description: Allow GlusterFS access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-          - proto: tcp
-            from_port: 111
-            to_port: 111
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 24007
-            to_port: 24007
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 49152
-            to_port: 49152
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 49153
-            to_port: 49153
-            cidr_ip: 10.0.0.0/8
-        rules_egress:
-          - proto: tcp
-            from_port: 111
-            to_port: 111
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 24007
-            to_port: 24007
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 49152
-            to_port: 49152
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 49153
-            to_port: 49153
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-logging security group
-      ec2_group:
-        name: srl-logging
-        description: Allow Log Server client access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 10514
-            to_port: 10514
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-memcached security group
-      ec2_group:
-        name: srl-memcached
-        description: Allow Memcache access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-          - proto: tcp
-            from_port: 11211
-            to_port: 11211
-            cidr_ip: 10.0.0.0/8
-        rules_egress:
-          - proto: tcp
-            from_port: 11211
-            to_port: 11211
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-rmq security group
-      ec2_group:
-        name: srl-rmq
-        description: Allow RabbitMQ access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-          - proto: tcp
-            from_port: 4369
-            to_port: 4369
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 5671
-            to_port: 5671
-            cidr_ip: 10.0.0.0/8
-        rules_egress:
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-rmq-client security group
-      ec2_group:
-        name: srl-rmq-client
-        description: Allow RabbitMQ client access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 5671
-            to_port: 5671
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-sso-client security group
-      ec2_group:
-        name: srl-sso-client
-        description: Allow SSO client access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 8443
-            to_port: 8443
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-web security group
-      ec2_group:
-        name: srl-web
-        description: Allow web server access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-          - proto: tcp
-            from_port: 80
-            to_port: 80
-            cidr_ip: 10.0.0.0/8
-          - proto: tcp
-            from_port: 443
-            to_port: 443
-            cidr_ip: 10.0.0.0/8
-        rules_egress:
-        purge_rules: true
-        purge_rules_egress: true
-    - name: srl-web-client security group
-      ec2_group:
-        name: srl-web-client
-        description: Allow web server client access
-        vpc_id: "{{ vpc_id }}"
-        region: "{{ ec2_region }}"
-        rules:
-        rules_egress:
-          - proto: tcp
-            from_port: 443
-            to_port: 443
-            cidr_ip: 10.0.0.0/8
-        purge_rules: true
-        purge_rules_egress: true
+- name: srl-db security group
+  ec2_group:
+    name: srl-db
+    description: DB Servers
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 5432
+        to_port: 5432
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-db-client security group
+  ec2_group:
+    name: srl-db-client
+    description: Allow DB client access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 5432
+        to_port: 5432
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-db-pgbouncer security group
+  ec2_group:
+    name: srl-db-pgbouncer
+    description: Allow pgbouncer client access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 6432
+        to_port: 6432
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 9999
+        to_port: 9999
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-db-pool security group
+  ec2_group:
+    name: srl-db-pool
+    description: Allow DB Pool access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 9898
+        to_port: 9898
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 9999
+        to_port: 9999
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: tcp
+        from_port: 9898
+        to_port: 9898
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 9999
+        to_port: 9999
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-db-pool-client security group
+  ec2_group:
+    name: srl-db-pool-client
+    description: Allow DB Pool client access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 6432
+        to_port: 6432
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-db-pool-pcp security group
+  ec2_group:
+    name: srl-db-pool-pcp
+    description: Allow DB Pool PCP access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 9898
+        to_port: 9898
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-glusterfs security group
+  ec2_group:
+    name: srl-glusterfs
+    description: Allow GlusterFS access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49152
+        to_port: 49152
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49153
+        to_port: 49153
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49152
+        to_port: 49152
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49153
+        to_port: 49153
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-logging security group
+  ec2_group:
+    name: srl-logging
+    description: Allow Log Server client access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 10514
+        to_port: 10514
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-memcached security group
+  ec2_group:
+    name: srl-memcached
+    description: Allow Memcache access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 11211
+        to_port: 11211
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: tcp
+        from_port: 11211
+        to_port: 11211
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-rmq security group
+  ec2_group:
+    name: srl-rmq
+    description: Allow RabbitMQ access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 4369
+        to_port: 4369
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 5671
+        to_port: 5671
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-rmq-client security group
+  ec2_group:
+    name: srl-rmq-client
+    description: Allow RabbitMQ client access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 5671
+        to_port: 5671
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-sso-client security group
+  ec2_group:
+    name: srl-sso-client
+    description: Allow SSO client access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 8443
+        to_port: 8443
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-web security group
+  ec2_group:
+    name: srl-web
+    description: Allow web server access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-web-client security group
+  ec2_group:
+    name: srl-web-client
+    description: Allow web server client access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+    rules_egress:
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
