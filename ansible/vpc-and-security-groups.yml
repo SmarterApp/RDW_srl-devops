@@ -1,9 +1,7 @@
 ---
-- hosts: localhost
+- name: Create VPC and Security Groups
+  hosts: localhost
   connection: local
-  vars:
-    ec2_region: us-east-1
-    vpc_id: vpc-2e234b4b
   roles:
-   - vpc
-   - security-groups
+    - vpc
+    - security-groups
