@@ -1,3 +1,29 @@
+- name: srl-default security group
+  ec2_group:
+    name: srl-default
+    description: Default security group for all instances
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 38.117.159.162/32
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 38.117.157.251/32
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: "{{ vpc_cidr_block }}"
+    rules_egress:
+      - proto: all
+        from_port: all
+        to_port: all
+        cidr_ip: 0.0.0.0/0
+    purge_rules: true
+    purge_rules_egress: true
 - name: srl-db security group
   ec2_group:
     name: srl-db
@@ -121,6 +147,30 @@
         from_port: 49153
         to_port: 49153
         cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49154
+        to_port: 49154
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49155
+        to_port: 49155
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49156
+        to_port: 49156
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49157
+        to_port: 49157
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49158
+        to_port: 49158
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49159
+        to_port: 49159
+        cidr_ip: 10.0.0.0/8
     rules_egress:
       - proto: tcp
         from_port: 111
@@ -137,6 +187,198 @@
       - proto: tcp
         from_port: 49153
         to_port: 49153
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49154
+        to_port: 49154
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49155
+        to_port: 49155
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49156
+        to_port: 49156
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49157
+        to_port: 49157
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49158
+        to_port: 49158
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49159
+        to_port: 49159
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-glusterfs-pdf-client security group
+  ec2_group:
+    name: srl-glusterfs-pdf-client
+    description: Allow GlusterFS access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49152
+        to_port: 49152
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49153
+        to_port: 49153
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49152
+        to_port: 49152
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49153
+        to_port: 49153
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-glusterfs-extract-client security group
+  ec2_group:
+    name: srl-glusterfs-extract-client
+    description: Allow GlusterFS access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49154
+        to_port: 49154
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49155
+        to_port: 49155
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49154
+        to_port: 49154
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49155
+        to_port: 49155
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-glusterfs-udl-client security group
+  ec2_group:
+    name: srl-glusterfs-udl-client
+    description: Allow GlusterFS access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49156
+        to_port: 49156
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49157
+        to_port: 49157
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49156
+        to_port: 49156
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49157
+        to_port: 49157
+        cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-glusterfs-hpz-client security group
+  ec2_group:
+    name: srl-glusterfs-hpz-client
+    description: Allow GlusterFS access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49158
+        to_port: 49158
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49159
+        to_port: 49159
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: tcp
+        from_port: 111
+        to_port: 111
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 24007
+        to_port: 24007
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49158
+        to_port: 49158
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 49159
+        to_port: 49159
         cidr_ip: 10.0.0.0/8
     purge_rules: true
     purge_rules_egress: true
@@ -248,5 +490,35 @@
         from_port: 443
         to_port: 443
         cidr_ip: 10.0.0.0/8
+    purge_rules: true
+    purge_rules_egress: true
+- name: omniti-fulton-office security group
+  ec2_group:
+    name: omniti-fulton-office
+    description: OmniTI Fulton secure office connection (two factor openvpn)
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 108.48.124.82/32
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 108.48.124.83/32
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 108.48.124.84/32
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 108.48.124.85/32
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 108.48.124.86/32
+    rules_egress:
     purge_rules: true
     purge_rules_egress: true

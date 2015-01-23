@@ -1,5 +1,5 @@
 ---
-- name: Install logstash, elasticsearch, nginx and set up Kibana
+- name: Install logstash and elasticsearch
   hosts: loghosts
   user: ansible
   sudo: yes
