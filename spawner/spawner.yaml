@@ -5,6 +5,7 @@ region: us-east-1
 
 # Instance types are from https://docs.google.com/a/amplify.com/spreadsheets/d/1KI4Cduq1NdBEtQX2mQMjKqYEDsjixTdUqYt4q8VZwO0/edit#gid=2140568744
 # Application names are from https://docs.google.com/a/amplify.com/spreadsheets/d/1vtYyCL50Ii3wHeNDsWYlu-YVjjBSORzZQZOKvnLAgkM/edit#gid=2108299998
+# Security group names are from https://docs.google.com/a/amplify.com/spreadsheets/d/1vtYyCL50Ii3wHeNDsWYlu-YVjjBSORzZQZOKvnLAgkM/edit#gid=2108299998
 
 apps:
 
