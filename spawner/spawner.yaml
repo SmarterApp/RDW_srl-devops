@@ -2,82 +2,170 @@
 region: us-east-1
 
 # List the application ("host classes") and properties of them
+
+# Instance types are from https://docs.google.com/a/amplify.com/spreadsheets/d/1KI4Cduq1NdBEtQX2mQMjKqYEDsjixTdUqYt4q8VZwO0/edit#gid=2140568744
+# Application names are from https://docs.google.com/a/amplify.com/spreadsheets/d/1vtYyCL50Ii3wHeNDsWYlu-YVjjBSORzZQZOKvnLAgkM/edit#gid=2108299998
+
 apps:
 
   # app-name:
-  #   ami: ami-id  # Required
+  #   ami_app_name: other_thing # Optional.  Use this to override which AMI is used.  Will look for an AMI that has an application:other_thing tag.
   #   security_groups:
   #     - sg-name-01 # Array of SG names
   #     - sg-name-02 # Array of SG names
   #   instance_type: t1.micro # Required
   #   subnet_type: private # One of private, public, or lz.  Defaults to private.
-  base:
-    ami: ami-c63e46ae
-    security_groups:
-      - ssh-from-amplifyhq
+
+  ansible:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
     instance_type: t1.micro
 
-# db-master:
-#   ami: 
-#   security_groups:
-#   instance_type:
+  base:
+    security_groups: []
+    instance_type: t1.micro
 
-# # i-7b8f758a
-# 10.166.39.232
- 
-# [db-slave-extract]
-# # i-64409a95
-# 10.166.39.53
- 
-# [db-slave-fe-web]
-# # i-182aede9
-# 10.166.38.72
- 
-# [db-util]
-# # i-0b29dafa
-# 10.166.36.66
- 
-# [hpz-web]
-# # i-2d5691dc
-# 10.166.32.53
- 
-# [jenkins-master]
-# # i-ed709d1c
-# 10.166.37.54
- 
-# [loghost]
-# # i-f6e64307
-# 10.166.34.153
- 
-# [memcached]
-# # i-957fb964
-# 10.166.35.65
- 
-# [reporting-rabbitmq]
-# # i-5cae5ead
-# 10.166.39.108
- 
-# [reporting-web]
-# # i-5b4a8daa
-# 10.166.34.81
- 
-# [tsb-rabbit]
-# # i-13be7fe2
-# 10.166.35.152
- 
-# [tsb-web]
-# # i-643bc295
-# 10.166.35.174
- 
-# [tsb-worker]
-# # i-2650a8d7
-# 10.166.36.47
- 
-# [udl]
-# # i-9bce346a
-# 10.166.39.231
- 
-# [udl-rabbit]
-# # i-4ee928bf
-# 10.166.33.124
+  db-master:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: r3.2xlarge
+
+  db-pgbouncer:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups:
+      # TODO
+      - srl-db-pgbouncer
+    instance_type: m3.xlarge
+
+  db-pgpool:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups:
+      # TODO
+      - srl-db-pool
+    instance_type: m3.xlarge
+
+  db-slave: # TODO: may be split; there are actually two - one for extraction and one for reporting
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: []  # TODO
+    instance_type: r3.2xlarge
+
+  gluster:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: []  # TODO
+    instance_type: m3.medium # TODO: verify
+
+  hpz-db:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.2xlarge
+
+  hpz-web:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  loghost:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m1.medium # TODO: verify
+
+  lz:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  memcached:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: r3.2xlarge
+
+  migrate-db:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.2xlarge
+
+  migrate-rabbit:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.2xlarge
+
+  nat:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.medium
+
+  reporting-cache-warmer:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.large
+
+  reporting-generator-pdf:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.large
+
+  reporting-rabbit:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  reporting-rabbit-extract:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  reporting-web:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  reporting-worker-extract:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.2xlarge
+
+  reporting-worker-pdf:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: r3.2xlarge
+
+  tsb-rabbit:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  tsb-trigger:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.large
+
+  tsb-web:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  tsb-worker:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  udl:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.2xlarge
+
+  udl-db:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.2xlarge
+
+  udl-rabbit:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.xlarge
+
+  vpn:
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups: [] # TODO
+    instance_type: m3.medium
 
