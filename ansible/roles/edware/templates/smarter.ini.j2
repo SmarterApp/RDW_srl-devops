@@ -3,7 +3,7 @@
 [app:main]
 auth.idp.metadata = /opt/edware/conf/idp_metadata.xml
 auth.oauth2.identity_parser = smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser
-auth.oauth2.idp_server_verify_url = {{ sso_oauth_verify__url }} 
+auth.oauth2.idp_server_verify_url = {{ sso_oauth_verify_url }} 
 auth.policy.cookie_name = edware
 auth.policy.hashalg = sha512
 auth.policy.http_only = True
@@ -11,8 +11,8 @@ auth.policy.secret = {{ auth_policy_secret }}
 auth.policy.secure = {{ auth_policy_secure}}
 auth.policy.timeout = 1200
 auth.saml.identity_parser = smarter_common.security.sbac_identity_parser.SbacIdentityParser
-auth.saml.idp_server_login_url = {{ sso_saml_login}} 
-auth.saml.idp_server_logout_url = {{ sso_saml_logout }}
+auth.saml.idp_server_login_url = {{ sso_saml_login_url }} 
+auth.saml.idp_server_logout_url = {{ sso_saml_logout_url }}
 auth.saml.issuer_name = {{ sso_saml_issuer_name }}
 auth.saml.name_qualifier = {{ sso_saml_name_qualifier }} 
 auth.session.timeout = 1200
@@ -86,8 +86,8 @@ file-grabber.tsb.args.remote_user = celery
 file-grabber.tsb.enable = True
 file-grabber.tsb.schedule.cron.minute = */1
 # TODO:  This should be the ELB for HPZ's address
-hpz.file_registration_url = http://{{ hpz_web_host }}:8443/registration
-hpz.file_upload_base_url = http://{{ hpz_web_host }}:8443/files
+hpz.file_registration_url = {{ hpz_base_url }}/registration
+hpz.file_upload_base_url = {{ hpz_base_url }}/files
 hpz.ignore_certificate = True
 ldap.base.dn = ou=environment,dc=edwdc,dc=net
 migrate.broadcast.queue = edmigrate_players
