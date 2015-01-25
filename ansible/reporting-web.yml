@@ -1,0 +1,7 @@
+---
+- name: Configure the reporting webserver hosts
+  hosts: reporting-web
+  roles:
+    - common
+    - edware
+    - reporting-web

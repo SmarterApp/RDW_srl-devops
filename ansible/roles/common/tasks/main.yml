@@ -1,0 +1,4 @@
+---
+- name: Say Hi
+  debug:
+    msg: "Hello from the Common Role!"
