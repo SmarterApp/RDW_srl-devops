@@ -1,0 +1,22 @@
+---
+- name: Make sure we can get in as ansible
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: Create ansible user
+      user:
+        name: ansible
+        state: present
+  
+    - name: Copy in public ssh key
+      authorized_key:
+        state: present
+        key: "{{ lookup('file', '../credentials/ansible.pem.pub') }}"
+        user: ansible
+
+    - name: Grant sudo to ansible
+      # TODO: surely there is a sudo module in galaxy
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        line: "ansible     ALL=(ALL) NOPASSWD: ALL"
