@@ -32,7 +32,6 @@ bind_host: 10.166.32.10 # TODO: dynamic
 # These hostnames are machines in our VPC that have registered their names in BIND. 
 # "should" be able to rely on local DNS without having to change these values.
 # TODO: may be able to push these up to global_vars if we can parameterize the .dev. part
-cache_host: srl-memcached.dev.ae1.sbac2dc.net
 edware_db_ca_host: srl-db-pgpool.dev.ae1.sbac2dc.net # TODO: multi-tenancy
 edware_repmgr_db_host : srl-db-master.dev.ae1.sbac2dc.net 
 edware_stats_db_host: srl-db-util.dev.ae1.sbac2dc.net
@@ -41,7 +40,18 @@ migrate_dest_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
 migrate_pg_pool_host: srl-db-pgpool.dev.ae1.sbac2dc.net
 migrate_rabbit_host: srl-rabbit.dev.ae1.sbac2dc.net
 migrate_source_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
-reporting_rabbit_host: srl-rabbit.dev.ae1.sbac2dc.net
+reporting_rabbit_services_host: srl-rabbit.dev.ae1.sbac2dc.net
 reporting_rabbit_extract_host: srl-rabbit.dev.ae1.sbac2dc.net
 
-
+#-------------------------------------------------------------#
+#                   Application Specific Config
+#-------------------------------------------------------------#
+sso_oauth_verify_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/
+auth_policy_secure: False
+sso_saml_login_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp
+sso_saml_logout_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp
+sso_saml_issuer_name: http://srl-reporting-web
+sso_saml_name_qualifier: http://sso.sbac2.net:8080/OpenAM-11.0.0
+cache_hosts: srl-memcached.dev.ae1.sbac2dc.net:11211
+hpz_base_url: http://srl-hpz-web.dev.ae1.sbac2dc.net:8443
+reporting_base_url_host: http://srl-web-reporting.dev.ae1.sbac2dc.net

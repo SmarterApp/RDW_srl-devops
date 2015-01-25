@@ -3,19 +3,18 @@
 [app:main]
 auth.idp.metadata = /opt/edware/conf/idp_metadata.xml
 auth.oauth2.identity_parser = smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser
-auth.oauth2.idp_server_verify_url = http://{{ sso_host }}:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/
+auth.oauth2.idp_server_verify_url = {{ sso_oauth_verify_url }} 
 auth.policy.cookie_name = edware
 auth.policy.hashalg = sha512
 auth.policy.http_only = True
 auth.policy.secret = {{ auth_policy_secret }}
-auth.policy.secure = False
+auth.policy.secure = {{ auth_policy_secure}}
 auth.policy.timeout = 1200
 auth.saml.identity_parser = smarter_common.security.sbac_identity_parser.SbacIdentityParser
-auth.saml.idp_server_login_url = http://{{ sso_host }}:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp
-auth.saml.idp_server_logout_url = http://{{ sso_host }}:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp
-# TODO: does the following need to be parameterized?
-auth.saml.issuer_name = http://srl-reporting-web
-auth.saml.name_qualifier = http://{{ sso_host }}:8080/OpenAM-11.0.0
+auth.saml.idp_server_login_url = {{ sso_saml_login_url }} 
+auth.saml.idp_server_logout_url = {{ sso_saml_logout_url }}
+auth.saml.issuer_name = {{ sso_saml_issuer_name }}
+auth.saml.name_qualifier = {{ sso_saml_name_qualifier }} 
 auth.session.timeout = 1200
 auth.skip.verify = False
 auth.state.secret = {{ auth_state_secret }}
@@ -23,14 +22,15 @@ batch.user.session.timeout = 300000
 cache.expire = 3600
 cache.lock_dir = /tmp/memcache
 cache.public.data.expire = 31556940
-cache.public.data.url = {{ cache_host }}:11211
+# NOTE: Cache Hosts are one or more memcache separated by semi-colons
+cache.public.data.url = {{ cache_hosts }}
 cache.public.filtered_data.expire = 15552000
-cache.public.filtered_data.url = {{ cache_host }}:11211
+cache.public.filtered_data.url = {{ cache_hosts }}
 cache.public.shortlived.expire = 7776000
-cache.public.shortlived.url = {{ cache_host }}:11211
+cache.public.shortlived.url = {{ cache_hosts }}
 cache.regions = public.data, public.filtered_data, public.shortlived, session
 cache.session.expire = 1200
-cache.session.url = {{ cache_host }}:11211
+cache.session.url = {{ cache_hosts }}
 cache.type = ext:memcached
 disable.context.security = False
 disable_stack_trace = False
@@ -59,8 +59,6 @@ extract.celery_timeout = 30
 extract.cleanup.schedule.cron.day = last
 extract.gpg.homedir = /opt/edware/conf/gpg
 extract.gpg.keyserver = hkp://{{ extract_keyserver_host }}
-extract.gpg.public_key.cat = sbac_data_provider@sbac.com
-extract.gpg.public_key.fish = sbac_data_provider@sbac.com
 extract.item_level_base_dir = /opt/edware/item_level
 extract.job.queue.archive = extract_archive
 extract.job.queue.async = extract
@@ -87,8 +85,9 @@ file-grabber.tsb.args.remote_host = {{ file_grabber_tsb_remote_host }}
 file-grabber.tsb.args.remote_user = celery
 file-grabber.tsb.enable = True
 file-grabber.tsb.schedule.cron.minute = */1
-hpz.file_registration_url = http://{{ hpz_web_host }}:8443/registration
-hpz.file_upload_base_url = http://{{ hpz_web_host }}:8443/files
+# TODO:  This should be the ELB for HPZ's address
+hpz.file_registration_url = {{ hpz_base_url }}/registration
+hpz.file_upload_base_url = {{ hpz_base_url }}/files
 hpz.ignore_certificate = True
 ldap.base.dn = ou=environment,dc=edwdc,dc=net
 migrate.broadcast.queue = edmigrate_players
@@ -127,7 +126,8 @@ migrate_dest.db.ca.url = postgresql+psycopg2://{{ migrate_dest_db_ca_username }}
 migrate_source.db.ca.url = postgresql+psycopg2://{{ migrate_source_db_ca_username }}:{{ migrate_source_db_ca_password }}@{{ migrate_source_db_ca_host }}:5432/edware
 mode = prod
 pdf.always_generate = False
-pdf.base.url = https://{{ pdf_base_url_host }}/assets/html/
+# Note: This is the reporting app ELB URL, I wanted to put entire URL to deal with http/https differences
+pdf.base.url = {{ reporting_base_url_host }}/assets/html/
 pdf.batch.job.queue = batch_pdf_gen
 pdf.celery_timeout = 30
 pdf.generate_timeout = 30
@@ -153,7 +153,8 @@ pyramid.includes = pyramid_tm pyramid_exclog pyramid_beaker
 pyramid.reload_templates = True
 run.npm.update = True
 # TODO: cwolfe made an educated guess that this is for the reporting PDF workers (ie, not extract)
-services.celery.BROKER_URL = amqp://{{ reporting_rabbit_username }}:{{ reporting_rabbit_password }}@{{ reporting_rabbit_host }}:5671/services
+# dip: this is correct
+services.celery.BROKER_URL = amqp://{{ reporting_rabbit_services_username }}:{{ reporting_rabbit_services_password }}@{{ reporting_rabbit_services_host }}:5671/services
 services.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': '/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
 services.celery.CELERYD_CONCURRENCY = 20
 services.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
@@ -264,7 +265,7 @@ level = INFO
 args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL1)
 class = logging.handlers.SysLogHandler
 formatter = generic
-level = DEBUG
+level = WARN
 [handlers]
 keys = audit, syslog, security_event
 [logger_audit]
@@ -302,7 +303,7 @@ propagate = 0
 qualname = security_event
 [logger_smarter]
 handlers = syslog
-level = DEBUG
+level = WARN
 qualname = smarter
 [logger_smarter_score_batcher]
 handlers = syslog
