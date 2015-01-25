@@ -5,6 +5,4 @@
     backup: yes
     src: smarter.ini.j2
   sudo: true
-  notify: 
-    - restart httpd
-# TODO: trigger restart of...something
+  register: smarter_ini

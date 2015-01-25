@@ -1,6 +1,11 @@
 ---
 
-# Nothing to do yet.
-
 # TODO: for from-base role, templatize /etc/httpd/conf.d/wsgi_edware.conf
 
+# Note: this allows a "conditional handler" - the edware role
+# can't notify this, becuase it may or may not be in the playbook.
+- name: restart httpd when smarter.ini changes
+  service:
+    name: httpd
+    state: restarted
+  when: smarter_ini|changed
