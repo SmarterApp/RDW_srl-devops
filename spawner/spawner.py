@@ -8,7 +8,7 @@ import yaml
 import os
 from subprocess import Popen, PIPE
 import time
-from distutils.version import StrictVersion
+from distutils.version import LooseVersion
 
 #import pdb; pdb.set_trace()
 
@@ -164,7 +164,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
         hints['app_version'] = opts.app_version
         ami = amis[0]
     else:
-        amis.sort(key=lambda a: StrictVersion(a.tags.get('version')))
+        amis.sort(key=lambda a: LooseVersion(a.tags.get('version')))
         ami = amis[-1]
         hints['app_version'] = ami.tags['version']
     
