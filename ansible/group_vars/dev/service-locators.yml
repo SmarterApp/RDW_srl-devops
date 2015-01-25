@@ -55,3 +55,4 @@ sso_saml_name_qualifier: http://sso.sbac2.net:8080/OpenAM-11.0.0
 cache_hosts: srl-memcached.dev.ae1.sbac2dc.net:11211
 hpz_base_url: http://srl-hpz-web.dev.ae1.sbac2dc.net:8443
 reporting_base_url_host: http://srl-web-reporting.dev.ae1.sbac2dc.net
+disable_stack_trace: False

@@ -1,0 +1,168 @@
+[app:main]
+auth.idp.metadata = /opt/edware/conf/idp_metadata.xml
+auth.oauth2.identity_parser = smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser
+auth.oauth2.idp_server_verify_url = {{ sso_oauth_verify_url }} 
+auth.policy.cookie_name = edware
+auth.policy.hashalg = sha512
+auth.policy.http_only = True
+auth.policy.secret = {{ auth_policy_secret }}
+auth.policy.secure = {{ auth_policy_secure }}
+auth.policy.timeout = 1200
+auth.saml.identity_parser = smarter_common.security.sbac_identity_parser.SbacIdentityParser
+auth.saml.idp_server_login_url = {{ sso_saml_login_url }}
+auth.saml.idp_server_logout_url = {{ sso_saml_logout_url }} 
+auth.saml.issuer_name = {{ sso_saml_issuer_name }}
+auth.saml.name_qualifier = {{ sso_saml_name_qualifier }}
+auth.session.timeout = 1200
+auth.skip.verify = False
+auth.state.secret = {{ auth_state_secret }}
+batch.user.session.timeout = 300000
+cache.expire = 3600
+cache.lock_dir = /tmp/memcache
+cache.public.data.expire = 31556940
+cache.public.data.url = {{ cache_hosts }}
+cache.public.filtered_data.expire = 15552000
+cache.public.filtered_data.url = {{ cache_hosts }}
+cache.public.shortlived.expire = 7776000
+cache.public.shortlived.url = {{ cache_hosts }}
+cache.regions = public.data, public.filtered_data, public.shortlived, session
+cache.session.expire = 1200
+cache.session.url = {{ cache_hosts }}
+cache.type = ext:memcached
+disable.context.security = False
+disable_stack_trace = {{ disable_stack_trace }}
+environment.PATH = /usr/local/bin:/opt/wkhtmltopdf/bin:/opt/pdfunite/bin/
+mode = prod
+pyramid.debug_all = False
+pyramid.debug_authorization = False
+pyramid.debug_notfound = False
+pyramid.debug_routematch = False
+pyramid.default_locale_name = en
+pyramid.includes = pyramid_tm pyramid_exclog pyramid_beaker
+pyramid.reload_templates = True
+smarter_score_batcher.async_queue = smarter_score_batcher_async
+smarter_score_batcher.base_dir.csv = /opt/edware/item_level
+smarter_score_batcher.base_dir.staging = /opt/edware/tsb/staging
+smarter_score_batcher.base_dir.working = /opt/edware/tsb/assessments
+smarter_score_batcher.base_dir.xml = /opt/edware/raw_data
+smarter_score_batcher.cache.expire = 1200
+smarter_score_batcher.cache.lock_dir = /tmp/memcache
+smarter_score_batcher.cache.regions = session
+smarter_score_batcher.cache.type = ext:memcached
+smarter_score_batcher.cache.session.url = {{ cache_hosts }}
+smarter_score_batcher.celery.BROKER_URL = amqp://{{ tsb_rabbit_username }}:{{ tsb_rabbit_password }}@{{ tsb_rabbit_host}}:5671/smarter_score_batcher
+smarter_score_batcher.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': '/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
+smarter_score_batcher.celery.CELERYD_CONCURRENCY = 20
+smarter_score_batcher.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
+smarter_score_batcher.celery.CELERY_DEFAULT_QUEUE = smarter_score_batcher_async
+smarter_score_batcher.celery.CELERY_DEFAULT_ROUTING_KEY = smarter_score_batcher_async
+smarter_score_batcher.celery.CELERY_IMPORTS = ('smarter_score_batcher.tasks.remote_file_writer', 'smarter_score_batcher.tasks.remote_csv_writer', 'smarter_score_batcher.tasks.remote_metadata_writer')
+smarter_score_batcher.celery.CELERY_RESULT_BACKEND = amqp
+smarter_score_batcher.celery.CELERY_TASK_RESULT_EXPIRES = 18000
+smarter_score_batcher.celery_timeout = 30
+smarter_score_batcher.db.schema_name = edware_tsb
+smarter_score_batcher.db.url = postgresql+psycopg2://{{ tsb_db_username }}:{{ tsb_db_password }}@{{ tsb_db_host }}:5432/edware
+smarter_score_batcher.gpg.homedir = /opt/edware/keys
+smarter_score_batcher.gpg.public_key.ca = {{ tsb_gpg_public_key }}
+smarter_score_batcher.metadata.default = /opt/edware/resources/meta/default
+smarter_score_batcher.metadata.performance = /opt/edware/resources/meta/performance
+smarter_score_batcher.metadata.static = /opt/edware/resources/meta/static
+smarter_score_batcher.metadata_queue = smarter_score_batcher_metadata
+smarter_score_batcher.sync_queue = smarter_score_batcher_sync
+smarter_score_batcher.xsd.path = /opt/edware/resources/sample_xsd.xsd
+trigger.assessment.enable = False
+trigger.assessment.schedule.cron.day = */1
+use = egg:smarter_score_batcher
+[formatter_generic]
+format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
+[formatter_json]
+class = edapi.logging.JsonDictLoggingFormatter
+format = %(asctime)s %(message)s
+[formatter_mna]
+class = smarter_common.logging.mna.MnALoggingFormatter
+format = [%(name)s][%(threadName)s] %(message)s
+[formatters]
+keys = generic, json, mna
+[handler_audit]
+args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL0)
+class = logging.handlers.SysLogHandler
+formatter = json
+level = WARN
+[handler_console]
+args = (sys.stderr,)
+class = StreamHandler
+formatter = generic
+level = NOTSET
+[handler_filelog]
+args = ('/tmp/smarter.log','midnight')
+class = logging.handlers.TimedRotatingFileHandler
+formatter = generic
+level = INFO
+[handler_mna_rest]
+args = ('mna-dev.opentestsystem.org:8443', '/mna-rest/log', 'POST', 'True')
+class = smarter_common.logging.mna.MNAHTTPHandler
+formatter = mna
+level = DEBUG
+[handler_security_event]
+args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL2)
+class = logging.handlers.SysLogHandler
+formatter = json
+level = INFO
+[handler_syslog]
+args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL1)
+class = logging.handlers.SysLogHandler
+formatter = generic
+level = INFO
+[handlers]
+keys = audit, syslog, security_event
+[logger_audit]
+handlers = audit
+level = INFO
+propagate = 0
+qualname = audit
+[logger_edauth]
+handlers = syslog
+level = WARN
+qualname = edauth
+[logger_edmigrate]
+handlers = syslog
+level = WARN
+qualname = edmigrate
+[logger_edsftp]
+handlers = syslog
+level = WARN
+qualname = edsftp
+[logger_edudl2]
+handlers = syslog
+level = WARN
+qualname = edudl2
+[logger_exc_logger]
+handlers = syslog
+level = INFO
+qualname = exc_logger
+[logger_root]
+handlers = syslog
+level = INFO
+[logger_security_event]
+handlers = security_event
+level = INFO
+propagate = 0
+qualname = security_event
+[logger_smarter]
+handlers = syslog
+level = INFO
+qualname = smarter
+[logger_smarter_score_batcher]
+handlers = syslog
+level = WARN
+qualname = smarter_score_batcher
+[logger_sqlalchemy]
+handlers = syslog
+level = WARN
+qualname = sqlalchemy
+[loggers]
+keys = root, smarter, sqlalchemy, exc_logger, audit, edauth, security_event, edmigrate, edsftp, edudl2, smarter_score_batcher
+[server:main]
+host = 0.0.0.0
+port = 6543
+use = egg:waitress#main
