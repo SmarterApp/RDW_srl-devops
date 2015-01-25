@@ -91,10 +91,10 @@ apps:
     security_groups: [] # TODO
     instance_type: m3.2xlarge
 
-  nat:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
-    instance_type: m3.medium
+  #nat:
+  #  ami_app_name: base # TODO: remove this when the real AMI is available
+  #  security_groups: [] # TODO
+  #  instance_type: m3.medium
 
   reporting-cache-warmer:
     ami_app_name: base # TODO: remove this when the real AMI is available
@@ -117,19 +117,34 @@ apps:
     instance_type: m3.xlarge
 
   reporting-web:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      # TODO: cwolfe guessed at this list
+      - srl-default
+      - srl-rmq-client
+      - srl-logging
+      - srl-memcached
+      - srl-web
     instance_type: m3.xlarge
 
   reporting-worker-extract:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      # TODO: cwolfe guessed at this list
+      - srl-default
+      - srl-rmq-client
+      - srl-logging
+      - srl-glusterfs-extract-client
     instance_type: m3.2xlarge
 
   reporting-worker-pdf:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
-    instance_type: r3.2xlarge
+    security_groups:
+      # TODO: cwolfe guessed at this list
+      - srl-default
+      - srl-rmq-client
+      - srl-logging
+      - srl-glusterfs-pdf-client
+    #instance_type: r3.2xlarge # TODO: existing image is PV, r3 requires HVM
+    instance_type: m2.4xlarge
+    subnet_type: public # TODO: fix the networking
 
   tsb-rabbit:
     ami_app_name: base # TODO: remove this when the real AMI is available
@@ -166,8 +181,8 @@ apps:
     security_groups: [] # TODO
     instance_type: m3.xlarge
 
-  vpn:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
-    instance_type: m3.medium
+  #vpn:
+  #  ami_app_name: base # TODO: remove this when the real AMI is available
+  #  security_groups: [] # TODO
+  #  instance_type: m3.medium
 
