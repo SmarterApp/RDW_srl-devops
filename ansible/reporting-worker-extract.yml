@@ -1,0 +1,7 @@
+---
+- name: Configure the reporting CSV/Extract worker machines
+  hosts: reporting-worker-extract
+  roles:
+    - common
+    - edware
+    - reporting-worker-extract

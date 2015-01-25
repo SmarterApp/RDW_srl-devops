@@ -1,0 +1,9 @@
+---
+
+# Note: this allows a "conditional handler" - the edware role
+# can't notify this, becuase it may or may not be in the playbook.
+- name: restart celeryd-edextract when smarter.ini changes
+  service:
+    name: celeryd-edextract
+    state: restarted
+  when: smarter_ini|changed
