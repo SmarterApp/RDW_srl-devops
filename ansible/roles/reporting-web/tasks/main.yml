@@ -1,6 +1,6 @@
 ---
 
+# Nothing to do yet.
 
-- name: Say Hello
-  debug: 
-    msg: Hello from reporting-web/tasks/main.yml - env is {{ env }}
+# TODO: for from-base role, templatize /etc/httpd/conf.d/wsgi_edware.conf
+
