@@ -1,0 +1,7 @@
+---
+- name: Configure the reporting PDF-making workers
+  hosts: reporting-worker-pdf
+  roles:
+    - common
+    - edware
+    - reporting-worker-pdf
