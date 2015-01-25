@@ -38,6 +38,7 @@ edware_repmgr_db_host : srl-db-master.dev.ae1.sbac2dc.net
 edware_stats_db_host: srl-db-util.dev.ae1.sbac2dc.net
 hpz_web_host: srl-hpz-web.dev.ae1.sbac2dc.net
 migrate_dest_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
+migrate_pg_pool_host: srl-db-pgpool.dev.ae1.sbac2dc.net
 migrate_rabbit_host: srl-rabbit.dev.ae1.sbac2dc.net
 migrate_source_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
 reporting_rabbit_host: srl-rabbit.dev.ae1.sbac2dc.net

@@ -1,5 +1,5 @@
 
-# Note: this file is managed by ansible.  You should make changes in the ansible playbooks; manual changes here will be lost.
+# Note: this file is managed by ansible. You should make changes in the ansible playbooks and variable files; manual changes here will be lost.
 [app:main]
 auth.idp.metadata = /opt/edware/conf/idp_metadata.xml
 auth.oauth2.identity_parser = smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser
@@ -7,7 +7,7 @@ auth.oauth2.idp_server_verify_url = http://{{ sso_host }}:8080/OpenAM-11.0.0/oau
 auth.policy.cookie_name = edware
 auth.policy.hashalg = sha512
 auth.policy.http_only = True
-auth.policy.secret = {{ auth.policy.secret }}
+auth.policy.secret = {{ auth_policy_secret }}
 auth.policy.secure = False
 auth.policy.timeout = 1200
 auth.saml.identity_parser = smarter_common.security.sbac_identity_parser.SbacIdentityParser
@@ -18,7 +18,7 @@ auth.saml.issuer_name = http://srl-reporting-web
 auth.saml.name_qualifier = http://{{ sso_host }}:8080/OpenAM-11.0.0
 auth.session.timeout = 1200
 auth.skip.verify = False
-auth.state.secret = {{ auth_state_secret }} 
+auth.state.secret = {{ auth_state_secret }}
 batch.user.session.timeout = 300000
 cache.expire = 3600
 cache.lock_dir = /tmp/memcache
@@ -37,7 +37,7 @@ disable_stack_trace = False
 # TODO: next three should be a loop over a hash structure for each tenant
 edware.db.ca.schema_name = ca
 edware.db.ca.state_code = CA
-edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ pg_pool_host }}:9999/edware
+edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:9999/edware
 edware.db.echo = False
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
 edware_rep.db.url = postgresql+psycopg2://{{ edware_repmgr_db_username }}:{{ edware_repmgr_db_password }}@{{ edware_repmgr_db_host }}:5432/edware
@@ -111,7 +111,7 @@ migrate.iptables.mock = False
 migrate.iptables.sudo = /usr/bin/sudo
 migrate.notification.mail_sender = no-reply@amplify.com
 migrate.notification.mail_server = localhost
-migrate.pgpool.hostname = {{ pg_pool_host }}
+migrate.pgpool.hostname = {{ migrate_pg_pool_host }}
 migrate.replication_monitor.admin.apply_lag_tolerance = 100
 migrate.replication_monitor.admin.check_interval = 1800
 migrate.replication_monitor.admin.replication_lag_tolerance = 100
@@ -196,7 +196,7 @@ smarter_score_batcher.cache.expire = 7200
 smarter_score_batcher.cache.lock_dir = /tmp/memcache
 smarter_score_batcher.cache.regions = public.shortlived
 smarter_score_batcher.cache.type = memory
-smarter_score_batcher.celery.BROKER_URL = amqp://{{ tsb_rabbit_username }}:{{ tsb_rabbit_password }}@{{ tsb_rabbit_host }}:5671/smarter_score_batcher
+smarter_score_batcher.celery.BROKER_URL = amqp://{{ tsb_rabbit_username }}:{{ tsb_rabbit_password }}@{{ tsb_rabbit_host }}/smarter_score_batcher
 smarter_score_batcher.celery.CELERYD_CONCURRENCY = 20
 smarter_score_batcher.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
 smarter_score_batcher.celery.CELERY_DEFAULT_QUEUE = smarter_score_batcher_async
