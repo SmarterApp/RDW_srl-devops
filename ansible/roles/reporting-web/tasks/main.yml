@@ -8,4 +8,5 @@
   service:
     name: httpd
     state: restarted
+  sudo: yes
   when: smarter_ini|changed
