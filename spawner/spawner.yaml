@@ -19,7 +19,8 @@ apps:
 
   ansible:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
     instance_type: t1.micro
 
   base:

@@ -132,7 +132,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     if not opts.app in cfg['apps']:
         logging.error("I don't know anything about an application named {0}".format(opts.app))
         exit(2)
-    app = cfg['apps'][opts.app]
+    app_cfg = cfg['apps'][opts.app]
     
     #------
     # Verify that no existing instances have names that will collide over the spawn range
@@ -150,16 +150,16 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     #------
     # Verify that AMI ID for that app type exists, and get tags
     #------
-    # TODO: rewrite to look for latest version
     amis = ec2_conn.get_all_images(owners=['self'])
-    amis = [a for a in amis if a.tags.get('application') == opts.app]
+    app_name = app_cfg.get('ami_app_name') if app_cfg.get('ami_app_name') else opts.app
+    amis = [a for a in amis if a.tags.get('application') == app_name]
     if len(amis) < 1:
-        logging.error("No AMIs have the tag application:{0} - you shall not pass.".format(opts.app))
+        logging.error("No AMIs have the tag application:{0} - you shall not pass.".format(app_name))
         exit(4)
     if opts.app_version:
         amis = [a for a in amis if a.tags.get('version') == opts.app_version]
         if len(amis) < 1:
-            logging.error("No AMIs have the tags application:{0}, version:{1} - you shall not pass.".format(opts.app, opts.app_version))
+            logging.error("No AMIs have the tags application:{0}, version:{1} - you shall not pass.".format(app_name, opts.app_version))
             exit(4)
         hints['app_version'] = opts.app_version
         ami = amis[0]
@@ -170,7 +170,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     
     hints['ami_id'] = ami.id
 
-    logging.info("Using version {0} of app {1} from AMI {2}".format(hints['app_version'], opts.app, hints['ami_id']))
+    logging.info("Using version {0} of app {1} from AMI {2}".format(hints['app_version'], app_name, hints['ami_id']))
     
     # Copy out tags for the AMI
     hints['tags'] = {}
@@ -195,7 +195,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     sgs = ec2_conn.get_all_security_groups()
     sgs = [sg for sg in sgs if sg.vpc_id == hints['vpc_id']]
     hints['security_group_ids'] = []
-    for sgn in app['security_groups']:
+    for sgn in app_cfg['security_groups']:
         matched_sg = [sg for sg in sgs if sg.name == sgn]
         if len(matched_sg) == 1:
             hints['security_group_ids'].append(matched_sg[0].id)
@@ -207,7 +207,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     #------
     # Locate subnet within VPC using 'Tier' tag
     #------
-    subnet_type = 'private' if not app.get('subnet_type') else app['subnet_type']
+    subnet_type = 'private' if not app_cfg.get('subnet_type') else app_cfg['subnet_type']
     subnets = vpc_conn.get_all_subnets()
     subnets = [s for s in subnets if s.vpc_id == hints['vpc_id']]
     subnets = [s for s in subnets if str(s.tags.get('Tier')).lower() == subnet_type.lower() ]
@@ -218,7 +218,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     hints['subnet_id'] = subnets[0].id
                 
     # TODO: Verify instance type ?
-    hints['instance_type'] = app['instance_type']
+    hints['instance_type'] = app_cfg['instance_type']
     
     logging.info("Preflight looks good, you are cleared for launch attempt.")
     
