@@ -1,0 +1,320 @@
+
+# Note: this file is managed by ansible.  You should make changes in the ansible playbooks; manual changes here will be lost.
+[app:main]
+auth.idp.metadata = /opt/edware/conf/idp_metadata.xml
+auth.oauth2.identity_parser = smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser
+auth.oauth2.idp_server_verify_url = http://{{ sso_host }}:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/
+auth.policy.cookie_name = edware
+auth.policy.hashalg = sha512
+auth.policy.http_only = True
+auth.policy.secret = {{ auth.policy.secret }}
+auth.policy.secure = False
+auth.policy.timeout = 1200
+auth.saml.identity_parser = smarter_common.security.sbac_identity_parser.SbacIdentityParser
+auth.saml.idp_server_login_url = http://{{ sso_host }}:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp
+auth.saml.idp_server_logout_url = http://{{ sso_host }}:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp
+# TODO: does the following need to be parameterized?
+auth.saml.issuer_name = http://srl-reporting-web
+auth.saml.name_qualifier = http://{{ sso_host }}:8080/OpenAM-11.0.0
+auth.session.timeout = 1200
+auth.skip.verify = False
+auth.state.secret = {{ auth_state_secret }} 
+batch.user.session.timeout = 300000
+cache.expire = 3600
+cache.lock_dir = /tmp/memcache
+cache.public.data.expire = 31556940
+cache.public.data.url = {{ cache_host }}:11211
+cache.public.filtered_data.expire = 15552000
+cache.public.filtered_data.url = {{ cache_host }}:11211
+cache.public.shortlived.expire = 7776000
+cache.public.shortlived.url = {{ cache_host }}:11211
+cache.regions = public.data, public.filtered_data, public.shortlived, session
+cache.session.expire = 1200
+cache.session.url = {{ cache_host }}:11211
+cache.type = ext:memcached
+disable.context.security = False
+disable_stack_trace = False
+# TODO: next three should be a loop over a hash structure for each tenant
+edware.db.ca.schema_name = ca
+edware.db.ca.state_code = CA
+edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ pg_pool_host }}:9999/edware
+edware.db.echo = False
+edware_rep.db.schema_name = repmgr_edware_pg_cluster
+edware_rep.db.url = postgresql+psycopg2://{{ edware_repmgr_db_username }}:{{ edware_repmgr_db_password }}@{{ edware_repmgr_db_host }}:5432/edware
+edware_stats.db.schema_name = edware_stats
+edware_stats.db.url = postgresql+psycopg2://{{ edware_stats_db_username }}:{{ edware_stats_db_password }}@{{ edware_stats_db_host }}:5432/edware_stats
+environment.PATH = /usr/local/bin:/opt/wkhtmltopdf/bin:/opt/pdfunite/bin/
+extract.available_grades = 3,4,5,6,7,8,11
+extract.celery.BROKER_URL = amqp://{{ reporting_rabbit_extract_username }}:{{ reporting_rabbit_extract_password }}@{{ reporting_rabbit_extract_host }}:5671/edextract
+extract.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': '/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
+extract.celery.CELERYD_CONCURRENCY = 20
+extract.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
+extract.celery.CELERY_DEFAULT_QUEUE = extract
+extract.celery.CELERY_DEFAULT_ROUTING_KEY = extract
+extract.celery.CELERY_IMPORTS = ('edextract.tasks.extract',)
+extract.celery.CELERY_QUEUES = [{'name': 'celery', 'key': 'celery', 'exchange': 'direct'}, {'name': 'extract', 'key': 'extract', 'exchange': 'direct'}, {'name': 'extract_sync', 'key': 'extract_sync', 'exchange': 'direct'}]
+extract.celery.CELERY_RESULT_BACKEND = amqp
+extract.celery.CELERY_TASK_RESULT_EXPIRES = 18000
+extract.celery_timeout = 30
+extract.cleanup.schedule.cron.day = last
+extract.gpg.homedir = /opt/edware/conf/gpg
+extract.gpg.keyserver = hkp://{{ extract_keyserver_host }}
+extract.gpg.public_key.cat = sbac_data_provider@sbac.com
+extract.gpg.public_key.fish = sbac_data_provider@sbac.com
+extract.item_level_base_dir = /opt/edware/item_level
+extract.job.queue.archive = extract_archive
+extract.job.queue.async = extract
+extract.job.queue.sync = extract_sync
+extract.partial_file.size.average.csv = 30000
+extract.partial_file.size.average.xml = 300000
+extract.partial_file.size.soft_limit = 30000000
+extract.raw_data_base_dir = /opt/edware/raw_data
+extract.retries_allowed = 1
+extract.retry_delay = 60
+extract.sftp.route.base_dir = route
+extract.work_zone_base_dir = /opt/edware/extraction
+file-grabber.lz.args.landing = /opt/edware/zones/landing/arrivals/
+file-grabber.lz.args.private_key = /home/udl2/.ssh/id_rsa
+file-grabber.lz.args.remote_dir = /sftp/opt/edware/staging/
+file-grabber.lz.args.remote_host = {{ file_grabber_lz_remote_host }}
+file-grabber.lz.args.remote_user = root
+file-grabber.lz.enable = True
+file-grabber.lz.schedule.cron.minute = */1
+file-grabber.tsb.args.landing = /opt/edware/zones/landing/arrivals/
+file-grabber.tsb.args.private_key = /home/udl2/.ssh/id_rsa
+file-grabber.tsb.args.remote_dir = /opt/edware/assessment/staging/
+file-grabber.tsb.args.remote_host = {{ file_grabber_tsb_remote_host }}
+file-grabber.tsb.args.remote_user = celery
+file-grabber.tsb.enable = True
+file-grabber.tsb.schedule.cron.minute = */1
+hpz.file_registration_url = http://{{ hpz_web_host }}:8443/registration
+hpz.file_upload_base_url = http://{{ hpz_web_host }}:8443/files
+hpz.ignore_certificate = True
+ldap.base.dn = ou=environment,dc=edwdc,dc=net
+migrate.broadcast.queue = edmigrate_players
+migrate.celery.BROKER_URL = amqp://{{ migrate_rabbit_username }}:{{ migrate_rabbit_password }}@{{ migrate_rabbit_host }}:5671/edmigrate
+migrate.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': 
+'/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
+migrate.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
+migrate.celery.CELERY_DEFAULT_QUEUE = celery
+migrate.celery.CELERY_DEFAULT_ROUTING_KEY = default
+migrate.celery.CELERY_IMPORTS = ('edmigrate.tasks.player')
+migrate.celery.CELERY_QUEUES = [{'name': 'edmigrate_players', 'key': 'edmigrate_players', 'exchange': 'fanout', 'durable': False}]
+migrate.celery.CELERY_RESULT_BACKEND = amqp
+migrate.celery.CELERY_ROUTES = [{'edmigrate.tasks.player': {'queue': 'edmigrate_players'}}]
+migrate.conductor.enable = True
+migrate.conductor.find_player.timeout = 5
+migrate.conductor.schedule.cron.day = */1
+migrate.iptables.chain = EDMIGRATE_PGSQL
+migrate.iptables.command = /sbin/iptables
+migrate.iptables.mock = False
+migrate.iptables.sudo = /usr/bin/sudo
+migrate.notification.mail_sender = no-reply@amplify.com
+migrate.notification.mail_server = localhost
+migrate.pgpool.hostname = {{ pg_pool_host }}
+migrate.replication_monitor.admin.apply_lag_tolerance = 100
+migrate.replication_monitor.admin.check_interval = 1800
+migrate.replication_monitor.admin.replication_lag_tolerance = 100
+migrate.replication_monitor.admin.time_lag_tolerance = 100
+migrate.replication_monitor.apply_lag_tolerance = 100
+migrate.replication_monitor.monitor_timeout = 28800
+migrate.replication_monitor.replication_lag_tolerance = 100
+migrate.replication_monitor.time_lag_tolerance = 100
+migrate.timeout = 6
+# TODO: need to loop over the tenants
+migrate_dest.db.ca.schema_name = ca
+migrate_dest.db.ca.url = postgresql+psycopg2://{{ migrate_dest_db_ca_username }}:{{ migrate_dest_db_ca_password }}@{{ migrate_dest_db_ca_host }}:5432/edware
+migrate_source.db.ca.url = postgresql+psycopg2://{{ migrate_source_db_ca_username }}:{{ migrate_source_db_ca_password }}@{{ migrate_source_db_ca_host }}:5432/edware
+mode = prod
+pdf.always_generate = False
+pdf.base.url = https://{{ pdf_base_url_host }}/assets/html/
+pdf.batch.job.queue = batch_pdf_gen
+pdf.celery_timeout = 30
+pdf.generate_timeout = 30
+pdf.health_check.job.queue = health_check
+pdf.merge.pdfunite_timeout = 3600
+pdf.minimum_file_size = 40000
+pdf.report_base_dir = /opt/edware/pdf
+pdf.retries_allowed = 3
+pdf.retry_delay = 0
+pdf.single_generate.queue = single_pdf_gen
+pickup.gatekeeper.cat = kswimberly
+pickup.gatekeeper.dog = skong
+pickup.gatekeeper.fish = kswimberly
+pickup.sftp.hostname = {{ pickup_host }}
+pickup.sftp.private_key_file = /opt/edware/ssh/.ssh/id_rsa
+pickup.sftp.user = filerouter
+pyramid.debug_all = False
+pyramid.debug_authorization = False
+pyramid.debug_notfound = False
+pyramid.debug_routematch = False
+pyramid.default_locale_name = en
+pyramid.includes = pyramid_tm pyramid_exclog pyramid_beaker
+pyramid.reload_templates = True
+run.npm.update = True
+# TODO: cwolfe made an educated guess that this is for the reporting PDF workers (ie, not extract)
+services.celery.BROKER_URL = amqp://{{ reporting_rabbit_username }}:{{ reporting_rabbit_password }}@{{ reporting_rabbit_host }}:5671/services
+services.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': '/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
+services.celery.CELERYD_CONCURRENCY = 20
+services.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
+services.celery.CELERY_DEFAULT_QUEUE = batch_pdf_gen
+services.celery.CELERY_DEFAULT_ROUTING_KEY = batch_pdf_gen
+services.celery.CELERY_IMPORTS = ('services.tasks.pdf',)
+services.celery.CELERY_QUEUES = [{'name': 'celery', 'key': 'celery', 'exchange': 'direct'}, {'name': 'batch_pdf_gen', 'key': 'batch_pdf_gen', 'exchange': 'direct'}, {'name': 'batch_worker', 'key': 'batch_worker', 'exchange': 'direct'}, {'name': 'health_check', 'key': 'health_check', 'exchange': 'direct'}, {'name': 'single_pdf_gen', 'key': 'single_pdf_gen', 'exchange': 'direct'}]
+services.celery.CELERY_RESULT_BACKEND = amqp
+services.celery.CELERY_TASK_RESULT_EXPIRES = 18000
+sftp.arrivals_dir = arrivals
+sftp.base_dir = /sftp/opt/edware/home
+sftp.file_move_type = local
+sftp.file_patterns_to_watch = ['*.gpg', '*.gpg.done']
+sftp.file_stat_watch_interval = 5
+sftp.file_stat_watch_period = 30
+sftp.file_system_scan_delay = 60
+sftp.group = edwaredataadmin
+sftp.home = /
+sftp.jail.base_path = /sftp
+sftp.remote.arrivals_path = /opt/edware/zones/landing/arrivals
+sftp.remote.landing_zone_hostname = {{ sftp_remote_lz_host }}
+sftp.remote.private_key_file = /opt/edware/ssh/.ssh/id_rsa
+sftp.remote.sftp_user = udl2
+sftp.roles = ['sftparrivals', 'sftpdepartures', 'filerouter']
+sftp.sftp_departures_dir = departures
+sftp.sftp_filerouter_dir = 
+sftp.staging_dir = /sftp/opt/edware/staging
+sftp.user_home_base_dir = /opt/edware/home
+sftp.user_path_filerouter_dir = route
+sftp.user_path_sftparrivals_dir = file_drop
+sftp.user_path_sftpdepartures_dir = reports
+smarter.reports.year_back = 5
+smarter.resources.static.max_age = 3600
+smarter_score_batcher.async_queue = smarter_score_batcher_async
+smarter_score_batcher.base_dir.csv = /opt/edware/item_level
+smarter_score_batcher.base_dir.staging = /opt/edware/tsb/staging
+smarter_score_batcher.base_dir.working = /opt/edware/tsb/assessments
+smarter_score_batcher.base_dir.xml = /opt/edware/raw_data
+smarter_score_batcher.cache.expire = 7200
+smarter_score_batcher.cache.lock_dir = /tmp/memcache
+smarter_score_batcher.cache.regions = public.shortlived
+smarter_score_batcher.cache.type = memory
+smarter_score_batcher.celery.BROKER_URL = amqp://{{ tsb_rabbit_username }}:{{ tsb_rabbit_password }}@{{ tsb_rabbit_host }}:5671/smarter_score_batcher
+smarter_score_batcher.celery.CELERYD_CONCURRENCY = 20
+smarter_score_batcher.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
+smarter_score_batcher.celery.CELERY_DEFAULT_QUEUE = smarter_score_batcher_async
+smarter_score_batcher.celery.CELERY_DEFAULT_ROUTING_KEY = smarter_score_batcher_async
+smarter_score_batcher.celery.CELERY_IMPORTS = ('smarter_score_batcher.tasks.remote_file_writer', 'smarter_score_batcher.tasks.remote_csv_writer', 'smarter_score_batcher.tasks.remote_metadata_writer')
+smarter_score_batcher.celery.CELERY_RESULT_BACKEND = amqp
+smarter_score_batcher.celery.CELERY_TASK_RESULT_EXPIRES = 18000
+smarter_score_batcher.celery_timeout = 30
+smarter_score_batcher.db.schema_name = edware_tsb
+smarter_score_batcher.db.url = postgresql+psycopg2://{{ tsb_db_username }}:{{ tsb_db_password }}@{{ tsb_db_host }}:5432/edware
+smarter_score_batcher.gpg.homedir = /opt/edware/keys
+smarter_score_batcher.gpg.public_key.ca = sbac_data_provider@sbac.com
+smarter_score_batcher.gpg.public_key.nc = sbac_data_provider@sbac.com
+smarter_score_batcher.gpg.public_key.vt = sbac_data_provider@sbac.com
+smarter_score_batcher.metadata.default = /opt/edware/resources/meta/default
+smarter_score_batcher.metadata.performance = /opt/edware/resources/meta/performance
+smarter_score_batcher.metadata.static = /opt/edware/resources/meta/static
+smarter_score_batcher.metadata_queue = smarter_score_batcher_metadata
+smarter_score_batcher.sync_queue = smarter_score_batcher_sync
+smarter_score_batcher.xsd.path = /opt/edware/resources/sample_xsd.xsd
+trigger.assessment.enable = False
+trigger.assessment.schedule.cron.day = */1
+trigger.pdf.enable = False
+trigger.pdf.schedule.cron.day = */1
+trigger.recache.enable = False
+trigger.recache.filter.file = /opt/edware/conf/comparing_populations_precache_filters.json
+trigger.recache.schedule.cron.day = */1
+use = egg:smarter
+[formatter_generic]
+format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
+[formatter_json]
+class = edapi.logging.JsonDictLoggingFormatter
+format = %(asctime)s %(message)s
+[formatter_mna]
+class = smarter_common.logging.mna.MnALoggingFormatter
+format = [%(name)s][%(threadName)s] %(message)s
+[formatters]
+keys = generic, json, mna
+[handler_audit]
+args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL0)
+class = logging.handlers.SysLogHandler
+formatter = json
+level = WARN
+[handler_console]
+args = (sys.stderr,)
+class = StreamHandler
+formatter = generic
+level = NOTSET
+[handler_filelog]
+args = ('/tmp/smarter.log','midnight')
+class = logging.handlers.TimedRotatingFileHandler
+formatter = generic
+level = INFO
+[handler_mna_rest]
+args = ('mna-dev.opentestsystem.org:8443', '/mna-rest/log', 'POST', 'True')
+class = smarter_common.logging.mna.MNAHTTPHandler
+formatter = mna
+level = DEBUG
+[handler_security_event]
+args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL2)
+class = logging.handlers.SysLogHandler
+formatter = json
+level = INFO
+[handler_syslog]
+args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL1)
+class = logging.handlers.SysLogHandler
+formatter = generic
+level = DEBUG
+[handlers]
+keys = audit, syslog, security_event
+[logger_audit]
+handlers = audit
+level = INFO
+propagate = 0
+qualname = audit
+[logger_edauth]
+handlers = syslog
+level = DEBUG
+qualname = edauth
+[logger_edmigrate]
+handlers = syslog
+level = WARN
+qualname = edmigrate
+[logger_edsftp]
+handlers = syslog
+level = WARN
+qualname = edsftp
+[logger_edudl2]
+handlers = syslog
+level = WARN
+qualname = edudl2
+[logger_exc_logger]
+handlers = syslog
+level = DEBUG
+qualname = exc_logger
+[logger_root]
+handlers = syslog
+level = INFO
+[logger_security_event]
+handlers = security_event
+level = INFO
+propagate = 0
+qualname = security_event
+[logger_smarter]
+handlers = syslog
+level = DEBUG
+qualname = smarter
+[logger_smarter_score_batcher]
+handlers = syslog
+level = INFO
+qualname = smarter_score_batcher
+[logger_sqlalchemy]
+handlers = syslog
+level = WARN
+qualname = sqlalchemy
+[loggers]
+keys = root, smarter, sqlalchemy, exc_logger, audit, edauth, security_event, edmigrate, edsftp, edudl2, smarter_score_batcher
+[server:main]
+host = 0.0.0.0
+port = 6543
+use = egg:waitress#main

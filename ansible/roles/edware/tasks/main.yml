@@ -1,0 +1,6 @@
+---
+- name: Hi dere
+  debug: Hello from edware/tasks/main
+
+#- name: Templatize smarter.ini
+#  template: 
