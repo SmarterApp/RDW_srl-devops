@@ -33,7 +33,7 @@ cache.session.expire = 1200
 cache.session.url = {{ cache_hosts }}
 cache.type = ext:memcached
 disable.context.security = False
-disable_stack_trace = False
+disable_stack_trace = {{ disable_stack_trace }}
 # TODO: next three should be a loop over a hash structure for each tenant
 edware.db.ca.schema_name = ca
 edware.db.ca.state_code = CA
