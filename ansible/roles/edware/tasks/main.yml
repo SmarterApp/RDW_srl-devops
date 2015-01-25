@@ -1,6 +1,10 @@
 ---
-- name: Hi dere
-  debug: Hello from edware/tasks/main
-
-#- name: Templatize smarter.ini
-#  template: 
+- name: Templatize smarter.ini
+  template: 
+    dest: /opt/edware/conf/smarter.ini
+    backup: yes
+    src: smarter.ini.j2
+  sudo: true
+  notify: 
+    - restart httpd
+# TODO: trigger restart of...something
