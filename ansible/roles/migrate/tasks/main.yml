@@ -1,4 +1,4 @@
 ---
 - name: Configure migrate 
-  template: src=smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
+  template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart celeryd-edmigrate 

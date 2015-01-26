@@ -1,5 +1,5 @@
 ---
 # TODO: for from-base role, templatize /etc/httpd/conf.d/wsgi_edware.conf
 - name: Configure reporting-web
-  template: src=smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
+  template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart httpd 

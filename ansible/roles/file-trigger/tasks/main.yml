@@ -1,8 +1,8 @@
 ---
 - name: Configure file-trigger
-  template: src=smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
+  template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart edudl2-trigger
 
 - name: Configure file-trigger udl
-  template: src=udl_conf.ini.j2 dest=/opt/edware/conf/udl_conf.ini
+  template: src=roles/edware/templates/udl_conf.ini.j2 dest=/opt/edware/conf/udl_conf.ini
   notify: restart edudl2-trigger
