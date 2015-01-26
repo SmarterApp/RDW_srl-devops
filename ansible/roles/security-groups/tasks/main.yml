@@ -396,6 +396,24 @@
         cidr_ip: 10.0.0.0/8
     purge_rules: true
     purge_rules_egress: true
+- name: srl-logstash security group
+  ec2_group:
+    name: srl-logstash
+    description: Allow Log Server access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 9200
+        to_port: 9200
+        cidr_ip: 10.0.0.0/8
+      - proto: tcp
+        from_port: 10514
+        to_port: 10514
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
 - name: srl-memcached security group
   ec2_group:
     name: srl-memcached

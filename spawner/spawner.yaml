@@ -29,61 +29,94 @@ apps:
 
   db-master:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
     instance_type: r3.2xlarge
 
   db-pgbouncer:
     ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
-      # TODO
+      - srl-default
+      - srl-db-client
       - srl-db-pgbouncer
+      - srl-logging
     instance_type: m3.xlarge
 
   db-pgpool:
     ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
-      # TODO
+      - srl-default
+      - srl-db-client
       - srl-db-pool
+      - srl-logging
     instance_type: m3.xlarge
 
   db-slave: # TODO: may be split; there are actually two - one for extraction and one for reporting
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: []  # TODO
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
     instance_type: r3.2xlarge
 
   gluster:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: []  # TODO
+    security_groups:
+      - srl-default
+      - srl-glusterfs
+      - srl-logging
     instance_type: m3.medium # TODO: verify
 
   hpz-db:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
     instance_type: m3.2xlarge
 
   hpz-web:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-glusterfs-hpz-client
+      - srl-logging
     instance_type: m3.xlarge
 
   loghost:
     ami_app_name: base 
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-logstash
     instance_type: m2.xlarge 
 
   lz:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-logging
     instance_type: m3.xlarge
 
   memcached:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-memcached
+      - srl-logging
     instance_type: r3.2xlarge
 
   migrate-db:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-db-client
+      - srl-db-pool-pcp
+      - srl-rmq-client
+      - srl-logging
     instance_type: m3.2xlarge
 
   migrate-rabbit:
@@ -101,56 +134,67 @@ apps:
 
   reporting-cache-warmer:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-memcached
+      - srl-logging
     instance_type: m3.large
 
   reporting-generator-pdf:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-rmq-client
+      - srl-logging
     instance_type: m3.large
 
   reporting-rabbit-services:
     ami_app_name: rabbit
     security_groups:
       - srl-default
-      - srl-logging
       - srl-rmq
+      - srl-logging
     instance_type: m3.xlarge
 
   reporting-rabbit-extract:
     ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
+      - srl-db-pool-client
+      - srl-rmq-client
+      - srl-web-client
+      - srl-glusterfs-extract-client
       - srl-logging
-      - srl-rmq
     instance_type: m3.xlarge
 
   reporting-web:
     security_groups:
-      # TODO: cwolfe guessed at this list
       - srl-default
+      - srl-db-pool-client
       - srl-rmq-client
-      - srl-logging
       - srl-memcached
       - srl-web
+      - srl-logging
     instance_type: m3.xlarge
 
   reporting-worker-extract:
     security_groups:
-      # TODO: cwolfe guessed at this list
       - srl-default
+      - srl-db-pool-client
       - srl-rmq-client
-      - srl-logging
+      - srl-web-client
       - srl-glusterfs-extract-client
+      - srl-logging
     instance_type: m3.2xlarge
 
   reporting-worker-pdf:
     security_groups:
-      # TODO: cwolfe guessed at this list
       - srl-default
       - srl-rmq-client
-      - srl-logging
+      - srl-sso-client
+      - srl-web-client
       - srl-glusterfs-pdf-client
+      - srl-logging
     #instance_type: r3.2xlarge # TODO: existing image is PV, r3 requires HVM
     instance_type: m2.4xlarge
     subnet_type: public # TODO: fix the networking
@@ -159,45 +203,64 @@ apps:
     ami_app_name: rabbit
     security_groups:
       - srl-default
-      - srl-logging
       - srl-rmq
+      - srl-logging
     instance_type: m3.xlarge
 
   tsb-trigger:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-logging
     instance_type: m3.large
 
   tsb-web:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-web
+      - srl-rmq-client
+      - srl-sso-client
+      - srl-logging
     instance_type: m3.xlarge
 
   tsb-worker:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-rmq-client
+      - srl-glusterfs-udl-client
+      - srl-logging
     instance_type: m3.xlarge
 
   udl:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-logging
     instance_type: m3.2xlarge
 
   udl-db:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
     instance_type: m3.2xlarge
 
   udl-rabbit:
     ami_app_name: rabbit
     security_groups:
       - srl-default
-      - srl-logging
       - srl-rmq
+      - srl-logging
     instance_type: m3.xlarge
 
   #vpn:
   #  ami_app_name: base # TODO: remove this when the real AMI is available
-  #  security_groups: [] # TODO
+  #  security_groups: # TODO
+  #    - srl-default
   #  instance_type: m3.medium
 
