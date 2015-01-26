@@ -3,9 +3,6 @@
   debug:
     msg: "Hello from the Common Role!"
 
-- name: Include the variables specific to the environment 
-  include_vars: envs/{{ environ| default("testing") }}
-
 - name: Install Rsyslog 
   yum: name=rsyslog state=present
 
