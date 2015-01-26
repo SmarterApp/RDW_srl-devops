@@ -24,6 +24,8 @@ tsb_db_host: dbpgudl0.qa.dum.edwdc.net
 #            that could be dynamically looked up
 #-------------------------------------------------------------#
 bind_host: 10.166.32.10 # TODO: dynamic
+loghost: srl-loghost-1.dev.ae1.sbac2dc.net
+loghost_port: 10514 
 
 #-------------------------------------------------------------#
 #                   Internal Services
