@@ -67,9 +67,9 @@ apps:
     instance_type: m3.xlarge
 
   loghost:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: base 
     security_groups: [] # TODO
-    instance_type: m1.medium # TODO: verify
+    instance_type: m2.xlarge 
 
   lz:
     ami_app_name: base # TODO: remove this when the real AMI is available
