@@ -1,0 +1,7 @@
+---
+- name: Configure HPZ Web servers 
+  hosts: hpz-web 
+  roles:
+    - common
+    - edware
+    - hpz-web 

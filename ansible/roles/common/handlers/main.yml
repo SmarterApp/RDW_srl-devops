@@ -1,0 +1,9 @@
+---
+- name: restart httpd 
+  service: name=httpd state=restarted
+
+- name: restart rsyslog 
+  service: name=rsyslog state=restarted
+
+- name: restart celeryd-edextract
+  service: name=celeryd-edextract state=restarted
