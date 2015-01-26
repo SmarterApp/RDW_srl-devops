@@ -1,8 +1,0 @@
----
-- name: Install rsyslog and set up rsyslog.conf 
-  hosts: loghost-clients
-  user: ansible
-  sudo: yes
-
-  roles: 
-    - common

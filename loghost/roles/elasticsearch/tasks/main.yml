@@ -1,7 +1,0 @@
----
-- name: Install Elasticsearch 
-  yum: name=elasticsearch state=present
-
-#The default configuration is fine for ES
-- name: Start Elasticsearch
-  service: name=elasticsearch state=started enabled=yes

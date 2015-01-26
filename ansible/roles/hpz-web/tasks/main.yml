@@ -1,0 +1,4 @@
+---
+- name: Configure HPZ 
+  template: src=hpz.ini.j2 dest=/opt/edware/conf/hpz.ini
+  notify: restart httpd 

@@ -1,0 +1,8 @@
+---
+- name: Install GlusterFS servers
+  user: ansible
+  sudo: yes
+  hosts: all
+
+  roles:
+    - common
