@@ -5,16 +5,13 @@
 #-------------------------------------------------------------#
 #                   Application Specific Config
 #-------------------------------------------------------------#
-
-# TODO
-#sso_oauth_verify_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/
+sso_oauth_verify_url: https://sso.smarterbalanced.org/auth/oauth2/tokeninfo?realm=/
 auth_policy_secure: True
-# TODO: neeed prod SSO
-#sso_saml_login_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp
-#sso_saml_logout_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp
-#sso_saml_issuer_name: http://srl-reporting-web
-#sso_saml_name_qualifier: http://sso.sbac2.net:8080/OpenAM-11.0.0
+sso_saml_login_url: https://sso.smarterbalanced.org/auth/SSORedirect/metaAlias/idp
+sso_saml_logout_url: https://sso.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/idp
+sso_saml_issuer_name: https://reporting.smarterbalanced.org
+sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
 #cache_hosts: srl-memcached.dev.ae1.sbac2dc.net:11211
 #hpz_base_url: http://srl-hpz-web.dev.ae1.sbac2dc.net:8443
-#reporting_base_url_host: http://srl-web-reporting.dev.ae1.sbac2dc.net
+reporting_base_url_host: https://reporting.smarterbalanced.org 
 disable_stack_trace: True
