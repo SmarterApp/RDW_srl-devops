@@ -1,0 +1,56 @@
+---
+- name: Install packages required for GlusterFS
+  yum: name={{item}} state=installed
+  with_items:
+    - fuse
+    - fuse-libs
+    - glusterfs-server
+    - glusterfs-fuse
+    - nfs-utils
+
+- name: Enable and start required services
+  service: name={{item}} state=started enabled=yes
+  with_items:
+    - glusterd
+    - rpcbind 
+
+- name: create base directory
+  file: path=/export state=directory owner=root group=root mode=0600
+
+- name: create brick mount points
+  file: path=/export/{{ item }} state=directory owner=root group=root mode=0600
+  with_items:
+    - pdfbr1
+    - pdfbr2
+
+- name: create lvm volume groups
+  lvg: pvs=/dev/{{ item.dev }} state=present vg=vg.{{ item.label }}
+  with_items:
+    - { dev: xvdf, label: pdfbr1 }
+    - { dev: xvdg, label: pdfbr2 }
+
+- name: create lvm logical volumes
+  lvol: lv=lv.{{ item }} state=present vg=vg.{{ item }} size='100%VG'
+  with_items:
+    - pdfbr1
+    - pdfbr2
+
+- name: create brick file systems
+  filesystem: fstype=ext4 dev=/dev/vg.{{ item }}/lv.{{ item }} opts="-m1 -L {{ item }}"
+  with_items:
+    - pdfbr1
+    - pdfbr2
+
+- name: add bricks to fstab and mount
+  mount: fstype=ext4 name=/export/{{ item }} src="LABEL={{ item }}" opts=noatime state=mounted
+  with_items:
+    - pdfbr1
+    - pdfbr2
+
+- name: create brick subdirs for volumes
+  file: path=/export/{{ item }}/brick state=directory owner=root group=root mode=0600
+  with_items:
+    - pdfbr1
+    - pdfbr2
+
+
