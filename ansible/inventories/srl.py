@@ -10,6 +10,8 @@ AWS EC2 using the Boto library.
 Modified for SBAC/SRL use:
   * Remove eucalytus, route 53, and RDS handling.
   * Read AWS creds from pass/gpg-agent
+  * Makes groups based directly on 'application' tag
+  * Makes groups based on VPC's 'environment' tag
 
 This script also assumes there is an ec2.ini file alongside it.  To specify a
 different path to ec2.ini, define the EC2_INI_PATH environment variable:
@@ -55,6 +57,7 @@ import re
 from time import time
 import boto
 from boto import ec2
+from boto import vpc
 import ConfigParser
 from collections import defaultdict
 from subprocess import Popen, PIPE
@@ -241,21 +244,33 @@ class Ec2Inventory(object):
         
         return conn
 
-    
+    def connect_to_vpc(self):
+        (access_id, secret_key) = self.get_aws_creds()
+        conn = boto.vpc.VPCConnection(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
+        return conn
+
+    # SBAC-specific
+    def build_vpc_env_map(self):
+        conn = self.connect_to_vpc()
+        self.env_by_vpc_id = {}
+        for vpc in conn.get_all_vpcs():
+            if vpc.tags.get('Environment'):
+                self.env_by_vpc_id[vpc.id] = vpc.tags.get('Environment')
         
     def get_instances_by_region(self, region):
         ''' Makes an AWS EC2 API call to the list of instances in a particular
         region '''
 
         try:
-            conn = self.connect_to_ec2(region)
-
+            ec2 = self.connect_to_ec2(region)
+            self.build_vpc_env_map()
+            
             reservations = []
             if self.ec2_instance_filters:
                 for filter_key, filter_values in self.ec2_instance_filters.iteritems():
-                    reservations.extend(conn.get_all_instances(filters = { filter_key : filter_values }))
+                    reservations.extend(ec2.get_all_instances(filters = { filter_key : filter_values }))
             else:
-                reservations = conn.get_all_instances()
+                reservations = ec2.get_all_instances()
 
             for reservation in reservations:
                 for instance in reservation.instances:
@@ -362,6 +377,10 @@ class Ec2Inventory(object):
             if k == 'application':
                 key = self.to_safe(v)
                 self.push(self.inventory, key, dest)
+
+        # SBAC: group by VPC's environment tag
+        if instance.vpc_id and self.env_by_vpc_id.get(instance.vpc_id):
+            self.push(self.inventory, self.to_safe(self.env_by_vpc_id[instance.vpc_id]), dest)
                 
         # Global Tag: instances without tags
         if len(instance.tags) == 0:

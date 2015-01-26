@@ -1,6 +1,7 @@
 ---
 - name: Configure the reporting PDF-making workers
   hosts: reporting-worker-pdf
+  sudo: yes
   roles:
     - common
     - edware
