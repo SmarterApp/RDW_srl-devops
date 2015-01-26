@@ -6,6 +6,7 @@ from optparse import OptionParser
 import logging
 import yaml
 import os
+import os.path
 from subprocess import Popen, PIPE
 import time
 from distutils.version import LooseVersion
@@ -19,6 +20,7 @@ def main():
     vpc_conn = connect_to_vpc(opts, cfg)
     hints = validate_request(opts, cfg, ec2_conn, vpc_conn)
     spawn(hints, ec2_conn)
+    run_ansible(opts, hints)
     logging.info('          ~ FIN ~')
     
 #=========================================================#
@@ -65,6 +67,10 @@ def read_cli_opts():
                         help="Debug level output")
     parser.add_option("-e", "--env", dest="env", metavar="ENV", type="string",
                        default="dev", help="Which environment (VPC) to target.  Defaults to dev; values are the Environment tags on the VPCs.")
+    parser.add_option("-p", "--playbook", dest="playbook", type = "string",
+                        help="Which playbook in ../ansible/*.yml to run.  Defaults to same name as -a.")
+    parser.add_option("-s", "--skip-ansible", dest="run_ansible", action="store_false", default=True,
+                        help="Do not run ansible playbook after spawning.")
     parser.add_option("-V", "--app-version", dest="app_version", metavar="APP_VERSION", type="string",
                        help="Which application version (AMI) to use.  AMI is selected by looking for an AMI tagged with the application and version.  Optional, latest version is default.")
     
@@ -86,6 +92,30 @@ def read_config_file(opts):
     cfg = yaml.load(open("./spawner.yaml", 'r'))
     return cfg
 
+def run_ansible(opts, hints):
+    if not opts.run_ansible:
+        logging.info("Skipping ansible run due to -s")
+        return
+
+    logging.info("Waiting at least 60 sec to run ansible...")
+    # TODO: make this smarter; we could poll, and continue when the IP's are up
+    time.sleep(60 + 1.0*hints['count'])
+    
+    playbook_name = opts.playbook if opts.playbook else opts.app
+    
+    os.chdir(os.environ['SBAC_DEVOPS'] + '/ansible')    
+    # already validated existence of playbook
+    cmd = []
+    cmd.append("ansible-playbook")
+    cmd.append('-i'); cmd.append('inventories/srl.py')
+    cmd.append('-l'); cmd.append(':'.join(hints['ips'].values())) # Limit to newly-created instances
+    cmd.append(playbook_name + '.yml')
+
+    logging.info("Running ansible as: {0}".format(' '.join(cmd)))
+    
+    os.execvp('ansible-playbook', cmd)
+    
+
 def spawn(hints, ec2):
 
     logging.info("About to launch {0} instance(s).  Press Control-C to abort!".format(hints['count']))
@@ -106,20 +136,26 @@ def spawn(hints, ec2):
     # Sleep a little bit.
     logging.info("Launch request sent.  Waiting a little bit to start tagging...")
     # TODO: make this smarter; we could poll, and continue when the reservation has the expected number of instances
-    time.sleep(3 + 0.25*hints['count'])
+    time.sleep(4 + 0.25*hints['count'])
 
     # Re-fetch the reservation, which "should" now have the instances populated
     # TODO: figure out the filter parameter to this call
     all_res = ec2.get_all_reservations()
     reservation = [r for r in all_res if r.id == reservation.id][0]
+
+    hints['ips'] = {}
     
     # Apply tags to the instances.
     for idx in range(0, len(hints['names'])):
         instance = reservation.instances[idx]
         logging.info ("Tagging instance {0} as {1}".format(instance.id, hints['names'][idx]))
         instance.add_tags(hints['tags'])
-        instance.add_tag('Name', value = hints['names'][idx])    
+        instance.add_tag('Name', value = hints['names'][idx])
+        # Store private IP by name
+        hints['ips'][hints['names'][idx]] = instance.private_ip_address
 
+
+        
 def validate_request(opts, cfg, ec2_conn, vpc_conn):
     logging.info("Gathering info about your spawn request....")
 
@@ -220,7 +256,16 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
                 
     # TODO: Verify instance type ?
     hints['instance_type'] = app_cfg['instance_type']
-    
+
+
+    if opts.run_ansible:
+        playbook_name = opts.playbook if opts.playbook else opts.app
+        offset = os.environ.get('SBAC_DEVOPS') if os.environ.get('SBAC_DEVOPS') else '..'
+        path = offset + '/ansible/' + playbook_name + '.yml'
+        if not os.path.isfile(path):
+            logging.error("Could not find an Ansible playbook at {0}.  Either specify an alternate playbook with -p, or disable ansible with -s.  You shall not pass.".format(path))
+            exit(8)
+                    
     logging.info("Preflight looks good, you are cleared for launch attempt.")
     
     return hints
