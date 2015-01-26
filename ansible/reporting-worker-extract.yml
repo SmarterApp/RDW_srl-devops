@@ -1,7 +1,9 @@
 ---
 - name: Configure the reporting CSV/Extract worker machines
   hosts: reporting-worker-extract
+  user: ansible
   sudo: yes
+
   roles:
     - common
     - edware

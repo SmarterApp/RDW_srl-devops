@@ -1,6 +1,9 @@
 ---
 - name: Configure the udl servers 
   hosts: udl 
+  user: ansible
+  sudo: yes
+
   roles:
     - common
     - edware

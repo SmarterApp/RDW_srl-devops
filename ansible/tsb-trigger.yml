@@ -1,6 +1,9 @@
 ---
 - name: Configure tsb-trigger server 
   hosts: tsb-trigger 
+  user: ansible
+  sudo: yes
+
   roles:
     - common
     - edware

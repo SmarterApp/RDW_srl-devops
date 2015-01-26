@@ -1,6 +1,9 @@
 ---
 - name: Configure file-grabber server 
   hosts: file-grabber 
+  user: ansible
+  sudo: yes
+
   roles:
     - common
     - edware

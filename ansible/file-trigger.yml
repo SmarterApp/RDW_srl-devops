@@ -1,6 +1,9 @@
 ---
 - name: Configure file-trigger server 
   hosts: file-trigger 
+  user: ansible
+  sudo: yes
+
   roles:
     - common
     - edware

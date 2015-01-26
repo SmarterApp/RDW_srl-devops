@@ -1,6 +1,9 @@
 ---
 - name: Configure the tsb-worker servers 
   hosts: tsb-worker 
+  user: ansible
+  sudo: yes
+
   roles:
     - common
     - edware
