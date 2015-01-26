@@ -1,6 +1,7 @@
 ---
 - name: Configure the reporting webserver hosts
   hosts: reporting-web
+  sudo: yes
   roles:
     - common
     - edware
