@@ -87,8 +87,11 @@ apps:
     instance_type: m3.2xlarge
 
   migrate-rabbit:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    ami_app_name: rabbit
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq
     instance_type: m3.2xlarge
 
   #nat:
@@ -106,14 +109,20 @@ apps:
     security_groups: [] # TODO
     instance_type: m3.large
 
-  reporting-rabbit:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+  reporting-rabbit-services:
+    ami_app_name: rabbit
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq
     instance_type: m3.xlarge
 
   reporting-rabbit-extract:
     ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq
     instance_type: m3.xlarge
 
   reporting-web:
@@ -147,8 +156,11 @@ apps:
     subnet_type: public # TODO: fix the networking
 
   tsb-rabbit:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    ami_app_name: rabbit
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq
     instance_type: m3.xlarge
 
   tsb-trigger:
@@ -177,8 +189,11 @@ apps:
     instance_type: m3.2xlarge
 
   udl-rabbit:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups: [] # TODO
+    ami_app_name: rabbit
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq
     instance_type: m3.xlarge
 
   #vpn:

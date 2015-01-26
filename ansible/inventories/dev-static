@@ -22,7 +22,10 @@
 [loghost]
 # i-f6e64307
 10.166.34.153
- 
+
+[lz]
+10.166.43.83 # AMI build for lz
+
 [memcached]
 # i-957fb964
 10.166.35.65
@@ -32,13 +35,19 @@
 10.166.39.108
  
 [reporting-web]
-#10.166.34.81 # doris's AMI build 
-10.166.38.183 # my test monster
- 
+10.166.34.81 # doris's AMI build 
+10.166.32.12 # cwolfe test machine 
+
+[reporting-worker-pdf]
+10.166.34.22 # AMI build
+
+[reporting-worker-extract]
+10.166.33.165 # AMI build reporting-worker-extract
+
 [tsb-rabbit]
 # i-13be7fe2
 10.166.35.152
- 
+
 [tsb-web]
 # i-643bc295
 10.166.35.174
@@ -55,15 +64,31 @@
 # i-4ee928bf
 10.166.33.124
 
+
+# These machines are precious - manually configured for AMI building.
+[precious]
+10.166.34.81  # AMI build reporting-web
+10.166.34.22  # AMI build reporting-worker-pdf
+10.166.33.165 # AMI build reporting-worker-extract
+10.166.43.83 # AMI build for lz
+
 # This defines 'webservers' as a group-of-groups
 [webservers:children]
 reporting-web
 tsb-web
 hpz-web
 
+[workers:children]
+reporting-worker-extract
+reporting-worker-pdf
+tsb-worker
+
 # This defines 'dev' as a group-of-groups.  We need this to load vars from the group_vars/dev/*
 [dev:children]
 reporting-web
 tsb-web
 hpz-web
+reporting-worker-pdf
+reporting-worker-extract
+
 # TODO the many other apps
