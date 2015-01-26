@@ -152,8 +152,6 @@ pyramid.default_locale_name = en
 pyramid.includes = pyramid_tm pyramid_exclog pyramid_beaker
 pyramid.reload_templates = True
 run.npm.update = True
-# TODO: cwolfe made an educated guess that this is for the reporting PDF workers (ie, not extract)
-# dip: this is correct
 services.celery.BROKER_URL = amqp://{{ reporting_rabbit_services_username }}:{{ reporting_rabbit_services_password }}@{{ reporting_rabbit_services_host }}:5671/services
 services.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': '/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
 services.celery.CELERYD_CONCURRENCY = 20

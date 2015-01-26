@@ -10,8 +10,8 @@
 pickup_host: lzsftpudl0.qa.dum.edwdc.net
 sso_host: sso.sbac2.net # TODO: This does not resolve in Dev VPC bind or public DNS
 extract_keyserver_host: rbtmqdw0.qa.dum.edwdc.net
-file_grabber_lz_remote_host: lzsftpudl0.qa.dum.edwdc.net
-file_grabber_tsb_remote_host: tsb.qa.dum.edwdc.net
+lz_host: lzsftpudl0.qa.dum.edwdc.net
+tsb_trigger_host: tsb.qa.dum.edwdc.net
 # This setting makes no sense to me: not sure what app, and why is it a RMQ host?
 sftp_remote_lz_host: rbtmqudl0.qa.dum.edwdc.net
 pdf_base_url_host: ha-int-pyweb0.qa.dum.edwdc.net
