@@ -1,0 +1,7 @@
+---
+- name: Configure tsb-trigger server 
+  hosts: tsb-trigger 
+  roles:
+    - common
+    - edware
+    - tsb-trigger 

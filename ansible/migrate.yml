@@ -1,0 +1,7 @@
+---
+- name: Configure migrate server 
+  hosts: migrate 
+  roles:
+    - common
+    - edware
+    - migrate 

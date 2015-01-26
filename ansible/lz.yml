@@ -1,0 +1,7 @@
+---
+- name: Configure lz server 
+  hosts: lz 
+  roles:
+    - common
+    - edware
+    - lz 

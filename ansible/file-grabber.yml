@@ -1,0 +1,7 @@
+---
+- name: Configure file-grabber server 
+  hosts: file-grabber 
+  roles:
+    - common
+    - edware
+    - file-grabber

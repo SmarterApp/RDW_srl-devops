@@ -1,0 +1,3 @@
+---
+- name: Configure lz 
+  template: src=smarter.ini.j2 dest=/opt/edware/conf/smarter.ini

@@ -1,0 +1,4 @@
+---
+- name: Configure tsb-worker
+  template: src=smarter_score_batcher.ini.j2 dest=/opt/edware/conf/smarter_score_batcher.ini
+  notify: restart celeryd-smarter_score_batcher 

@@ -1,0 +1,7 @@
+---
+- name: Configure the udl servers 
+  hosts: udl 
+  roles:
+    - common
+    - edware
+    - udl 

@@ -1,0 +1,7 @@
+---
+- name: Configure the tsb-web server 
+  hosts: tsb-web 
+  roles:
+    - common
+    - edware
+    - tsb-web 

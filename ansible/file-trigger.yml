@@ -1,0 +1,7 @@
+---
+- name: Configure file-trigger server 
+  hosts: file-trigger 
+  roles:
+    - common
+    - edware
+    - file-trigger 

@@ -5,5 +5,26 @@
 - name: restart rsyslog 
   service: name=rsyslog state=restarted
 
+- name: restart celeryd-services
+  service: name=celeryd-services state=restarted
+
 - name: restart celeryd-edextract
   service: name=celeryd-edextract state=restarted
+
+- name: restart celeryd-smarter_score_batcher
+  service: name=celeryd-smarter_score_batcher state=restarted
+
+- name: restart celeryd-udl2
+  service: name=celeryd-udl2 state=restarted
+
+- name: restart celeryd-edmigrate
+  service: name=celeryd-edmigrate state=restarted
+
+- name: restart file-monitor-smarter_score_batcher
+  service: name=file-monitor-smarter_score_batcher state=restarted
+
+- name: restart edudl2-file-grabber
+  service: name=edudl2-file-grabber state=restarted
+
+- name: restart edudl2-trigger
+  service: name=edudl2-trigger state=restarted

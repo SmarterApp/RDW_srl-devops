@@ -1,0 +1,7 @@
+---
+- name: Configure the tsb-worker servers 
+  hosts: tsb-worker 
+  roles:
+    - common
+    - edware
+    - tsb-worker 
