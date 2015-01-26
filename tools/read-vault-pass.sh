@@ -1,2 +1,2 @@
 #!/bin/bash
-pass ansible/vault
+pass $SBAC_ENV/ansible/vault
