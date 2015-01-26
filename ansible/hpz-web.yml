@@ -1,6 +1,9 @@
 ---
 - name: Configure HPZ Web servers 
   hosts: hpz-web 
+  user: ansible
+  sudo: yes
+
   roles:
     - common
     - edware

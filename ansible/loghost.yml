@@ -1,0 +1,8 @@
+---
+- name: Configure loghost for log aggregation 
+  hosts: loghost 
+  user: ansible
+  sudo: yes
+
+  roles:
+    - loghost 
