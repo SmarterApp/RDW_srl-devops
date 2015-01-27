@@ -36,6 +36,7 @@ loghost_port: 10514
 # "should" be able to rely on local DNS without having to change these values.
 # TODO: may be able to push these up to global_vars if we can parameterize the .dev. part
 edware_db_ca_host: srl-db-pgpool.dev.ae1.sbac2dc.net # TODO: multi-tenancy
+edware_extract_db_ca_host: 10.166.32.97 
 edware_repmgr_db_host : srl-db-master.dev.ae1.sbac2dc.net 
 edware_stats_db_host: srl-db-util.dev.ae1.sbac2dc.net
 hpz_web_host: srl-hpz-web.dev.ae1.sbac2dc.net
