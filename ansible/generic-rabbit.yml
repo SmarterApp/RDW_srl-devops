@@ -3,3 +3,7 @@
   sudo: yes
   roles:
     - common
+
+# Change password of rabbit user - "edware"'s password
+# May need to rethink this, all rabbit servers are now using edware user
+# rabbitmqctl change_password edware {{ rabbit_user_password }}
