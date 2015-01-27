@@ -20,37 +20,85 @@
 - name: create brick mount points
   file: path=/export/{{ item }} state=directory owner=root group=root mode=0600
   with_items:
-    - pdfbr1
-    - pdfbr2
+    - data1
+    - data2
+    - working1
+    - working2
+    - tsb1
+    - tsb2
+    - uploads1
+    - uploads2
+    - zones1
+    - zones2
 
 - name: create lvm volume groups
   lvg: pvs=/dev/{{ item.dev }} state=present vg=vg.{{ item.label }}
   with_items:
-    - { dev: xvdf, label: pdfbr1 }
-    - { dev: xvdg, label: pdfbr2 }
+    - { dev: xvdf, label: data1 }
+    - { dev: xvdg, label: data2 }
+    - { dev: xvdh, label: working1 }
+    - { dev: xvdi, label: working2 }
+    - { dev: xvdj, label: tsb1 }
+    - { dev: xvdk, label: tsb2 }
+    - { dev: xvdl, label: uploads1 }
+    - { dev: xvdm, label: uploads22 }
+    - { dev: xvdn, label: zones1 }
+    - { dev: xvdo, label: zones2 }
 
 - name: create lvm logical volumes
   lvol: lv=lv.{{ item }} state=present vg=vg.{{ item }} size='100%VG'
   with_items:
-    - pdfbr1
-    - pdfbr2
+    - data1
+    - data2
+    - working1
+    - working2
+    - tsb1
+    - tsb2
+    - uploads1
+    - uploads2
+    - zones1
+    - zones2
 
 - name: create brick file systems
   filesystem: fstype=ext4 dev=/dev/vg.{{ item }}/lv.{{ item }} opts="-m1 -L {{ item }}"
   with_items:
-    - pdfbr1
-    - pdfbr2
+    - data1
+    - data2
+    - working1
+    - working2
+    - tsb1
+    - tsb2
+    - uploads1
+    - uploads2
+    - zones1
+    - zones2
 
 - name: add bricks to fstab and mount
   mount: fstype=ext4 name=/export/{{ item }} src="LABEL={{ item }}" opts=noatime state=mounted
   with_items:
-    - pdfbr1
-    - pdfbr2
+    - data1
+    - data2
+    - working1
+    - working2
+    - tsb1
+    - tsb2
+    - uploads1
+    - uploads2
+    - zones1
+    - zones2
 
 - name: create brick subdirs for volumes
   file: path=/export/{{ item }}/brick state=directory owner=root group=root mode=0600
   with_items:
-    - pdfbr1
-    - pdfbr2
+    - data1
+    - data2
+    - working1
+    - working2
+    - tsb1
+    - tsb2
+    - uploads1
+    - uploads2
+    - zones1
+    - zones2
 
 

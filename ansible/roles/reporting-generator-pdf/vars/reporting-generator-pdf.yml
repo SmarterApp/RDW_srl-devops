@@ -1,2 +1,2 @@
 trigger_pdf_enable: 'True'
-cache.session.expire: 300000
+cache_session_expire: 300000

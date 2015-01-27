@@ -1,3 +1,0 @@
-# Tenant specific
-# Extracts point to its own pgpool
-edware.db.ca.url = postgresql+psycopg2://{{ edware_extract_db_ca_username }}:{{ edware_extract_db_ca_password }}@{{ edware_extract_db_ca_host }}:9999/edware

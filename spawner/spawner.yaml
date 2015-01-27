@@ -78,6 +78,7 @@ apps:
     instance_type: m3.2xlarge
 
   hpz-web:
+    ami_app_name: hpz-web
     security_groups:
       - srl-default
       - srl-db-client
@@ -93,19 +94,35 @@ apps:
     instance_type: m2.xlarge 
 
   lz:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: lz
     security_groups:
       - srl-default
       - srl-logging
     instance_type: m3.xlarge
 
   memcached:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: memcached 
     security_groups:
       - srl-default
       - srl-memcached
       - srl-logging
-    instance_type: r3.2xlarge
+    instance_type: m2.4xlarge
+
+  file-trigger:
+    ami_app_name: file-trigger 
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq-client
+      - srl-glusterfs-udl-client
+    instance_type: t1.micro 
+
+  file-grabber:
+    ami_app_name: file-grabber
+    security_groups:
+      - srl-default
+      - srl-logging
+    instance_type: t1.micro
 
   migrate-db:
     ami_app_name: base # TODO: remove this when the real AMI is available
@@ -167,6 +184,7 @@ apps:
     instance_type: m3.xlarge
 
   reporting-web:
+    ami_app_name: reporting-web
     security_groups:
       - srl-default
       - srl-db-pool-client
@@ -177,6 +195,7 @@ apps:
     instance_type: m3.xlarge
 
   reporting-worker-extract:
+    ami_app_name: reporting-worker-extract 
     security_groups:
       - srl-default
       - srl-db-pool-client
@@ -187,6 +206,7 @@ apps:
     instance_type: m3.2xlarge
 
   reporting-worker-pdf:
+    ami_app_name: reporting-worker-pdf
     security_groups:
       - srl-default
       - srl-rmq-client
@@ -206,12 +226,14 @@ apps:
     instance_type: m3.xlarge
 
   tsb-trigger:
+    ami_app_name: tsb-trigger
     security_groups:
       - srl-default
       - srl-logging
     instance_type: m3.large
 
   tsb-web:
+    ami_app_name: tsb-web
     security_groups:
       - srl-default
       - srl-web
@@ -221,6 +243,7 @@ apps:
     instance_type: m3.xlarge
 
   tsb-worker:
+    ami_app_name: tsb-worker
     security_groups:
       - srl-default
       - srl-db-client
@@ -230,6 +253,7 @@ apps:
     instance_type: m3.xlarge
 
   udl:
+    ami_app_name: udl
     security_groups:
       - srl-default
       - srl-db-client

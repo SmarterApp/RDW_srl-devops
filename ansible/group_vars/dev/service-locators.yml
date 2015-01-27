@@ -36,6 +36,7 @@ loghost_port: 10514
 # "should" be able to rely on local DNS without having to change these values.
 # TODO: may be able to push these up to global_vars if we can parameterize the .dev. part
 edware_db_ca_host: srl-db-pgpool.dev.ae1.sbac2dc.net # TODO: multi-tenancy
+edware_extract_db_ca_host: 10.166.32.97 
 edware_repmgr_db_host : srl-db-master.dev.ae1.sbac2dc.net 
 edware_stats_db_host: srl-db-util.dev.ae1.sbac2dc.net
 hpz_web_host: srl-hpz-web.dev.ae1.sbac2dc.net
@@ -45,6 +46,8 @@ migrate_rabbit_host: srl-rabbit.dev.ae1.sbac2dc.net
 migrate_source_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
 reporting_rabbit_services_host: srl-rabbit.dev.ae1.sbac2dc.net
 reporting_rabbit_extract_host: srl-rabbit.dev.ae1.sbac2dc.net
+gluster_server_1: srl-gluster-1.dev.ae1.sbac2dc.net
+gluster_server_2: srl-gluster-2.dev.ae1.sbac2dc.net
 
 #-------------------------------------------------------------#
 #                   Application Specific Config
