@@ -54,7 +54,9 @@ sso_saml_login_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlia
 sso_saml_logout_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp
 sso_saml_issuer_name: http://srl-reporting-web
 sso_saml_name_qualifier: http://sso.sbac2.net:8080/OpenAM-11.0.0
-cache_hosts: srl-memcached.dev.ae1.sbac2dc.net:11211
 hpz_base_url: http://srl-hpz-web.dev.ae1.sbac2dc.net:8443
 reporting_base_url_host: http://srl-web-reporting.dev.ae1.sbac2dc.net
 disable_stack_trace: False
+
+# Must be dynamically looked up from inventory
+cache_hosts: "{{ groups['memcached']  | append_to_each(':11211') | join(';') }}"
