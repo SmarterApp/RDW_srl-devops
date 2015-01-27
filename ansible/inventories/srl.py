@@ -11,6 +11,7 @@ Modified for SBAC/SRL use:
   * Remove eucalytus, route 53, and RDS handling.
   * Read AWS creds from pass/gpg-agent
   * Makes groups based directly on 'application' tag
+  * Makes single-element groups based on 'Name' tag
   * Makes groups based on VPC's 'environment' tag
 
 This script also assumes there is an ec2.ini file alongside it.  To specify a
@@ -375,6 +376,12 @@ class Ec2Inventory(object):
         # SBAC: in particular, group by application tags directly
         for k, v in instance.tags.iteritems():
             if k == 'application':
+                key = self.to_safe(v)
+                self.push(self.inventory, key, dest)
+
+        # SBAC: in particular, group by Name tags directly
+        for k, v in instance.tags.iteritems():
+            if k == 'Name':
                 key = self.to_safe(v)
                 self.push(self.inventory, key, dest)
 
