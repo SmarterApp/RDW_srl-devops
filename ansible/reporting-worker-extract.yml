@@ -4,6 +4,9 @@
   user: ansible
   sudo: yes
 
+  vars_files:
+    - reporting-worker-extract.yml
+
   roles:
     - common
     - edware

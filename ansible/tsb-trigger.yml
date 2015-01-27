@@ -4,6 +4,9 @@
   user: ansible
   sudo: yes
 
+  vars_files:
+    - tsb-trigger.yml 
+
   roles:
     - common
     - edware
