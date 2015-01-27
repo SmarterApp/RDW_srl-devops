@@ -1,0 +1,10 @@
+---
+- name: Configure reporting-generator-pdf servers 
+  hosts: reporting-generator-pdf 
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - edware
+    - reporting-generator-pdf

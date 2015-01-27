@@ -1,0 +1,5 @@
+---
+- include_vars: reporting-cache-warmer.yml
+- name: Configure reporting-cache-warmer 
+  template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
+  notify: restart httpd 

@@ -1,0 +1,10 @@
+---
+- name: Configure reporting-cache-warmer servers 
+  hosts: reporting-cache-warmer 
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - edware
+    - reporting-generator-pdf
