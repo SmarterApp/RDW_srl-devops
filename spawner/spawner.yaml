@@ -61,7 +61,7 @@ apps:
       - srl-logging
     instance_type: r3.2xlarge
 
-  gluster:
+  gluster-server:
     ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
