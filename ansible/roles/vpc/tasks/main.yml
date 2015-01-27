@@ -1,8 +1,15 @@
 ---
+
+- name: Select environment variable set
+  include_vars: selector.yml
+
 - name: Include the variables specific to the vpc
-  include_vars: envs/{{ environ| default("testing") }}
+  include_vars: envs/{{ env_file }}.yml
+
 - name: Create VPC 
   ec2_vpc:
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     state: present
     cidr_block: "{{ vpc_cidr_block }}" 
     resource_tags: "{{ vpc_resource_tags }}" 

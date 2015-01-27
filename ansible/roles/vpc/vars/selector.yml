@@ -1,0 +1,2 @@
+
+env_file: "{{ environ | default(lookup('env', 'SBAC_ENVIRO_BUILDER_MODE')) | default('testing') }}"
