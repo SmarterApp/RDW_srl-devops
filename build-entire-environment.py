@@ -12,8 +12,8 @@ import time
 def main():
     opts = read_options()
     hints = preflight(opts)
-    #create_vpc(hints)
-    #create_security_groups(hints)
+    create_vpc_and_security_groups(hints)
+
     #create_infra_hosts(hints)
     #create_application_hosts(hints)
 
@@ -59,8 +59,11 @@ def read_options():
     parser.add_option("-d", "--debug", dest="debug", action="store_true",
                         help="Debug level output")
     parser.add_option("-e", "--env", dest="env", metavar="ENV", type="string",
-                       default="dev", help="Required.  Which environment (VPC) to target.  'dev' not permitted.  If the VPC exists, will create instances there; if not will create the VPC. Values are the Environment tags on the VPCs.")
-    
+                       help="Required.  Which environment (VPC) to target.  'dev' not permitted.  If the VPC exists, will create instances there; if not will create the VPC. Values are the Environment tags on the VPCs.")
+    parser.add_option("-b", "--block", dest="block", metavar="BLOCK", type="int",
+                       help="Required.  Which CIDR B-block to place the VPC in under 10.BLOCK.0.0.")
+
+        
     (options, args) = parser.parse_args()
      
     if options.debug:
@@ -88,20 +91,34 @@ def preflight(opts):
     vpc_conn = connect_to_vpc()
     hints['vpc']['conn'] = vpc_conn
     hints['vpc']['env'] = opts.env
-    vpcs = [ v for v in vpc_conn.get_all_vpcs() if v.tags.get['Environment'] == opts.env ]
+    vpcs = [ v for v in vpc_conn.get_all_vpcs() if v.tags.get('Environment') == opts.env ]
     if len(vpcs) > 1:
         logging.error("Yipes, VPC environment {0} is non-unique!".format(opts.env))
         exit(3)
     if len(vpcs) == 1:
-        logging.error("Selected EXISTING VPC environment {0} {1}".format(opts.env, vpcs[0].id))
+        logging.info("Selected EXISTING VPC environment {0} {1}".format(opts.env, vpcs[0].id))
         hints['vpc']['obj'] = vpcs[0]
         hints['vpc']['id'] = vpcs[0].id
     if len(vpcs) == 0:
-        logging.error("We'll be creating a new VPC environment {0}".format(opts.env))
+        logging.info("We'll be creating a new VPC environment {0}".format(opts.env))
         
-    
+    # TODO - check for b-block collision
+    hints['vpc']['block'] = opts.block
+            
     return hints
 
+def create_vpc_and_security_groups(hints):
+    if hints['vpc'].get('obj'):
+        return
+
+    os.environ['SBAC_ENVIRO_BUILDER_VPC_BLOCK'] = hints['vpc']['block']
+    os.environ['SBAC_ENVIRO_BUILDER_MODE'] = 'dynamic'
+    os.environ['SBAC_ENVIRO_BUILDER_ENV_NAME'] = hints['vpc']['env']
+
+    os.chdir('ansible')
+    os.system('ansible-playbook -v vpc-and-security-groups.yml')
+    os.chdir('..')
 
     
+
 main()
