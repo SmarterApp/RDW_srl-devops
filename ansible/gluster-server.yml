@@ -1,4 +1,18 @@
 ---
+- name: Provision GlusterFS storage
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    instance_ids:
+      - 'i-5d6fd2ac'
+      - 'i-5c6fd2ad'
+    region: 'us-east-1'
+    aws_access_key: "{{ lookup('pipe', 'pass dev/aws/access_id') }}"
+    aws_secret_key: "{{ lookup('pipe', 'pass dev/aws/secret_key') }}"
+  roles:
+    - gluster-storage
+
 - name: Install GlusterFS servers
   user: ansible
   sudo: yes

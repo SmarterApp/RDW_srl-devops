@@ -9,5 +9,5 @@ storage_devices:
   - { name: uploads2, size: 50, dev: xvdm }
   - { name: zones1, size: 50, dev: xvdn }
   - { name: zones2, size: 50, dev: xvdo }
-  - { name: zones2, size: 50, dev: xvdp }
-  - { name: zones2, size: 50, dev: xvdq }
+  - { name: pdf1, size: 50, dev: xvdp }
+  - { name: pdf2, size: 50, dev: xvdq }
