@@ -1,0 +1,3 @@
+# See https://github.wgenhq.net/Ed-Ware-SBAC/srl-devops/blob/master/docs/SettingUpPasswordCaching.md
+aws_access_id: "{{ lookup('pipe', 'pass $SBAC_ENV/aws/access_id') }}"
+aws_secret_key: "{{ lookup('pipe', 'pass $SBAC_ENV/aws/secret_key') }}"
