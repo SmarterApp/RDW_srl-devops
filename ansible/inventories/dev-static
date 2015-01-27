@@ -101,5 +101,6 @@ tsb-web
 hpz-web
 reporting-worker-pdf
 reporting-worker-extract
+gluster-servers
 
 # TODO the many other apps
