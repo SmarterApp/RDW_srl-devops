@@ -113,6 +113,8 @@ apps:
     security_groups:
       - srl-default
       - srl-logging
+      - srl-rmq-client
+      - srl-glusterfs-udl-client
     instance_type: t1.micro 
 
   file-grabber:
