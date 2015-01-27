@@ -16,3 +16,5 @@
 
 - name: Start Rsyslog
   service: name=rsyslog state=started enabled=yes
+
+- include: dns-client.yml
