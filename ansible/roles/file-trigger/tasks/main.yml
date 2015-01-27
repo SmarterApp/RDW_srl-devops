@@ -4,5 +4,5 @@
   notify: restart edudl2-trigger
 
 - name: Configure file-trigger udl
-  template: src=roles/edware/templates/udl_conf.ini.j2 dest=/opt/edware/conf/udl_conf.ini
+  template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart edudl2-trigger

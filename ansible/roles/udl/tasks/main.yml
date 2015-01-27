@@ -1,4 +1,4 @@
 ---
 - name: Configure udl 
-  template: src=roles/edware/templates/udl_conf.ini.j2 dest=/opt/edware/conf/udl_conf.ini
+  template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart celeryd-udl2 
