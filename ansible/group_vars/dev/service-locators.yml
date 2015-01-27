@@ -45,6 +45,8 @@ migrate_rabbit_host: srl-rabbit.dev.ae1.sbac2dc.net
 migrate_source_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
 reporting_rabbit_services_host: srl-rabbit.dev.ae1.sbac2dc.net
 reporting_rabbit_extract_host: srl-rabbit.dev.ae1.sbac2dc.net
+gluster_server_1: srl-gluster-1.dev.ae1.sbac2dc.net
+gluster_server_2: srl-gluster-2.dev.ae1.sbac2dc.net
 
 #-------------------------------------------------------------#
 #                   Application Specific Config

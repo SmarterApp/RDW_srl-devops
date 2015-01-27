@@ -64,6 +64,13 @@
 # i-4ee928bf
 10.166.33.124
 
+[gluster-1]
+# i-5d6fd2ac
+10.166.36.20
+
+[gluster-2]
+# i-5c6fd2ad
+10.166.36.21
 
 # These machines are precious - manually configured for AMI building.
 [precious]
@@ -82,6 +89,10 @@ hpz-web
 reporting-worker-extract
 reporting-worker-pdf
 tsb-worker
+
+[gluster-servers:children]
+gluster-1
+gluster-2
 
 # This defines 'dev' as a group-of-groups.  We need this to load vars from the group_vars/dev/*
 [dev:children]
