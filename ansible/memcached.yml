@@ -1,0 +1,9 @@
+---
+- name: Configure the memcached server 
+  hosts: memcached 
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - memcached 
