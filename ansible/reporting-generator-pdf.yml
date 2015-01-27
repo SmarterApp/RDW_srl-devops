@@ -4,9 +4,6 @@
   user: ansible
   sudo: yes
 
-  vars_files:
-    - reporting-pdf-generator.yml
-
   roles:
     - common
     - edware
