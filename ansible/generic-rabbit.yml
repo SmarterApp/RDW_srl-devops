@@ -1,0 +1,5 @@
+- name: Generic rabbitmq setup
+  hosts: migrate-rabbit:reporting-rabbit-services:reporting-rabbit-extract:tsb-rabbit:udl-rabbit
+  sudo: yes
+  roles:
+    - common
