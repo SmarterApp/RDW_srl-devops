@@ -1,4 +1,4 @@
 ---
-- name: Configure reporting-worker-extract
+- name: Configure migrate 
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
-  notify: restart celeryd-edextract 
+  notify: restart celeryd-edmigrate 

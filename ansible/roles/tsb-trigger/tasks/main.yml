@@ -1,0 +1,4 @@
+---
+- name: Configure tsb-trigger
+  template: src=roles/edware/templates/smarter_score_batcher.ini.j2 dest=/opt/edware/conf/smarter_score_batcher.ini
+  notify: restart file-monitor-smarter_score_batcher

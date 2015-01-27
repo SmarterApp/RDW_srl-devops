@@ -1,7 +1,9 @@
 ---
 - name: Configure the reporting webserver hosts
   hosts: reporting-web
+  user: ansible
   sudo: yes
+
   roles:
     - common
     - edware

@@ -1,0 +1,10 @@
+---
+- name: Configure lz server 
+  hosts: lz 
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - edware
+    - lz 

@@ -1,0 +1,10 @@
+---
+- name: Configure the tsb-web server 
+  hosts: tsb-web 
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - edware
+    - tsb-web 

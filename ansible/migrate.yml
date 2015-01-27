@@ -1,0 +1,10 @@
+---
+- name: Configure migrate server 
+  hosts: migrate 
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - edware
+    - migrate 

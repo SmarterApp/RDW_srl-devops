@@ -1,9 +1,4 @@
 ---
-
-# Note: this allows a "conditional handler" - the edware role
-# can't notify this, becuase it may or may not be in the playbook.
-- name: restart celeryd-services when smarter.ini changes
-  service:
-    name: celeryd-services
-    state: restarted
-  when: smarter_ini|changed
+- name: Configure reporting-worker-pdf
+  template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
+  notify: restart celeryd-services 
