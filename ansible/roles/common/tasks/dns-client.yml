@@ -16,3 +16,17 @@
     dest: /etc/dhcp/dhclient-enter-hooks
     mode: 0755
 
+- name: Set local hostname to AWS name tag
+  hostname: 
+    name: "{{ ec2_tag_Name }}"
+
+# TODO: get clean images without bad lines :-)
+- name: Remove unwanted lines from /etc/hosts
+  lineinfile:
+    state: absent
+    dest: /etc/hosts
+    line: "{{ item }}"
+  with_items:
+    - "72.232.223.58       mirrorlist.centos.org"
+    - "10.166.38.29		sso.sbac2.net"
+    - "10.166.34.81       reporting.sbac2.net"
