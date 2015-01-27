@@ -1,8 +1,18 @@
 ---
 # Setup DNS client on machine
 
+# This task handles running instances.
 - name: Setup resolv.conf to point at local bind server
   template:
     src: resolv.conf.j2
     dest: /etc/resolv.conf
+
+
+# This task, in theory, should handle machines that 
+# have restarted, but have not had ansible run since the restart.
+- name: Setup dhclient start hook to write our custom resolve.conf
+  template:
+    src: dhclient-enter-hooks.j2
+    dest: /etc/dhcp/dhclient-enter-hooks
+    mode: 0755
 
