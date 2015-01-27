@@ -1,0 +1,22 @@
+# -*-sh-*-
+# This file is maintained by ansible. Local changes will be lost.
+
+# SBAC: override resolv.conf generation to use our fixed (from ansible) values, 
+# instead of the values from AWS DHCP.
+make_resolv_conf() {
+    [ "${PEERDNS}" = "no" ] && return
+
+    if [ "${reason}" = "RENEW" ] &&
+       [ "${new_domain_name}" = "${old_domain_name}" ] &&
+       [ "${new_domain_name_servers}" = "${old_domain_name_servers}" ]; then
+        return
+    fi
+
+    echo "; This file is maintained by ansible. Local changes will be lost." > ${rscf}
+    echo "search {{ dns_search_domain}}" >> ${rscf}
+    echo "nameserver {{ bind_host }}" >> ${rscf}
+
+    change_resolv_conf ${rscf}
+    rm -f ${rscf}
+    fix_context /etc/resolv.conf
+}

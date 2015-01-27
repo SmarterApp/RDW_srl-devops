@@ -1,0 +1,47 @@
+---
+# Setup DNS client on machine
+
+# This task handles running instances.
+- name: Setup resolv.conf to point at local bind server
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+
+
+# This task, in theory, should handle machines that 
+# have restarted, but have not had ansible run since the restart.
+- name: Setup dhclient start hook to write our custom resolve.conf
+  template:
+    src: dhclient-enter-hooks.j2
+    dest: /etc/dhcp/dhclient-enter-hooks
+    mode: 0755
+
+- name: Set local hostname to AWS name tag
+  hostname: 
+    name: "{{ ec2_tag_Name }}"
+
+# TODO: get clean images without bad lines :-)
+- name: Remove unwanted lines from /etc/hosts
+  lineinfile:
+    state: absent
+    dest: /etc/hosts
+    line: "{{ item }}"
+  with_items:
+    # Per tosako 2015-01-27
+    - "72.232.223.58       mirrorlist.centos.org"
+    - "10.166.38.29		sso.sbac2.net"
+    - "10.166.34.81       reporting.sbac2.net"
+
+- name: Check to see if I am in the BIND server
+  # There has got to be a better way
+  shell: "dig @{{ bind_host }} {{ ec2_tag_Name}}.{{ dns_search_domain }} +noquestion +nostats +nocmd | grep -v ';' | grep {{ ec2_tag_Name }}"  
+  ignore_errors: yes # Do not abort if this fails
+  changed_when: False # never consider this a "change"
+  register: dig_lookup
+
+
+- name: Refresh BIND server if needed
+  sudo: no
+  shell: "ssh -t -t ansible@{{ bind_host }} sudo /opt/itops/bin/AWS_bind_refresh.sh"
+  delegate_to: 127.0.0.1
+  when: dig_lookup|failed
