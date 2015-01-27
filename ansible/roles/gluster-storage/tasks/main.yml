@@ -1,0 +1,27 @@
+---
+- name: provision ebs storage on srl-gluster-1
+  local_action:
+    module: ec2_vol
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    instance: 'i-5d6fd2ac'
+    device_name: "/dev/{{ item.dev }}"
+    volume_size: "{{ item.size }}"
+    state: present
+    encrypted: yes
+    region: "{{ region }}"
+  with_items: storage_devices
+  register: vols
+
+- name: provision ebs storage on srl-gluster-2
+  ec2_vol:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    instance: 'i-5c6fd2ad'
+    device_name: "/dev/{{ item.dev }}"
+    volume_size: "{{ item.size }}"
+    state: present
+    encrypted: yes
+    region: "{{ region }}"
+  with_items: storage_devices
+  register: vols

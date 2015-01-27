@@ -1,6 +1,4 @@
 ---
-- include: provision_storage.yml
-
 - name: Install packages required for GlusterFS
   yum: name={{item}} state=installed
   with_items:
