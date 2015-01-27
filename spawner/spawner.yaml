@@ -70,7 +70,7 @@ apps:
     instance_type: m3.medium # TODO: verify
 
   hpz-db:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: db # per doris
     security_groups:
       - srl-default
       - srl-db
@@ -78,7 +78,6 @@ apps:
     instance_type: m3.2xlarge
 
   hpz-web:
-    ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
       - srl-db-client
@@ -133,7 +132,7 @@ apps:
   #  instance_type: m3.medium
 
   reporting-cache-warmer:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-default
       - srl-memcached
@@ -141,7 +140,7 @@ apps:
     instance_type: m3.large
 
   reporting-generator-pdf:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-default
       - srl-rmq-client
@@ -157,7 +156,7 @@ apps:
     instance_type: m3.xlarge
 
   reporting-rabbit-extract:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: rabbit
     security_groups:
       - srl-default
       - srl-db-pool-client
@@ -197,7 +196,6 @@ apps:
       - srl-logging
     #instance_type: r3.2xlarge # TODO: existing image is PV, r3 requires HVM
     instance_type: m2.4xlarge
-    subnet_type: public # TODO: fix the networking
 
   tsb-rabbit:
     ami_app_name: rabbit
@@ -208,14 +206,12 @@ apps:
     instance_type: m3.xlarge
 
   tsb-trigger:
-    ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
       - srl-logging
     instance_type: m3.large
 
   tsb-web:
-    ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
       - srl-web
@@ -225,7 +221,6 @@ apps:
     instance_type: m3.xlarge
 
   tsb-worker:
-    ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
       - srl-db-client
@@ -235,7 +230,6 @@ apps:
     instance_type: m3.xlarge
 
   udl:
-    ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
       - srl-db-client
