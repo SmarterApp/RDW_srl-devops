@@ -210,10 +210,13 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     
     # Copy out tags for the AMI
     hints['tags'] = {}
-    for tn in ['application', 'version', 'environment', 'tier']:
+    for tn in ['version', 'environment', 'tier']:
         if ami.tags.get(tn):
             hints['tags'][tn] = ami.tags[tn]
-
+            
+    # Regardless of what the AMI was, tag it according to the app that was requested
+    hints['tags']['application'] = opts.app
+            
     #------
     # Check VPC selection (via opts.vpc matching on VPC 'environment' tag)
     #------
