@@ -33,6 +33,17 @@ apps:
       dev: 0  # Deployed by external bootstrapper
       prod: 0 # TODO: verify
 
+  - name: nat
+    ami_app_name: nat
+      - srl-default
+      - srl-nat
+    instance_type: m3.medium
+    public_ip: True
+    spawn_count: 
+      dev: 0
+      test: 1
+      prod: 0
+
   - name: bind
     ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
