@@ -32,7 +32,7 @@ apps:
     instance_type: t1.micro
 
   db-master:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: db-master 
     security_groups:
       - srl-default
       - srl-db
@@ -49,7 +49,7 @@ apps:
     instance_type: m3.xlarge
 
   db-pgpool:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: pg-pool 
     security_groups:
       - srl-default
       - srl-db-client
@@ -58,7 +58,7 @@ apps:
     instance_type: m3.xlarge
 
   db-slave: # TODO: may be split; there are actually two - one for extraction and one for reporting
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: db-slave 
     security_groups:
       - srl-default
       - srl-db
@@ -129,7 +129,7 @@ apps:
     instance_type: t1.micro
 
   migrate-db:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: db 
     security_groups:
       - srl-default
       - srl-db
@@ -265,7 +265,7 @@ apps:
     instance_type: m3.2xlarge
 
   udl-db:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: db 
     security_groups:
       - srl-default
       - srl-db

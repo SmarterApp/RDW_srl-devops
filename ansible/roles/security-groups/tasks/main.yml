@@ -26,6 +26,20 @@
         cidr_ip: 0.0.0.0/0
     purge_rules: true
     purge_rules_egress: true
+- name: srl-bind security group
+  ec2_group:
+    name: srl-bind
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: BIND Servers
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 53
+        to_port: 53
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
 - name: srl-db security group
   ec2_group:
     name: srl-db
