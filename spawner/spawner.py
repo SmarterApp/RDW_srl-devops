@@ -289,7 +289,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     if app_cfg.get('public_ip') and hints['count'] > 1:
         logging.error("Refusing to assign public IPs to a multi-instance request, because that is hard.")
         exit(9)
-    hints['public_ip'] = app_cfg['public_ip']
+    hints['public_ip'] = app_cfg.get('public_ip')
         
 
     if opts.run_ansible:
