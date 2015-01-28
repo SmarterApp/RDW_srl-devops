@@ -5,7 +5,7 @@
 #-------------------------------------------------------------#
 #                   Application Specific Config
 #-------------------------------------------------------------#
-sso_oauth_verify_url: https://sso.smarterbalanced.org/auth/oauth2/tokeninfo?realm=/
+sso_oauth_verify_url: https://sso.smarterbalanced.org/auth/oauth2/tokeninfo?realm=/sbac
 auth_policy_secure: True
 sso_saml_login_url: https://sso.smarterbalanced.org/auth/SSORedirect/metaAlias/idp
 sso_saml_logout_url: https://sso.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/idp
