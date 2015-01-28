@@ -313,6 +313,9 @@ apps:
       - srl-default
       - srl-logging
     instance_type: m3.large
+    spawn_count:
+      dev: 0
+      prod: 0
 
   - name: tsb-web
     ami_app_name: tsb-web
@@ -358,6 +361,9 @@ apps:
       - srl-db
       - srl-logging
     instance_type: m3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
   - name: udl-rabbit
     ami_app_name: rabbit
