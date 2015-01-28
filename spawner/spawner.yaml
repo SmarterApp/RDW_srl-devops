@@ -29,12 +29,25 @@ apps:
       - omniti-fulton-office
     instance_type: t1.micro
     public_ip: True
+    subnet_type: public # Colin said so!
     spawn_count:
       dev: 0  # Deployed by external bootstrapper
       prod: 0 # TODO: verify
 
+  - name: nat
+    ami_app_name: nat # TODO: remove this when the real AMI is available
+    security_groups:
+      - srl-default
+      - srl-nat
+    instance_type: m3.medium # TODO: verify    
+    public_ip: True
+    subnet_type: public # Colin said so!
+    spawn_count:
+      dev: 0   # TODO: verify
+      prod: 0  # Not managed by SRL in prod
+
   - name: bind
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: bind # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
       - srl-logging
