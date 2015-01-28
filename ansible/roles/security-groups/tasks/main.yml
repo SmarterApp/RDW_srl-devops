@@ -476,6 +476,26 @@
         cidr_ip: 10.0.0.0/8
     purge_rules: true
     purge_rules_egress: true
+- name: srl-nat security group
+  ec2_group:
+    name: srl-nat
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow private subnet access to NAT for external inet traffic
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: all
+        from_port: all
+        to_port: all
+        cidr_ip: 10.0.0.0/8
+    rules_egress:
+      - proto: all
+        from_port: all
+        to_port: all
+        cidr_ip: 0.0.0.0/0
+    purge_rules: true
+    purge_rules_egress: true
 - name: srl-rmq security group
   ec2_group:
     name: srl-rmq
