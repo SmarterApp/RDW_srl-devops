@@ -59,8 +59,8 @@ def read_cli_opts():
     parser = OptionParser()
     parser.add_option("-a", "--app", dest="app", type="string",
                         help="Which app to spawn.  Required; values are app names from spawner.yaml", metavar="APP")
-    parser.add_option("-b", "--begin", type="int", dest="begin", default=1,
-                        help="Sequence number to begin at for naming to avoid naming collisions.  Optional, default 1.", metavar="BEGIN")
+    parser.add_option("-b", "--begin", type="int", dest="begin",
+                        help="Sequence number to begin at for naming to avoid naming collisions.  Optional, default auto.", metavar="BEGIN")
     parser.add_option("-c", "--count", type="int", dest="count", default=1,
                         help="Number of instances to spawn.  Optional, default 1.", metavar="COUNT")
     parser.add_option("-d", "--debug", dest="debug", action="store_true",
@@ -189,14 +189,21 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     #------
     # TODO: consider examining DNS instead of / in addition to the AWS tags
     logging.debug("Generating names and checking for collisions")
-    hints['names'] = ["srl-{0}-{1}".format(opts.app, str(i).zfill(3)) for i in range(opts.begin, opts.count + opts.begin)]
     instance_tags = ec2_conn.get_all_tags({'resource-type':'instance'})
-    existing_names = [t.value for t in instance_tags if t.name == 'Name']
-    for proposed_name in hints['names']:
-        if proposed_name in existing_names:
-            logging.error("A machine already exists named {0}. Consider the -b option. You shall not pass.".format(proposed_name))
+    existing_names = sorted([t.value for t in instance_tags if t.name == 'Name' and t.value.startswith('srl-' +  opts.app)])
+
+    new_start = opts.begin if opts.begin else 1
+    hints['names'] = ["srl-{0}-{1}".format(opts.app, str(i).zfill(3)) for i in range(new_start, opts.count + new_start)]
+    intersection = sorted([ n for n in hints['names'] if n in existing_names])
+    while len(intersection) != 0:
+        if opts.begin:
+            logging.error("A naming collision would exist for {0}. Consider the removing the -b option. You shall not pass.".format(','.join(intersection)))
             exit(3)
-            
+        else:
+            new_start = int(intersection[-1][-3:]) + 1
+            hints['names'] = ["srl-{0}-{1}".format(opts.app, str(i).zfill(3)) for i in range(new_start, opts.count + new_start)]
+            intersection = sorted([ n for n in hints['names'] if n in existing_names])
+                                    
     #------
     # Verify that AMI ID for that app type exists, and get tags
     #------
