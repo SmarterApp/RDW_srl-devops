@@ -118,10 +118,13 @@ def create_vpc_and_security_groups(hints):
     os.chdir('..')
 
 def create_ansible_host(hints):
+
+    # Spawn, but do not ansiblize, the ansible server.
     os.chdir('spawner')
-    os.system("./spawner.py -a ansible -e {0} -p ansible-bootstrap".format(hints['vpc']['env']))
+    os.system("./spawner.py -a ansible -e {0} -s".format(hints['vpc']['env']))
     os.chdir('..')
 
+    
     # Now run ansible with special inventory program mode for bootstrapping
     os.chdir('ansible')
     os.environ['EC2_INI_PATH'] = 'inventories/ec2-public.ini'
