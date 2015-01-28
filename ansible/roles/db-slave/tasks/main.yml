@@ -1,0 +1,21 @@
+---
+  - name: clone master
+    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -d edware -p 5432 -R postgres --verbose standby clone {{ db_master.host }}'"
+
+  - name: update recovery.conf
+    lineinfile: dest=/var/lib/pgsql/9.2/data/recovery.conf line='$item'
+    with_items:
+      - "restore_command = 'gunzip < /var/lib/pgsql/9.2/archive/%f.gz > %p'"
+      - "archive_cleanup_command = '/usr/pgsql-9.2/bin/pg_archivecleanup /var/lib/pgsql/9.2/archive %r'"
+
+  - name: copy archive
+    shell: "su - postgres -c 'scp {{ db_master.host }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
+
+  - name: configure repmgr.conf
+    template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/opt/edware/conf/repmgr.conf
+
+  - name: register slave
+    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf standby register'"
+
+  - name: add service
+    service: name=repmgrd state=started enabled=yes

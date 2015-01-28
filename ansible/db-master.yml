@@ -1,0 +1,12 @@
+---
+- name: Configure the standalone database postgres server 
+  hosts: db-master
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - db
+    - db-master
+
+# We might need to update postgres user names and password
