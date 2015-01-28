@@ -1,0 +1,21 @@
+---
+- name: Just say stuff
+  hosts: localhost
+  connection: local
+  gather_facts: Yes
+  tasks:
+  - name: Show me the hosts
+    debug: var=groups['gluster-server']
+
+  - name: Show me the groups
+    debug: var=group_names
+
+  - name: show me the hostvars
+    debug: var=hostvars[{{ item }}]
+    with_items: groups['gluster-server']
+
+  - name: Can I get more hostvars
+    debug: var=hostvars['10.166.33.153']
+
+  - name: Dump all variables
+    action: template src=dumpall.j2 dest=/tmp/ansible.all
