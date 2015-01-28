@@ -179,10 +179,15 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     #------
     # Verify that requested app type exists in the config file
     #------
-    if not opts.app in cfg['apps']:
+        
+    matched_apps = [a for a in cfg['apps'] if a['name'] == opts.app]    
+    if len(matched_apps) < 1:
         logging.error("I don't know anything about an application named {0}".format(opts.app))
         exit(2)
-    app_cfg = cfg['apps'][opts.app]
+    if len(matched_apps) > 1:
+        logging.error("App {0} appears more than once in spawner.yaml!".format(opts.app))
+        exit(2)
+    app_cfg = matched_apps[0]
     
     #------
     # Verify that no existing instances have names that will collide over the spawn range

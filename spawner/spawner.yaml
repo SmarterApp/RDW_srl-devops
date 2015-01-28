@@ -8,8 +8,9 @@ region: us-east-1
 # Security group names are from https://docs.google.com/a/amplify.com/spreadsheets/d/1vtYyCL50Ii3wHeNDsWYlu-YVjjBSORzZQZOKvnLAgkM/edit#gid=2108299998
 
 apps:
-
-  # app-name:
+  
+  # Array order indicates spawn order when called from the environment deployer.
+  # - name: app_name
   #   ami_app_name: other_thing # Optional.  Use this to override which AMI is used.  Will look for an AMI that has an application:other_thing tag.
   #   security_groups:
   #     - sg-name-01 # Array of SG names
@@ -17,8 +18,12 @@ apps:
   #   instance_type: t1.micro # Required
   #   subnet_type: private # One of private, public, or lz.  Defaults to private.
   #   public_ip: True or False, defaults to false.
+  #   spawn_count:  # Default initial spawn when called by the env builder.
+  #    env_name: INT # 0 disables spawning from env-builder
 
-  ansible:
+  # Note: when building an env, ansible is first bootstrapped externally, then will be revisited.
+
+  - name: ansible
     ami_app_name: base # Playbook runs from base
     security_groups:
       - srl-default
@@ -26,20 +31,66 @@ apps:
       - omniti-fulton-office
     instance_type: t1.micro
     public_ip: True
+    spawn_count:
+      dev: 1
+      prod: 0  # Not managed by SRL in prod
 
-  base:
-    security_groups: []
-    instance_type: t1.micro
 
-  db-master:
+  - name: bind
+    ami_app_name: base # TODO: remove this when the real AMI is available
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-bind
+    instance_type: m3.medium # TODO: verify    
+    spawn_count:
+      dev: 1
+      prod: 0  # Not managed by SRL in prod
+
+  - name: gluster-server
+    ami_app_name: base # Playbook runs from base
+    security_groups:
+      - srl-default
+      - srl-glusterfs
+      - srl-logging
+    instance_type: m3.medium # TODO: verify    
+    spawn_count:
+      dev: 2
+      prod: 0 # TODO
+
+  - name: loghost
+    ami_app_name: base # Playbook runs from base
+    security_groups:
+      - srl-default
+      - srl-logstash
+    instance_type: m2.xlarge 
+    spawn_count:
+      dev: 0
+      prod: 0
+
+  - name: memcached
+    ami_app_name: memcached 
+    security_groups:
+      - srl-default
+      - srl-memcached
+      - srl-logging
+    instance_type: m2.4xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
+
+  - name: db-master
     ami_app_name: db-master 
     security_groups:
       - srl-default
       - srl-db
       - srl-logging
     instance_type: r3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  db-pgbouncer:
+  - name: db-pgbouncer
     ami_app_name: base # TODO: remove this when the real AMI is available
     security_groups:
       - srl-default
@@ -47,8 +98,11 @@ apps:
       - srl-db-pgbouncer
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  db-pgpool:
+  - name: db-pgpool
     ami_app_name: pg-pool 
     security_groups:
       - srl-default
@@ -56,32 +110,33 @@ apps:
       - srl-db-pool
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  db-slave: # TODO: may be split; there are actually two - one for extraction and one for reporting
+  - name: db-slave # TODO: may be split; there are actually two - one for extraction and one for reporting
     ami_app_name: db-slave 
     security_groups:
       - srl-default
       - srl-db
       - srl-logging
     instance_type: r3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  gluster-server:
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups:
-      - srl-default
-      - srl-glusterfs
-      - srl-logging
-    instance_type: m3.medium # TODO: verify
-
-  hpz-db:
+  - name: hpz-db
     ami_app_name: db # per doris
     security_groups:
       - srl-default
       - srl-db
       - srl-logging
     instance_type: m3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  hpz-web:
+  - name: hpz-web
     ami_app_name: hpz-web
     security_groups:
       - srl-default
@@ -89,30 +144,22 @@ apps:
       - srl-glusterfs-hpz-client
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  loghost:
-    ami_app_name: base 
-    security_groups:
-      - srl-default
-      - srl-logstash
-    instance_type: m2.xlarge 
-
-  lz:
+  - name: lz
     ami_app_name: lz
     security_groups:
       - srl-default
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  memcached:
-    ami_app_name: memcached 
-    security_groups:
-      - srl-default
-      - srl-memcached
-      - srl-logging
-    instance_type: m2.4xlarge
 
-  file-trigger:
+  - name: file-trigger
     ami_app_name: file-trigger 
     security_groups:
       - srl-default
@@ -120,15 +167,21 @@ apps:
       - srl-rmq-client
       - srl-glusterfs-udl-client
     instance_type: t1.micro 
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  file-grabber:
+  - name: file-grabber
     ami_app_name: file-grabber
     security_groups:
       - srl-default
       - srl-logging
     instance_type: t1.micro
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  migrate-db:
+  - name: migrate-db
     ami_app_name: db 
     security_groups:
       - srl-default
@@ -138,45 +191,55 @@ apps:
       - srl-rmq-client
       - srl-logging
     instance_type: m3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  migrate-rabbit:
+  - name: migrate-rabbit
     ami_app_name: rabbit
     security_groups:
       - srl-default
       - srl-logging
       - srl-rmq
     instance_type: m3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  #nat:
-  #  ami_app_name: base # TODO: remove this when the real AMI is available
-  #  security_groups: [] # TODO
-  #  instance_type: m3.medium
-
-  reporting-cache-warmer:
+  - name: reporting-cache-warmer
     ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-default
       - srl-memcached
       - srl-logging
     instance_type: m3.large
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  reporting-generator-pdf:
+  - name: reporting-generator-pdf
     ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-default
       - srl-rmq-client
       - srl-logging
     instance_type: m3.large
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  reporting-rabbit-services:
+  - name: reporting-rabbit-services
     ami_app_name: rabbit
     security_groups:
       - srl-default
       - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  reporting-rabbit-extract:
+  - name: reporting-rabbit-extract
     ami_app_name: rabbit
     security_groups:
       - srl-default
@@ -186,8 +249,11 @@ apps:
       - srl-glusterfs-extract-client
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  reporting-web:
+  - name: reporting-web
     ami_app_name: reporting-web
     security_groups:
       - srl-default
@@ -197,8 +263,11 @@ apps:
       - srl-web
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  reporting-worker-extract:
+  - name: reporting-worker-extract
     ami_app_name: reporting-worker-extract 
     security_groups:
       - srl-default
@@ -208,8 +277,11 @@ apps:
       - srl-glusterfs-extract-client
       - srl-logging
     instance_type: m3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  reporting-worker-pdf:
+  - name: reporting-worker-pdf
     ami_app_name: reporting-worker-pdf
     security_groups:
       - srl-default
@@ -220,23 +292,29 @@ apps:
       - srl-logging
     #instance_type: r3.2xlarge # TODO: existing image is PV, r3 requires HVM
     instance_type: m2.4xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  tsb-rabbit:
+  - name: tsb-rabbit
     ami_app_name: rabbit
     security_groups:
       - srl-default
       - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  tsb-trigger:
+  - name: tsb-trigger
     ami_app_name: tsb-trigger
     security_groups:
       - srl-default
       - srl-logging
     instance_type: m3.large
 
-  tsb-web:
+  - name: tsb-web
     ami_app_name: tsb-web
     security_groups:
       - srl-default
@@ -245,8 +323,11 @@ apps:
       - srl-sso-client
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  tsb-worker:
+  - name: tsb-worker
     ami_app_name: tsb-worker
     security_groups:
       - srl-default
@@ -255,16 +336,22 @@ apps:
       - srl-glusterfs-udl-client
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  udl:
+  - name: udl
     ami_app_name: udl
     security_groups:
       - srl-default
       - srl-db-client
       - srl-logging
     instance_type: m3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
-  udl-db:
+  - name: udl-db
     ami_app_name: db 
     security_groups:
       - srl-default
@@ -272,13 +359,16 @@ apps:
       - srl-logging
     instance_type: m3.2xlarge
 
-  udl-rabbit:
+  - name: udl-rabbit
     ami_app_name: rabbit
     security_groups:
       - srl-default
       - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
   #vpn:
   #  ami_app_name: base # TODO: remove this when the real AMI is available
@@ -286,3 +376,11 @@ apps:
   #    - srl-default
   #  instance_type: m3.medium
 
+  #- name: base
+  #  security_groups: []
+  #  instance_type: t1.micro
+
+  #nat:
+  #  ami_app_name: base # TODO: remove this when the real AMI is available
+  #  security_groups: [] # TODO
+  #  instance_type: m3.medium
