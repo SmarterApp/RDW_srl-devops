@@ -31,7 +31,7 @@ apps:
     public_ip: True
     spawn_count:
       dev: 0  # Deployed by external bootstrapper
-      prod: 0
+      prod: 0 # TODO: verify
 
   - name: bind
     ami_app_name: base # TODO: remove this when the real AMI is available
@@ -41,7 +41,7 @@ apps:
       - srl-bind
     instance_type: m3.medium # TODO: verify    
     spawn_count:
-      dev: 0  # TODO
+      dev: 1   # TODO: verify
       prod: 0  # Not managed by SRL in prod
 
   - name: gluster-server
@@ -50,10 +50,10 @@ apps:
       - srl-default
       - srl-glusterfs
       - srl-logging
-    instance_type: m3.medium # TODO: verify    
+    instance_type: m3.medium # TODO: verify  
     spawn_count:
-      dev: 0 # TODO
-      prod: 0 # TODO
+      dev: 2
+      prod: 2
 
   - name: loghost
     ami_app_name: base # Playbook runs from base
@@ -63,10 +63,7 @@ apps:
     instance_type: m2.xlarge 
     spawn_count:
       dev: 1
-      prod: 0
-
-
-  # Deployment not ordered beyond this point
+      prod: 1
 
   - name: memcached
     ami_app_name: memcached 
@@ -76,54 +73,8 @@ apps:
       - srl-logging
     instance_type: m2.4xlarge
     spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: db-master
-    ami_app_name: db-master 
-    security_groups:
-      - srl-default
-      - srl-db
-      - srl-logging
-    instance_type: r3.2xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: db-pgbouncer
-    ami_app_name: base # TODO: remove this when the real AMI is available
-    security_groups:
-      - srl-default
-      - srl-db-client
-      - srl-db-pgbouncer
-      - srl-logging
-    instance_type: m3.xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: db-pgpool
-    ami_app_name: pg-pool 
-    security_groups:
-      - srl-default
-      - srl-db-client
-      - srl-db-pool
-      - srl-logging
-    instance_type: m3.xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: db-slave # TODO: may be split; there are actually two - one for extraction and one for reporting
-    ami_app_name: db-slave 
-    security_groups:
-      - srl-default
-      - srl-db
-      - srl-logging
-    instance_type: r3.2xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
+      dev: 2
+      prod: 5
 
   - name: hpz-db
     ami_app_name: db # per doris
@@ -133,53 +84,41 @@ apps:
       - srl-logging
     instance_type: m3.2xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
-  - name: hpz-web
-    ami_app_name: hpz-web
+  - name: tsb-db
+    ami_app_name: db
     security_groups:
       - srl-default
-      - srl-db-client
-      - srl-glusterfs-hpz-client
+      - srl-db
       - srl-logging
-    instance_type: m3.xlarge
+    instance_type: m3.2xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
-  - name: lz
-    ami_app_name: lz
+  - name: stats-db
+    ami_app_name: db 
     security_groups:
       - srl-default
+      - srl-db
       - srl-logging
-    instance_type: m3.xlarge
+    instance_type: m3.2xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
-
-  - name: file-trigger
-    ami_app_name: file-trigger 
+  - name: udl-db
+    ami_app_name: db 
     security_groups:
       - srl-default
+      - srl-db
       - srl-logging
-      - srl-rmq-client
-      - srl-glusterfs-udl-client
-    instance_type: t1.micro 
+    instance_type: m3.2xlarge
     spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: file-grabber
-    ami_app_name: file-grabber
-    security_groups:
-      - srl-default
-      - srl-logging
-    instance_type: t1.micro
-    spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
   - name: migrate-db
     ami_app_name: db 
@@ -192,8 +131,8 @@ apps:
       - srl-logging
     instance_type: m3.2xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
   - name: migrate-rabbit
     ami_app_name: rabbit
@@ -203,41 +142,8 @@ apps:
       - srl-rmq
     instance_type: m3.2xlarge
     spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: reporting-cache-warmer
-    ami_app_name: reporting-generator # per doris
-    security_groups:
-      - srl-default
-      - srl-memcached
-      - srl-logging
-    instance_type: m3.large
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: reporting-generator-pdf
-    ami_app_name: reporting-generator # per doris
-    security_groups:
-      - srl-default
-      - srl-rmq-client
-      - srl-logging
-    instance_type: m3.large
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: reporting-rabbit-services
-    ami_app_name: rabbit
-    security_groups:
-      - srl-default
-      - srl-rmq
-      - srl-logging
-    instance_type: m3.xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
   - name: reporting-rabbit-extract
     ami_app_name: rabbit
@@ -250,22 +156,201 @@ apps:
       - srl-logging
     instance_type: m3.xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
-  - name: reporting-web
-    ami_app_name: reporting-web
+  - name: reporting-rabbit-services
+    ami_app_name: rabbit
     security_groups:
       - srl-default
-      - srl-db-pool-client
-      - srl-rmq-client
-      - srl-memcached
-      - srl-web
+      - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
+
+  - name: tsb-rabbit
+    ami_app_name: rabbit
+    security_groups:
+      - srl-default
+      - srl-rmq
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: udl-rabbit
+    ami_app_name: rabbit
+    security_groups:
+      - srl-default
+      - srl-rmq
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: db-master
+    ami_app_name: db-master 
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
+    instance_type: r3.2xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  # - name: db-pgbouncer
+    # ami_app_name: base # TODO: remove this when the real AMI is available
+    # security_groups:
+      # - srl-default
+      # - srl-db-client
+      # - srl-db-pgbouncer
+      # - srl-logging
+    # instance_type: m3.xlarge
+    # spawn_count:
+      # dev: 0
+      # prod: 0
+ 
+  - name: reporting-db-slave # one for extraction and one for reporting
+    ami_app_name: db-slave 
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
+    instance_type: r3.2xlarge
+    spawn_count:
+      dev: 2
+      prod: 30
+ 
+  - name: extracts-db-slave
+    ami_app_name: db-slave 
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
+    instance_type: r3.2xlarge
+    spawn_count:
+      dev: 2
+      prod: 30
+
+  - name: reporting-db-pgpool
+    ami_app_name: pg-pool 
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-db-pool
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: extracts-db-pgpool
+    ami_app_name: pg-pool 
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-db-pool
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: tsb-worker
+    ami_app_name: tsb-worker
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-rmq-client
+      - srl-glusterfs-udl-client
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 2
+      prod: 3
+
+  - name: tsb-web
+    ami_app_name: tsb-web
+    security_groups:
+      - srl-default
+      - srl-web
+      - srl-rmq-client
+      - srl-sso-client
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 2
+      prod: 2
+
+  - name: tsb-trigger
+    ami_app_name: tsb-trigger
+    security_groups:
+      - srl-default
+      - srl-logging
+    instance_type: m3.large
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: lz
+    ami_app_name: lz
+    security_groups:
+      - srl-default
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: file-grabber
+    ami_app_name: file-grabber
+    security_groups:
+      - srl-default
+      - srl-logging
+    instance_type: t1.micro
+    spawn_count:
+      dev: 1
+      prod: 1
+ 
+  - name: file-trigger
+    ami_app_name: file-trigger 
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq-client
+      - srl-glusterfs-udl-client
+    instance_type: t1.micro 
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: udl
+    ami_app_name: udl
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-logging
+    instance_type: m3.2xlarge
+    spawn_count:
+      dev: 2
+      prod: 3
+
+  - name: hpz-web
+    ami_app_name: hpz-web
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-glusterfs-hpz-client
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 2
+      prod: 15
 
   - name: reporting-worker-extract
     ami_app_name: reporting-worker-extract 
@@ -278,8 +363,8 @@ apps:
       - srl-logging
     instance_type: m3.2xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 2
+      prod: 10
 
   - name: reporting-worker-pdf
     ami_app_name: reporting-worker-pdf
@@ -293,99 +378,44 @@ apps:
     #instance_type: r3.2xlarge # TODO: existing image is PV, r3 requires HVM
     instance_type: m2.4xlarge
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 2
+      prod: 10
 
-  - name: tsb-rabbit
-    ami_app_name: rabbit
+  - name: reporting-web
+    ami_app_name: reporting-web
     security_groups:
       - srl-default
-      - srl-rmq
+      - srl-db-pool-client
+      - srl-rmq-client
+      - srl-memcached
+      - srl-web
       - srl-logging
     instance_type: m3.xlarge
     spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: tsb-trigger
-    ami_app_name: tsb-trigger
+      dev: 4
+      prod: 60
+  
+  - name: reporting-cache-warmer
+    ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-default
+      - srl-memcached
       - srl-logging
     instance_type: m3.large
     spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
-  - name: tsb-web
-    ami_app_name: tsb-web
+  - name: reporting-generator-pdf
+    ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-default
-      - srl-web
       - srl-rmq-client
-      - srl-sso-client
       - srl-logging
-    instance_type: m3.xlarge
+    instance_type: m3.large
     spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: tsb-worker
-    ami_app_name: tsb-worker
-    security_groups:
-      - srl-default
-      - srl-db-client
-      - srl-rmq-client
-      - srl-glusterfs-udl-client
-      - srl-logging
-    instance_type: m3.xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: udl
-    ami_app_name: udl
-    security_groups:
-      - srl-default
-      - srl-db-client
-      - srl-logging
-    instance_type: m3.2xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: udl-db
-    ami_app_name: db 
-    security_groups:
-      - srl-default
-      - srl-db
-      - srl-logging
-    instance_type: m3.2xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: udl-rabbit
-    ami_app_name: rabbit
-    security_groups:
-      - srl-default
-      - srl-rmq
-      - srl-logging
-    instance_type: m3.xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
-
-  - name: stats-db
-    ami_app_name: db 
-    security_groups:
-      - srl-default
-      - srl-db
-      - srl-logging
-    instance_type: m3.2xlarge
-    spawn_count:
-      dev: 0
-      prod: 0
+      dev: 1
+      prod: 1
 
   #vpn:
   #  ami_app_name: base # TODO: remove this when the real AMI is available
