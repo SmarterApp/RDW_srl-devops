@@ -9,56 +9,11 @@ import sys
 
 def main(opts):
     ec2connection = EC2connection()
-    iam = IAMconnection()
     if opts.listinstance:
         try:
             ec2connection.get_instances_info(opts.instance)
         except UnboundLocalError:
             print "Incorrect value for instance or instance not found"
-    elif opts.listeip:
-        try:
-            ec2connection.get_elastic_ip_info(opts.elasticip)
-        except boto.exception.EC2ResponseError:
-            print "Incorrect value for elasticip or elasticip not found"
-    elif opts.listkeypair:
-        ec2connection.get_key_pairs_info()
-    elif opts.listloadbalancer:
-        ec2connection.get_load_balancers_info()
-    elif opts.listsecurity:
-        try:
-            ec2connection.get_security_groups_info(opts.securitygroup, opts.detail)
-        except boto.exception.EC2ResponseError:
-            print "Incorrect value for securitygroup or securitygroup not found"
-    elif opts.listamis:
-        ec2connection.get_ami_info()
-    elif opts.listusers:
-        try:
-            iam.get_users(opts.user)
-        except boto.exception.EC2ResponseError:
-            print "Incorrect value for user or user not found"
-    elif opts.listgroups:
-        try:
-            iam.get_groups(opts.group)
-        except boto.exception.EC2ResponseError:
-            print "Incorrect value for group or group not found"
-    elif opts.listroles:
-        iam.get_roles()
-    elif opts.getgrouppolicy:
-        if not opts.group or not opts.policy:
-            print "-ggp requires --group and --policy arguments"
-        else:
-            try:
-                iam.get_group_policy_info(opts.group[0],opts.policy[0])
-            except boto.exception.EC2ResponseError:
-                print "Incorrect value for group/policy or group/policy not found"
-    elif opts.getrolepolicy:
-        if not opts.role or not opts.policy:
-            print "-grp requires --role and --policy arguments"
-        else:
-            try:
-                iam.get_role_policy_info(opts.role[0],opts.policy[0])
-            except boto.exception.EC2ResponseError:
-                print "Incorrect value for role/policy or role/policy not found"
 
 
 class EC2connection(object):
@@ -107,20 +62,19 @@ class EC2connection(object):
         else:
             instances = self.ec2.get_only_instances()
         for i in instances:
-            name = self.instanceNameDict[i.id]
-            insttag = i.id + ".alltags"
-            tagstring = ""
-            for istncetags in self.instanceNameDict[insttag].keys():
-                tagstring = tagstring + istncetags + ":" + self.instanceNameDict[insttag][istncetags] + ";"
-            tagstring = tagstring[:-1]
-            print "Name: " + name + "| ID: "+ str(i.id) +\
-                  " | State: " + str(i.state) +\
-                  " | Type: " + str(i.instance_type) +\
-                  " | Public IP: " + str(i.ip_address) +\
-                  " | Public DNS: " + str(i.public_dns_name) +\
-                  " | Private IP: " + str(i.private_ip_address) +\
-                  " | Tags: [" + str(tagstring) + "]"
+            # SBAC: all we care about are name, id, state, private IP, and env tag
+            line = ""
+            line = line + self.instanceNameDict[i.id] + ','
+            line = line + str(i.id) + ','
+            line = line + str(i.state) + ','
+            line = line + str(i.private_ip_address) + ','
 
+            # what is wrong with you people
+            insttag = i.id + ".alltags"
+            line = line + (self.instanceNameDict[insttag].get('environment') if self.instanceNameDict[insttag].get('environment') else '')
+
+            print line
+            
     def get_elastic_ip_info(self, eip=None):
         """Prints elastic ip and assocation if any"""
         eips = self.ec2.get_all_addresses(eip)
@@ -314,34 +268,7 @@ if __name__ == "__main__":
     argParser = argparse.ArgumentParser(description='Placeholder Text')
     argParser.add_argument('-li',dest='listinstance',action='store_true',\
             help='list instance', default=False)
-    argParser.add_argument('-leip',dest='listeip',action='store_true',\
-            help='list elastic ip', default=False)
-    argParser.add_argument('-lkp',dest='listkeypair',action='store_true',\
-            help='list key pair', default=False)
-    argParser.add_argument('-llb',dest='listloadbalancer',action='store_true',\
-            help='list load balancer', default=False)
-    argParser.add_argument('-lsg',dest='listsecurity',action='store_true',\
-            help='list security group', default=False)
-    argParser.add_argument('-lami',dest='listamis',action='store_true',\
-            help='list AMIs', default=False)
-    argParser.add_argument('-lu', dest='listusers',action='store_true',\
-            help='list users', default=False)
-    argParser.add_argument('-lg', dest='listgroups',action='store_true',\
-            help='list groups', default=False)
-    argParser.add_argument('-lr', dest='listroles',action='store_true',\
-            help='list roles', default=False)
-    argParser.add_argument('-ggp', dest='getgrouppolicy', action='store_true',\
-            help='get group policy', default=False)
-    argParser.add_argument('-grp', dest='getrolepolicy', action='store_true',\
-            help='get role policy', default=False)
-    argParser.add_argument('--user', help='user', nargs='+')
     argParser.add_argument('--instance', help='instance', nargs='+')
-    argParser.add_argument('--elasticip', help='elastic ip', nargs='+')
-    argParser.add_argument('--securitygroup', help='security group', nargs='+')
-    argParser.add_argument('--detail', help='detail level', action='store_true')
-    argParser.add_argument('--group', help='group name', nargs='+')
-    argParser.add_argument('--role', help='role name', nargs='+')
-    argParser.add_argument('--policy', help='policy name', nargs='+')
     args = argParser.parse_args()
     #EC2connection.check_config()
     main(args)
