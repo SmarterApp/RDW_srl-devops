@@ -120,6 +120,7 @@ def create_vpc_and_security_groups(hints):
 def create_ansible_host(hints):
     os.chdir('spawner')
     os.system("./spawner.py -a ansible -e {0} -p ansible-bootstrap".format(hints['vpc']['env']))
+    os.system("./spawner.py -a nat -e {0} -s".format(hints['vpc']['env'])) 
     os.chdir('..')
 
     # Now run ansible with special inventory program mode for bootstrapping
