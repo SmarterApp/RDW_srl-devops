@@ -1,0 +1,5 @@
+cluster=edware_pg_cluster
+node={{ ec2_id | instance_id_2_node_id }}
+node_name={{ db_master.node_name }}
+conninfo='host={{db_master.host}} user=repmgr dbname=edware'
+pg_bindir=/usr/pgsql-9.2/bin
