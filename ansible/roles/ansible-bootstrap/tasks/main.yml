@@ -1,0 +1,98 @@
+---
+# Install various things from yum
+- name: Install ansible-required yum packages
+  yum:
+    state: latest
+    name: "{{ item }}"
+  with_items:
+    - python-pip
+    - python-boto
+    - pass
+    - ansible-lint
+    - ansible
+    - git
+
+# Install jq ?
+
+# setup gpg-agent stuff in /etc/profile.d
+- name: Copy in gpg-agent stuff into /etc/profile.d
+  copy:
+    src: gpg-agent-startup.sh
+    dest: /etc/profile.d/gpg-agent-startup.sh
+
+
+# This is a workaround for lack of AD
+- name: Set authorized_key for users
+  authorized_key:
+    state: present
+    user: "{{ item }}"
+    key: "{{ lookup('file', 'ssh-public-keys/' + item + '.pem') }}"
+  with_items: ansible_devs
+
+# TODO: without AD, we may need to adjust sudoers to be NOPASSWD for ansible_devs
+
+- name: Setup .gnupg for users
+  unarchive:
+    creates: "/home/{{ item }}/.gnupg"
+    dest: "/home/{{ item }}"
+    src: "gpg-tarballs/{{ item }}.tgz"
+  with_items: ansible_devs
+
+- name: Fix ownership on .gnupg
+  file:
+    path: "/home/{{ item }}/.gnupg"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_devs
+
+- name: Setup .password-store for users
+  unarchive:
+    creates: "/home/{{ item }}/.password-store"
+    dest: "/home/{{ item }}"
+    src: "pass-tarballs/{{ item }}.tgz"
+  with_items: ansible_devs
+    
+- name: Fix ownership on .password-store
+  file:
+    path: "/home/{{ item }}/.password-store"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_devs
+
+- name: Pack srl-devops code
+  sudo: no
+  delegate_to: 127.0.0.1
+  connection: local
+  shell: chdir=../../ warn=no tar czf srl-devops.tgz -h srl-devops
+  register: wtf
+
+- name: Send latest srl-devops code
+  unarchive:
+    # Creates flag?  or always clobber?
+    dest: "/home/{{ item }}"
+    src: "../../srl-devops.tgz"
+  with_items: ansible_devs
+
+- name: Fix ownership on srl-devops
+  file:
+    path: "/home/{{ item }}/srl-devops"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_devs
+
+- name: Set SBAC_DEVOPS variable in bash_profile
+  lineinfile:
+    state: present
+    dest: "/home/{{ item }}/.bash_profile"
+    line: "export SBAC_DEVOPS=/home/{{ item }}/srl-devops"
+  with_items: ansible_devs
+
+- name: Set SBAC_ENV variable in bash_profile
+  lineinfile:
+    state: present
+    dest: "/home/{{ item }}/.bash_profile"
+    line: "export SBAC_ENV=dev"   # TODO - probably want this dynamic
+  with_items: ansible_devs
