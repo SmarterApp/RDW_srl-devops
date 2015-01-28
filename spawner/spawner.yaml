@@ -16,12 +16,16 @@ apps:
   #     - sg-name-02 # Array of SG names
   #   instance_type: t1.micro # Required
   #   subnet_type: private # One of private, public, or lz.  Defaults to private.
+  #   public_ip: True or False, defaults to false.
 
   ansible:
-    ami_app_name: base # TODO: remove this when the real AMI is available
+    ami_app_name: base # Playbook runs from base
     security_groups:
       - srl-default
+      - srl-logging
+      - omniti-fulton-office
     instance_type: t1.micro
+    public_ip: True
 
   base:
     security_groups: []

@@ -122,26 +122,38 @@ def spawn(hints, ec2):
     for t in range(5,0,-1):
         logging.info("Launching in {0}...".format(t))
         time.sleep(1)
-        
-    # Make the reservation call.
+
     logging.info("OK, sending launch request!")
-    reservation = ec2.run_instances(hints['ami_id'],
-                                    min_count = hints['count'],
-                                    max_count = hints['count'],
-                                    instance_type = hints['instance_type'],
-                                    subnet_id = hints['subnet_id'],
-                                    security_group_ids = hints['security_group_ids']
-                                   )
+    # Make the reservation call.    
+    if hints['public_ip']:
+        # http://stackoverflow.com/questions/19029588/how-to-auto-assign-public-ip-to-ec2-instance-with-boto
+        interface = boto.ec2.networkinterface.NetworkInterfaceSpecification(subnet_id=hints['subnet_id'],
+                                                                            groups=hints['security_group_ids'],
+                                                                            associate_public_ip_address=True)
+        interfaces = boto.ec2.networkinterface.NetworkInterfaceCollection(interface)
+        reservation = ec2.run_instances(hints['ami_id'],
+                                instance_type='t1.micro',
+                                network_interfaces=interfaces,
+                                )
+    else:                
+        reservation = ec2.run_instances(hints['ami_id'],
+                                        min_count = hints['count'],
+                                        max_count = hints['count'],
+                                        instance_type = hints['instance_type'],
+                                        subnet_id = hints['subnet_id'],
+                                        security_group_ids = hints['security_group_ids']
+                                    )
 
     # Sleep a little bit.
     logging.info("Launch request sent.  Waiting a little bit to start tagging...")
     # TODO: make this smarter; we could poll, and continue when the reservation has the expected number of instances
-    time.sleep(4 + 0.25*hints['count'])
+    time.sleep(10 + 0.25*hints['count'])
 
     # Re-fetch the reservation, which "should" now have the instances populated
     # TODO: figure out the filter parameter to this call
     all_res = ec2.get_all_reservations()
     reservation = [r for r in all_res if r.id == reservation.id][0]
+    
 
     hints['ips'] = {}
     
@@ -260,6 +272,11 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     # TODO: Verify instance type ?
     hints['instance_type'] = app_cfg['instance_type']
 
+    if app_cfg['public_ip'] and hints['count'] > 1:
+        logging.error("Refusing to assign public IPs to a multi-instance request, because that is hard.")
+        exit(9)
+    hints['public_ip'] = app_cfg['public_ip']
+        
 
     if opts.run_ansible:
         playbook_name = opts.playbook if opts.playbook else opts.app
