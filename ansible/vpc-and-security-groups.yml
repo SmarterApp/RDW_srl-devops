@@ -3,5 +3,6 @@
   hosts: localhost
   connection: local
   roles:
+    - aws-creds
     - vpc
     - security-groups

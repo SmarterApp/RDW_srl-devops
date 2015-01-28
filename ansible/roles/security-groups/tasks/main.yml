@@ -1,6 +1,8 @@
 - name: srl-default security group
   ec2_group:
     name: srl-default
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Default security group for all instances
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -27,6 +29,8 @@
 - name: srl-db security group
   ec2_group:
     name: srl-db
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: DB Servers
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -41,6 +45,8 @@
 - name: srl-db-client security group
   ec2_group:
     name: srl-db-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow DB client access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -55,6 +61,8 @@
 - name: srl-db-pgbouncer security group
   ec2_group:
     name: srl-db-pgbouncer
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow pgbouncer client access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -73,6 +81,8 @@
 - name: srl-db-pool security group
   ec2_group:
     name: srl-db-pool
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow DB Pool access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -99,6 +109,8 @@
 - name: srl-db-pool-client security group
   ec2_group:
     name: srl-db-pool-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow DB Pool client access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -113,6 +125,8 @@
 - name: srl-db-pool-pcp security group
   ec2_group:
     name: srl-db-pool-pcp
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow DB Pool PCP access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -127,6 +141,8 @@
 - name: srl-glusterfs security group
   ec2_group:
     name: srl-glusterfs
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow GlusterFS access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -217,6 +233,8 @@
 - name: srl-glusterfs-pdf-client security group
   ec2_group:
     name: srl-glusterfs-pdf-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow GlusterFS access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -259,6 +277,8 @@
 - name: srl-glusterfs-extract-client security group
   ec2_group:
     name: srl-glusterfs-extract-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow GlusterFS access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -301,6 +321,8 @@
 - name: srl-glusterfs-udl-client security group
   ec2_group:
     name: srl-glusterfs-udl-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow GlusterFS access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -343,6 +365,8 @@
 - name: srl-glusterfs-hpz-client security group
   ec2_group:
     name: srl-glusterfs-hpz-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow GlusterFS access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -385,6 +409,8 @@
 - name: srl-logging security group
   ec2_group:
     name: srl-logging
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow Log Server client access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -399,6 +425,8 @@
 - name: srl-logstash security group
   ec2_group:
     name: srl-logstash
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow Log Server access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -417,6 +445,8 @@
 - name: srl-memcached security group
   ec2_group:
     name: srl-memcached
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow Memcache access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -435,6 +465,8 @@
 - name: srl-rmq security group
   ec2_group:
     name: srl-rmq
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow RabbitMQ access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -453,6 +485,8 @@
 - name: srl-rmq-client security group
   ec2_group:
     name: srl-rmq-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow RabbitMQ client access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -467,6 +501,8 @@
 - name: srl-sso-client security group
   ec2_group:
     name: srl-sso-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow SSO client access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -481,6 +517,8 @@
 - name: srl-web security group
   ec2_group:
     name: srl-web
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow web server access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -499,6 +537,8 @@
 - name: srl-web-client security group
   ec2_group:
     name: srl-web-client
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: Allow web server client access
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
@@ -513,6 +553,8 @@
 - name: omniti-fulton-office security group
   ec2_group:
     name: omniti-fulton-office
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     description: OmniTI Fulton secure office connection (two factor openvpn)
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
