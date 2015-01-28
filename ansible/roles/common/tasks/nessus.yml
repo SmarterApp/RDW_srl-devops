@@ -1,0 +1,24 @@
+---
+# Setup nessus user on machine
+
+- name: Add nessus user
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: Create nessus user
+      user:
+        name: nessus
+        state: present
+
+    - name: Copy in public ssh key
+      authorized_key:
+        state: present
+        key: "{{ lookup('file', '../credentials/nessus.pub') }}"
+        user: nessus
+
+    - name: Grant sudo to nessus
+      # TODO: surely there is a sudo module in galaxy
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        line: "nessus     ALL=(ALL) NOPASSWD: ALL"

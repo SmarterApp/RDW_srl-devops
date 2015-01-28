@@ -18,3 +18,4 @@
   service: name=rsyslog state=started enabled=yes
 
 - include: dns-client.yml
+- include: nessus.yml
