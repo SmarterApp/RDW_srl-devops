@@ -232,7 +232,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     
     hints['ami_id'] = ami.id
 
-    logging.info("Using version {0} of app {1} from AMI {2}".format(hints['app_version'], app_name, hints['ami_id']))
+    logging.info("Using version {0} of ami_app_name {1} from AMI {2}".format(hints['app_version'], app_name, hints['ami_id']))
     
     # Copy out tags for the AMI
     hints['tags'] = {}
@@ -286,10 +286,10 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     # TODO: Verify instance type ?
     hints['instance_type'] = app_cfg['instance_type']
 
-    if app_cfg['public_ip'] and hints['count'] > 1:
+    if app_cfg.get('public_ip') and hints['count'] > 1:
         logging.error("Refusing to assign public IPs to a multi-instance request, because that is hard.")
         exit(9)
-    hints['public_ip'] = app_cfg['public_ip']
+    hints['public_ip'] = app_cfg.get('public_ip')
         
 
     if opts.run_ansible:
