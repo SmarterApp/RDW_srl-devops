@@ -28,7 +28,6 @@
     line: "{{ item }}"
   with_items:
     # Per tosako 2015-01-27
-    - "72.232.223.58       mirrorlist.centos.org"
     - "10.166.38.29		sso.sbac2.net"
     - "10.166.34.81       reporting.sbac2.net"
 
