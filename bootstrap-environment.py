@@ -13,10 +13,8 @@ def main():
     opts = read_options()
     hints = preflight(opts)
     create_vpc_and_security_groups(hints)
-
-    #create_infra_hosts(hints)
-    #create_application_hosts(hints)
-
+    create_ansible_host(hints)
+    
 #===========================================================#
 #                    
 #===========================================================#
@@ -111,14 +109,23 @@ def create_vpc_and_security_groups(hints):
     if hints['vpc'].get('obj'):
         return
 
-    os.environ['SBAC_ENVIRO_BUILDER_VPC_BLOCK'] = hints['vpc']['block']
+    os.environ['SBAC_ENVIRO_BUILDER_VPC_BLOCK'] = str(hints['vpc']['block'])
     os.environ['SBAC_ENVIRO_BUILDER_MODE'] = 'dynamic'
     os.environ['SBAC_ENVIRO_BUILDER_ENV_NAME'] = hints['vpc']['env']
 
     os.chdir('ansible')
-    os.system('ansible-playbook -v vpc-and-security-groups.yml')
+    os.system('ansible-playbook vpc-and-security-groups.yml')
     os.chdir('..')
 
-    
+def create_ansible_host(hints):
+    os.chdir('spawner')
+    os.system("./spawner.py -a ansible -e {0} -p ansible-bootstrap".format(hints['vpc']['env']))
+    os.chdir('..')
 
+    # Now run ansible with special inventory program mode for bootstrapping
+    os.chdir('ansible')
+    os.environ['EC2_INI_PATH'] = 'inventories/ec2-public.ini'
+    os.system("ansible-playbook -i inventories/srl.py -l{0} ansible-bootstrap.yml".format(hints['vpc']['env']))
+    os.chdir('..')
+    
 main()
