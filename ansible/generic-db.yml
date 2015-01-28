@@ -1,0 +1,11 @@
+---
+- name: Configure the standalone database postgres server 
+  hosts: hpz-db:tsb-db:udl-db:stats-db:migrate-db
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - db
+
+# We might need to update postgres user names and password

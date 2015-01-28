@@ -370,6 +370,14 @@ apps:
       dev: 0
       prod: 0
 
+  stats-db:
+    ami_app_name: db 
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
+    instance_type: m3.2xlarge
+
   #vpn:
   #  ami_app_name: base # TODO: remove this when the real AMI is available
   #  security_groups: # TODO
