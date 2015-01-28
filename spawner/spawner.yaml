@@ -21,8 +21,6 @@ apps:
   #   spawn_count:  # Default initial spawn when called by the env builder.
   #    env_name: INT # 0 disables spawning from env-builder
 
-  # Note: when building an env, ansible is first bootstrapped externally, then will be revisited.
-
   - name: ansible
     ami_app_name: base # Playbook runs from base
     security_groups:
@@ -32,9 +30,8 @@ apps:
     instance_type: t1.micro
     public_ip: True
     spawn_count:
-      dev: 1
-      prod: 0  # Not managed by SRL in prod
-
+      dev: 0  # Deployed by external bootstrapper
+      prod: 0
 
   - name: bind
     ami_app_name: base # TODO: remove this when the real AMI is available
@@ -44,7 +41,7 @@ apps:
       - srl-bind
     instance_type: m3.medium # TODO: verify    
     spawn_count:
-      dev: 1
+      dev: 0  # TODO
       prod: 0  # Not managed by SRL in prod
 
   - name: gluster-server
@@ -55,7 +52,7 @@ apps:
       - srl-logging
     instance_type: m3.medium # TODO: verify    
     spawn_count:
-      dev: 2
+      dev: 0 # TODO
       prod: 0 # TODO
 
   - name: loghost
@@ -65,8 +62,11 @@ apps:
       - srl-logstash
     instance_type: m2.xlarge 
     spawn_count:
-      dev: 0
+      dev: 1
       prod: 0
+
+
+  # Deployment not ordered beyond this point
 
   - name: memcached
     ami_app_name: memcached 
@@ -370,13 +370,16 @@ apps:
       dev: 0
       prod: 0
 
-  stats-db:
+  - name: stats-db
     ami_app_name: db 
     security_groups:
       - srl-default
       - srl-db
       - srl-logging
     instance_type: m3.2xlarge
+    spawn_count:
+      dev: 0
+      prod: 0
 
   #vpn:
   #  ami_app_name: base # TODO: remove this when the real AMI is available
