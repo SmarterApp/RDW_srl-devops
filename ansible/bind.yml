@@ -1,0 +1,6 @@
+- name: Setup bind server
+  hosts: bind
+  sudo: yes
+  roles:
+    - common
+    - bind
