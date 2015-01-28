@@ -134,6 +134,7 @@ def spawn(hints, ec2):
         reservation = ec2.run_instances(hints['ami_id'],
                                 instance_type='t1.micro',
                                 network_interfaces=interfaces,
+                                instance_profile_name = 's3yum_access', # TODO: make a config option
                                 )
     else:                
         reservation = ec2.run_instances(hints['ami_id'],
@@ -141,7 +142,8 @@ def spawn(hints, ec2):
                                         max_count = hints['count'],
                                         instance_type = hints['instance_type'],
                                         subnet_id = hints['subnet_id'],
-                                        security_group_ids = hints['security_group_ids']
+                                        security_group_ids = hints['security_group_ids'],
+                                        instance_profile_name = 's3yum_access', # TODO: make a config option
                                     )
 
     # Sleep a little bit.
