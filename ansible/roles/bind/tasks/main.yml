@@ -1,0 +1,31 @@
+
+- name: Put read-only AWS creds in boto config
+  template:
+    dest: /root/.boto
+    src: boto-cfg.j2
+    mode: 0600
+
+- name: Deposit our instance-lister
+  template: 
+    src: srl-aws-spork.py.j2
+    dest: /root/srl-aws-spork.py
+    mode: 0700
+
+- name: Deposit our dns-refresher
+  template:
+    src: AWS_bind_refresh.sh.j2
+    dest: /root/AWS_bind_refresh.sh
+    mode: 0700
+
+- name: Make opt itops path
+  file:
+    state: directory
+    recurse: True
+    path: /opt/itops/bin
+
+- name: Link the refresher for some reason
+  file:
+    state: link
+    src: /root/AWS_bind_refresh.sh
+    path: /opt/itops/bin/AWS_bind_refresh.sh
+
