@@ -121,7 +121,9 @@ def create_ansible_host(hints):
 
     # Spawn, but do not ansiblize, the ansible server.
     os.chdir('spawner')
+
     os.system("./spawner.py -a ansible -e {0} -s".format(hints['vpc']['env']))
+    os.system("./spawner.py -a nat -e {0} -s".format(hints['vpc']['env'])) 
     os.chdir('..')
 
     
