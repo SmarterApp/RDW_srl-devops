@@ -1,6 +1,6 @@
 [app:main]
 auth.idp.metadata = /opt/edware/conf/idp_metadata.xml
-auth.oauth2.identity_parser = smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser
+auth.oauth2.identity_parser = {{ auth.oauth2.identity_parser }}
 auth.oauth2.idp_server_verify_url = {{ sso_oauth_verify_url }} 
 auth.policy.cookie_name = edware
 auth.policy.hashalg = sha512
@@ -8,7 +8,7 @@ auth.policy.http_only = True
 auth.policy.secret = {{ auth_policy_secret }}
 auth.policy.secure = {{ auth_policy_secure }}
 auth.policy.timeout = 1200
-auth.saml.identity_parser = smarter_common.security.sbac_identity_parser.SbacIdentityParser
+auth.saml.identity_parser = {{ auth.saml.identity_parser }}
 auth.saml.idp_server_login_url = {{ sso_saml_login_url }}
 auth.saml.idp_server_logout_url = {{ sso_saml_logout_url }} 
 auth.saml.issuer_name = {{ sso_saml_issuer_name }}
