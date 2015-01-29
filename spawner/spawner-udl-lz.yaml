@@ -222,6 +222,8 @@ apps:
       - srl-default
       - srl-logging
     instance_type: m3.xlarge
+    subnet_type: lz
+    public_ip: True
     spawn_count:
       dev: 1
       prod: 1
