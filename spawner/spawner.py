@@ -108,6 +108,7 @@ def run_ansible(opts, hints):
     cmd = []
     cmd.append("ansible-playbook")
     cmd.append('-i'); cmd.append('inventories/srl.py')
+    cmd.append('-e'); cmd.append('spawner_env=' + opts.env)
     cmd.append('-l'); cmd.append(':'.join(hints['ips'].values())) # Limit to newly-created instances
     cmd.append(playbook_name + '.yml')
 
