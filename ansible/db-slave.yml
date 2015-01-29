@@ -1,5 +1,5 @@
 ---
-- name: Configure the standalone database postgres server 
+- name: Configure slave database
   hosts: reporting-db-slave
   user: ansible
   sudo: yes
@@ -9,4 +9,6 @@
     - db
     - db-slave
 
+  var:
+     reporting_db_master_ip: "{{ groups['db-master'] | intersect(groups [ ec2_tag_environment ]) | first }}"
 # We might need to update postgres user names and password
