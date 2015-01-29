@@ -8,3 +8,4 @@
     - common
     - edware
     - tsb-trigger 
+    - gluster-client

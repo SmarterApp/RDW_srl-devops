@@ -8,3 +8,4 @@
     - common
     - edware
     - reporting-worker-extract
+    - gluster-client

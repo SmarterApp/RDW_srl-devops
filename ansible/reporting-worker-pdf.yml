@@ -8,3 +8,4 @@
     - common
     - edware
     - reporting-worker-pdf
+    - gluster-client

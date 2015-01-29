@@ -8,3 +8,4 @@
     - common
     - edware
     - tsb-worker 
+    - gluster-client

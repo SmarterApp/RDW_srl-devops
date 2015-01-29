@@ -1,0 +1,22 @@
+---
+- include_vars: gluster-client.yml
+
+- name: Install packages required for GlusterFS client
+  yum: name={{item}} state=installed
+  with_items:
+    - fuse
+    - fuse-libs
+    - glusterfs-fuse
+    - nfs-utils
+    - attr
+
+- name: get appropriate SSL certs
+  shell: 'aws s3 sync --sse s3://srl-gluster-ssl/{{ec2_tag_environment}}/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
+
+- name: create mount point
+  file: path={{ item.mount_at }} state=directory owner=root group=root mode=0600
+  with_items: gluster_mount[ec2_tag_application].mounts
+
+- name: Add to fstab and mount volumes
+  mount: fstype=glusterfs name="{{ item.mount_at }}" src="{{gfs_node1}}:/{{item.volume}}" state=mounted
+  with_items: gluster_mount[ec2_tag_application].mounts
