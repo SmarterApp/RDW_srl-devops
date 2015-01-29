@@ -1,3 +1,3 @@
 ---
   - name: configure repmgr.conf
-    template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/opt/edware/conf/repmgr.conf
+    template: src=roles/db-master/templates/repmgr.conf.j2 dest=/opt/edware/conf/repmgr.conf
