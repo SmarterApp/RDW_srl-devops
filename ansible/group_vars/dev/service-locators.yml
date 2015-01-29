@@ -23,9 +23,9 @@ tsb_db_host: dbpgudl0.qa.dum.edwdc.net
 #                   Internal Services
 #            that could be dynamically looked up
 #-------------------------------------------------------------#
-bind_host: "{{ groups['loghost'] | intersect(groups[ ec2_tag_environment ]) | first | default('10.166.32.10') }}"
+bind_host: "{{groups['bind'] | intersect(groups[ ec2_tag_environment ]) | first | default('10.166.32.10')}}"
 dns_search_domain: "{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-loghost: "{{ groups['loghost'] | intersect(groups[ ec2_tag_environment ]) | first | default('127.0.0.1') }}"
+loghost: "{{groups['loghost'] | intersect(groups[ ec2_tag_environment ]) | first | default('127.0.0.1')}}"
 loghost_port: 10514 
 
 #-------------------------------------------------------------#
