@@ -6,9 +6,9 @@
 #                   Application Specific Config
 #-------------------------------------------------------------#
 # Use sbac live parser for SSO
-auth.oauth2.identity_parser: smarter_common.security.sbac_live_identity_parser.SbacOauthIdentityParser
+auth_oauth2_identity_parser: smarter_common.security.sbac_live_identity_parser.SbacOauthIdentityParser
 sso_oauth_verify_url: https://sso.smarterbalanced.org/auth/oauth2/tokeninfo?realm=/sbac
-auth.saml.identity_parser: smarter_common.security.sbac_live_identity_parser.SbacIdentityParser
+auth_saml_identity_parser: smarter_common.security.sbac_live_identity_parser.SbacIdentityParser
 auth_policy_secure: True
 sso_saml_login_url: https://sso.smarterbalanced.org/auth/SSORedirect/metaAlias/idp
 sso_saml_logout_url: https://sso.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/idp
