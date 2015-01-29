@@ -23,9 +23,9 @@ tsb_db_host: dbpgudl0.qa.dum.edwdc.net
 #                   Internal Services
 #            that could be dynamically looked up
 #-------------------------------------------------------------#
-bind_host: 10.166.32.10 # TODO: dynamic
-dns_search_domain: dev.ae1.sbac2dc.net
-loghost: srl-loghost-1.dev.ae1.sbac2dc.net
+bind_host: "{{ groups['loghost'] | intersect(groups[ ec2_tag_environment ]) | first | default('10.166.32.10') }}"
+dns_search_domain: "{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+loghost: "{{ groups['loghost'] | intersect(groups[ ec2_tag_environment ]) | first | default('127.0.0.1') }}"
 loghost_port: 10514 
 
 #-------------------------------------------------------------#
@@ -35,34 +35,34 @@ loghost_port: 10514
 # These hostnames are machines in our VPC that have registered their names in BIND. 
 # "should" be able to rely on local DNS without having to change these values.
 # TODO: may be able to push these up to global_vars if we can parameterize the .dev. part
-edware_db_ca_host: srl-db-pgpool.dev.ae1.sbac2dc.net # TODO: multi-tenancy
-edware_extract_db_ca_host: 10.166.32.97 
-edware_repmgr_db_host : srl-db-master.dev.ae1.sbac2dc.net 
-edware_stats_db_host: srl-db-util.dev.ae1.sbac2dc.net
-hpz_web_host: srl-hpz-web.dev.ae1.sbac2dc.net
-migrate_dest_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
-migrate_pg_pool_host: srl-db-pgpool.dev.ae1.sbac2dc.net
-migrate_rabbit_host: srl-rabbit.dev.ae1.sbac2dc.net
-migrate_source_db_ca_host: srl-db-master.dev.ae1.sbac2dc.net # TODO: multi-tenancy
-reporting_rabbit_services_host: srl-rabbit.dev.ae1.sbac2dc.net
-reporting_rabbit_extract_host: srl-rabbit.dev.ae1.sbac2dc.net
-gluster_server_1: srl-gluster-1.dev.ae1.sbac2dc.net
-gluster_server_2: srl-gluster-2.dev.ae1.sbac2dc.net
+edware_db_ca_host: "srl-db-pgpool.{{ ec2_tag_environment }}.ae1.sbac2dc.net" # TODO: multi-tenancy
+edware_extract_db_ca_host: 10.166.32.97 # TODO
+edware_repmgr_db_host : "srl-db-master.{{ ec2_tag_environment }}.ae1.sbac2dc.net" 
+edware_stats_db_host: "srl-db-util.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+hpz_web_host: "srl-hpz-web.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+migrate_dest_db_ca_host: "srl-db-master.{{ ec2_tag_environment }}.ae1.sbac2dc.net" # TODO: multi-tenancy
+migrate_pg_pool_host: "srl-db-pgpool.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+migrate_rabbit_host: "srl-rabbit.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+migrate_source_db_ca_host: "srl-db-master.{{ ec2_tag_environment }}.ae1.sbac2dc.net" # TODO: multi-tenancy
+reporting_rabbit_services_host: "srl-rabbit.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+reporting_rabbit_extract_host: "srl-rabbit.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+gluster_server_1: "srl-gluster-1.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+gluster_server_2: "srl-gluster-2.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
 
 #-------------------------------------------------------------#
 #                   Application Specific Config
 #-------------------------------------------------------------#
 # Use sbac (old) parser for SSO when we use internal SSO for testing
-auth.oauth2.identity_parser: smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser
-sso_oauth_verify_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/
-auth.saml.identity_parser: smarter_common.security.sbac_identity_parser.SbacIdentityParser
+auth.oauth2.identity_parser: "smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser"
+sso_oauth_verify_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/"
+auth.saml.identity_parser: "smarter_common.security.sbac_identity_parser.SbacIdentityParser"
 auth_policy_secure: False
-sso_saml_login_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp
-sso_saml_logout_url: http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp
-sso_saml_issuer_name: http://srl-reporting-web
-sso_saml_name_qualifier: http://sso.sbac2.net:8080/OpenAM-11.0.0
-hpz_base_url: http://srl-hpz-web.dev.ae1.sbac2dc.net:8443
-reporting_base_url_host: http://srl-web-reporting.dev.ae1.sbac2dc.net
+sso_saml_login_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp"
+sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp"
+sso_saml_issuer_name: "http://srl-reporting-web"
+sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
+hpz_base_url: "http://srl-hpz-web.{{ ec2_tag_environment }}.ae1.sbac2dc.net:8443"
+reporting_base_url_host: "http://srl-web-reporting.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
 disable_stack_trace: False
 
 # Must be dynamically looked up from inventory
