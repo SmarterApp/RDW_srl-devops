@@ -1,0 +1,13 @@
+- name: Install Rsyslog 
+  yum: name=rsyslog state=present
+
+- name: Configure Rsyslog
+  template: src=rsyslog.conf.j2 dest=/etc/rsyslog.conf
+  notify: restart rsyslog 
+
+- name: Configure Celery logging
+  template: src=celery.conf dest=/etc/rsyslog.d/celery.conf
+  notify: restart rsyslog
+
+- name: Start Rsyslog
+  service: name=rsyslog state=started enabled=yes
