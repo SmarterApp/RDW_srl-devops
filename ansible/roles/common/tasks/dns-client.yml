@@ -31,6 +31,13 @@
     - "10.166.38.29		sso.sbac2.net"
     - "10.166.34.81       reporting.sbac2.net"
 
+- name: Add hostname and FQDN
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ item }}"
+  with_items:
+    - "{{ ec2_ip_address }}        {{ ec2_tag_Name }}.{{ dns_search_domain }} {{ ec2_tag_Name }}"
+
 - name: Check to see if I am in the BIND server
   # There has got to be a better way
   shell: "dig @{{ bind_host }} {{ ec2_tag_Name}}.{{ dns_search_domain }} +noquestion +nostats +nocmd | grep -v ';' | grep {{ ec2_tag_Name }}"  
