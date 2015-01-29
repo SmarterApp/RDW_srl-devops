@@ -41,6 +41,6 @@
 
 - name: Refresh BIND server if needed
   sudo: no
-  shell: "ssh -t -t ansible@{{ bind_host }} sudo /opt/itops/bin/AWS_bind_refresh.sh"
+  shell: "ssh -oStrictHostKeyChecking=no -t -t ansible@{{ bind_host }} sudo /opt/itops/bin/AWS_bind_refresh.sh"
   delegate_to: 127.0.0.1
   when: dig_lookup|failed
