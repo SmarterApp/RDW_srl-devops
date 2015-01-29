@@ -210,7 +210,7 @@ apps:
       - srl-default
       - srl-db
       - srl-logging
-    instance_type: r3.2xlarge
+    instance_type: m2.4xlarge
     spawn_count:
       dev: 1
       prod: 1
@@ -233,7 +233,7 @@ apps:
       - srl-default
       - srl-db
       - srl-logging
-    instance_type: r3.2xlarge
+    instance_type: m2.4xlarge
     spawn_count:
       dev: 2
       prod: 30
@@ -244,7 +244,7 @@ apps:
       - srl-default
       - srl-db
       - srl-logging
-    instance_type: r3.2xlarge
+    instance_type: m2.4xlarge
     spawn_count:
       dev: 2
       prod: 30
