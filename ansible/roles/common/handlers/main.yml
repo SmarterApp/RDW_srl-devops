@@ -28,3 +28,6 @@
 
 - name: restart edudl2-trigger
   service: name=edudl2-trigger state=restarted
+
+- name: add restart notification file
+  file: path=/etc/not-yet-restarted-since-ghost-fix state=touch mode="u=rw,g=r,o=r"
