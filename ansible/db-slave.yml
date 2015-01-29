@@ -1,6 +1,6 @@
 ---
 - name: Configure the standalone database postgres server 
-  hosts: db-master
+  hosts: db-slave
   user: ansible
   sudo: yes
 
