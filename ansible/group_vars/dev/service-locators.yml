@@ -56,6 +56,8 @@ migrate_rabbit_host: "{{ hostvars[(groups['migrate-rabbit'] | intersect(locals) 
 migrate_source_db_ca_host: "{{ hostvars[(groups['migrate-db'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy 
 reporting_rabbit_services_host: "{{ hostvars[(groups['reporting-rabbit-services'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
 reporting_rabbit_extract_host: "{{ hostvars[(groups['reporting-rabbit-extract'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+lz_host: "{{ hostvars[(groups['lz'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+tsb_trigger_host: "{{ hostvars[(groups['tsb-trigger'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
 
 # gluster-server 
 # TODO: need to figure out why there are two vars
