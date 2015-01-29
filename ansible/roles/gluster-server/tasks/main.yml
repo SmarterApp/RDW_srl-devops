@@ -1,4 +1,6 @@
 ---
+- include_vars: gluster-server.yml
+
 - name: Install packages required for GlusterFS
   yum: name={{item}} state=installed
   with_items:
@@ -18,87 +20,53 @@
   file: path=/export state=directory owner=root group=root mode=0600
 
 - name: create brick mount points
-  file: path=/export/{{ item }} state=directory owner=root group=root mode=0600
-  with_items:
-    - data1
-    - data2
-    - working1
-    - working2
-    - tsb1
-    - tsb2
-    - uploads1
-    - uploads2
-    - zones1
-    - zones2
+  file: path=/export/{{ item.label }} state=directory owner=root group=root mode=0600
+  with_items: brick_devices
 
 - name: create lvm volume groups
   lvg: pvs=/dev/{{ item.dev }} state=present vg=vg.{{ item.label }}
-  with_items:
-    - { dev: xvdf, label: data1 }
-    - { dev: xvdg, label: data2 }
-    - { dev: xvdh, label: working1 }
-    - { dev: xvdi, label: working2 }
-    - { dev: xvdj, label: tsb1 }
-    - { dev: xvdk, label: tsb2 }
-    - { dev: xvdl, label: uploads1 }
-    - { dev: xvdm, label: uploads22 }
-    - { dev: xvdn, label: zones1 }
-    - { dev: xvdo, label: zones2 }
+  with_items: brick_devices
+
 
 - name: create lvm logical volumes
-  lvol: lv=lv.{{ item }} state=present vg=vg.{{ item }} size='100%VG'
-  with_items:
-    - data1
-    - data2
-    - working1
-    - working2
-    - tsb1
-    - tsb2
-    - uploads1
-    - uploads2
-    - zones1
-    - zones2
+  lvol: lv=lv.{{ item.label }} state=present vg=vg.{{ item.label }} size='100%VG'
+  with_items: brick_devices
+
 
 - name: create brick file systems
-  filesystem: fstype=ext4 dev=/dev/vg.{{ item }}/lv.{{ item }} opts="-m1 -L {{ item }}"
-  with_items:
-    - data1
-    - data2
-    - working1
-    - working2
-    - tsb1
-    - tsb2
-    - uploads1
-    - uploads2
-    - zones1
-    - zones2
+  filesystem: fstype=ext4 dev=/dev/vg.{{ item.label }}/lv.{{ item.label }} opts="-m1 -L {{ item.label }}"
+  with_items: brick_devices
 
 - name: add bricks to fstab and mount
-  mount: fstype=ext4 name=/export/{{ item }} src="LABEL={{ item }}" opts=noatime state=mounted
-  with_items:
-    - data1
-    - data2
-    - working1
-    - working2
-    - tsb1
-    - tsb2
-    - uploads1
-    - uploads2
-    - zones1
-    - zones2
+  mount: fstype=ext4 name="/export/{{ item.label }}" src="LABEL={{ item.label }}" opts=noatime state=mounted
+  with_items: brick_devices
 
 - name: create brick subdirs for volumes
-  file: path=/export/{{ item }}/brick state=directory owner=root group=root mode=0600
-  with_items:
-    - data1
-    - data2
-    - working1
-    - working2
-    - tsb1
-    - tsb2
-    - uploads1
-    - uploads2
-    - zones1
-    - zones2
+  file: path=/export/{{ item.label }}/brick state=directory owner=root group=root mode=0600
+  with_items: brick_devices
 
+- name: sync server ssl certificates
+  shell: "aws s3 sync --sse s3://srl-gluster-ssl/{{spawner_env}}/gluster-server /etc/ssl --exclude 'certs/'"
 
+- name: check peering
+  shell: "gluster peer probe {{ node2 }}"
+  delegate_to: "{{ node1 }}"
+
+- name: create volumes
+  shell: 'gluster volume info {{ item }} | grep "Status: Started\|Created" || gluster volume create {{ item }} replica 2 transport tcp {{node1}}:/export/{{ item }}1/brick {{node2}}:/export/{{ item }}1/brick {{node1}}:/export/{{ item }}2/brick {{node2}}:/export/{{ item }}2/brick && sleep 5'
+  with_items: volumes
+  run_once: true
+  delegate_to: "{{ node1 }}"
+
+- name: configure volumes
+  shell: 'gluster volume info {{ item.vol }} | grep "Status: Started\|Created" || gluster volume set {{item.vol}} nfs.disable && gluster volume set {{item.vol}} client.ssl on && gluster volume set {{item.vol}} server.ssl on && gluster volume set {{item.vol}} performance.cache-size 256MB &&  gluster volume set {{ item.vol }} auth.ssl-allow {{ item.ssl }}'
+#  gluster volume set {{item.vol}} auth.allow '*' &&
+  with_items: vol_ssl
+  run_once: true
+  delegate_to: "{{node1}}"
+
+- name: start volumes
+  shell: 'gluster volume start {{item}}'
+  run_once: true
+  with_items: volumes
+  delegate_to: "{{node1}}"

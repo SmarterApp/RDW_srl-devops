@@ -7,14 +7,18 @@
     region: 'us-east-1'
     aws_access_key: "{{ lookup('pipe', 'pass dev/aws/access_id') }}"
     aws_secret_key: "{{ lookup('pipe', 'pass dev/aws/secret_key') }}"
+    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
+    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
   roles:
     - gluster-storage
 
-#- name: Install GlusterFS servers
-#  user: ansible
-#  sudo: yes
-#  hosts: gluster-servers
-#    
-#  roles:
-#    - common
-#    - gluster-server
+- name: Install GlusterFS servers
+  user: ansible
+  sudo: yes
+  hosts: gluster-server
+  vars:
+    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
+    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
+  roles:
+    - common
+    - gluster-server

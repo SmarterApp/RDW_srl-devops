@@ -1,0 +1,29 @@
+brick_devices:
+  - { dev: xvdf, label: data1 }
+  - { dev: xvdg, label: data2 }
+  - { dev: xvdh, label: working1 }
+  - { dev: xvdi, label: working2 }
+  - { dev: xvdj, label: tsb1 }
+  - { dev: xvdk, label: tsb2 }
+  - { dev: xvdl, label: uploads1 }
+  - { dev: xvdm, label: uploads2 }
+  - { dev: xvdn, label: zones1 }
+  - { dev: xvdo, label: zones2 }
+  - { dev: xvdp, label: pdf1 }
+  - { dev: xvdq, label: pdf2 }
+
+volumes:
+  - data
+  - working
+  - tsb
+  - uploads
+  - zones
+  - pdf
+
+vol_ssl:
+  - { vol: data, ssl: "data" }
+  - { vol: working, ssl: "data" }
+  - { vol: tsb, ssl: "tsb" }
+  - { vol: uploads, ssl: "uploads" }
+  - { vol: zones, ssl: "zones" }
+  - { vol: pdf, ssl: "pdf" }

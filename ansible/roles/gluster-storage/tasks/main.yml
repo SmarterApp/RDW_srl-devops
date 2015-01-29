@@ -1,4 +1,8 @@
 ---
+#TODO
+#- name: "check that we have only two nodes. we fail here if we don't"
+#  failed_when: 
+
 - include_vars: gluster-storage.yml
 - name: provision ebs storage on gluster nodes
   local_action:
@@ -12,7 +16,7 @@
     encrypted: yes
     region: "{{ region }}"
   with_nested:
-    - groups['gluster-server']
+    - "{{ groups['gluster-server'] | intersect(groups[spawner_env]) }}"
     - storage_devices
   register: ec2_vols
 
@@ -26,4 +30,4 @@
   with_items: ec2_vols.results
   args:
     tags:
-      Name: gluster
+      Name: "gluster-{{ spawner_env }}"
