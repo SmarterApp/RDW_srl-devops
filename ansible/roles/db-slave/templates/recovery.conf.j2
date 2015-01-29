@@ -1,0 +1,4 @@
+standby_mode = 'on'
+primary_conninfo = 'port=5432 host={{ reporting_db_master_ip }} application_name={{ ec2_tag_Name }}'
+restore_command = 'gunzip < /var/lib/pgsql/9.2/archive/%f.gz > %p'
+archive_cleanup_command = '/usr/pgsql-9.2/bin/pg_archivecleanup /var/lib/pgsql/9.2/archive %r'
