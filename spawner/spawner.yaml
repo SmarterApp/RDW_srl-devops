@@ -36,6 +36,7 @@ apps:
 
   - name: nat
     ami_app_name: nat
+    security_groups:
       - srl-default
       - srl-nat
     instance_type: m3.medium
