@@ -7,7 +7,7 @@ def instance_id_2_node_id(arg):
     return int(arg[2:], 16)
 
 def first(arg):
-    if len(arg) > 1:
+    if len(arg) > 0:
         return arg[0]
     else:
         return None
