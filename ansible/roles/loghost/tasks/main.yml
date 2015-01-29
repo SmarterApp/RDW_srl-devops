@@ -8,15 +8,15 @@
 - name: Logstash GPG
   copy: src=GPG-KEY-elasticsearch dest=/etc/pki/rpm-gpg
 
+- name: Install Logstash
+  yum: name=logstash state=present
+
 - name: Install Elasticsearch 
   yum: name=elasticsearch state=present
 
 #The default configuration is fine for ES
 - name: Start Elasticsearch
   service: name=elasticsearch state=started enabled=yes
-
-- name: Install Logstash
-  yum: name=logstash state=present
 
 - name: Configure logstash
   template: src=logstash.conf dest=/etc/logstash/conf.d/
