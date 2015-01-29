@@ -20,6 +20,11 @@
     src: gpg-agent-startup.sh
     dest: /etc/profile.d/gpg-agent-startup.sh
 
+- name: Useradd for users
+  user:
+    name: "{{ item }}"
+    comment: "SBAC Dev {{ item }}"
+  with_items: ansible_devs
 
 # This is a workaround for lack of AD
 - name: Set authorized_key for users
