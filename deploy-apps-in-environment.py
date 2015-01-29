@@ -64,6 +64,9 @@ def read_options():
     parser.add_option("-e", "--env", dest="env", metavar="ENV", type="string",
                        help="Required.  Which environment (VPC) to target.  'dev' not permitted.  If the VPC exists, will create instances there; if not will create the VPC. Values are the Environment tags on the VPCs.")    
 
+    parser.add_option("-s", "--skip-to", dest="skip_to", metavar="SKIPTO", type="string",
+                       help="Optional.  If provided, the name of an app to skip to and continue from.")    
+
     (options, args) = parser.parse_args()
      
     if options.debug:
@@ -108,7 +111,14 @@ def preflight(opts):
 def create_app_instances(opts, cfg):
 
     os.chdir('spawner')
-    for app in cfg['apps']:
+    
+    start = 0
+    if opts.skip_to:
+        for idx, app in enumerate(cfg['apps']):
+            if app['name'] == opts.skip_to:
+                start = idx
+    
+    for app in cfg['apps'][start:]:
         app_name = app['name']
         
         # TODO: for now, take all counts from the dev setting.
@@ -118,7 +128,10 @@ def create_app_instances(opts, cfg):
             logging.info('Skipping app {0} due to zero count'.format(app_name))
         else:
             logging.info('Examining app {0}'.format(app_name))
-            os.system("./spawner.py -a {0} -e {1} -c {2}".format(app_name, opts.env, count))
+            rc = os.system("./spawner.py -a {0} -e {1} -c {2}".format(app_name, opts.env, count))
+            if rc != 0:
+                logging.info('Cowardly giving up. ')
+                exit(4)
     
     os.chdir('..')
 
