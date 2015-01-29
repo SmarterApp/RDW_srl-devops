@@ -28,26 +28,42 @@ dns_search_domain: "{{ ec2_tag_environment }}.ae1.sbac2dc.net"
 loghost: "{{groups['loghost'] | intersect(groups[ ec2_tag_environment ]) | first | default('127.0.0.1')}}"
 loghost_port: 10514 
 
+
+domain: "{{ dns_search_domain }}" # concise
+locals: "{{ groups[ ec2_tag_environment ] }}" # concise
+
+# All of the lookups below are just doing this:
+# groups['extracts-db-pgpool'] # List of IPs of all instances of that app type
+# groups['extracts-db-pgpool'] | intersect(locals) # IPs of instances of that app type in the same environment as me
+# groups['extracts-db-pgpool'] | intersect(locals) | first # First IP of any instance of that app type in the same environment as me
+# hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)] All vars defined for that IP
+# hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)]['ec2_tag_Name'] EC2 tag 'Name' == DNS shortname
+
 #-------------------------------------------------------------#
 #                   Internal Services
-#                   set via local DNS
 #-------------------------------------------------------------#
 # These hostnames are machines in our VPC that have registered their names in BIND. 
 # "should" be able to rely on local DNS without having to change these values.
-# TODO: may be able to push these up to global_vars if we can parameterize the .dev. part
-edware_db_ca_host: "srl-db-pgpool.{{ ec2_tag_environment }}.ae1.sbac2dc.net" # TODO: multi-tenancy
-edware_extract_db_ca_host: 10.166.32.97 # TODO
-edware_repmgr_db_host : "srl-db-master.{{ ec2_tag_environment }}.ae1.sbac2dc.net" 
-edware_stats_db_host: "srl-db-util.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-hpz_web_host: "srl-hpz-web.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-migrate_dest_db_ca_host: "srl-db-master.{{ ec2_tag_environment }}.ae1.sbac2dc.net" # TODO: multi-tenancy
-migrate_pg_pool_host: "srl-db-pgpool.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-migrate_rabbit_host: "srl-rabbit.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-migrate_source_db_ca_host: "srl-db-master.{{ ec2_tag_environment }}.ae1.sbac2dc.net" # TODO: multi-tenancy
-reporting_rabbit_services_host: "srl-rabbit.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-reporting_rabbit_extract_host: "srl-rabbit.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-gluster_server_1: "srl-gluster-1.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-gluster_server_2: "srl-gluster-2.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+
+edware_db_ca_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy 
+edware_extract_db_ca_host: "{{ hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy
+edware_repmgr_db_host : "{{ hostvars[(groups['db-master'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+edware_stats_db_host: "{{ hostvars[(groups['stats-db'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+# hpz_web_host: "srl-hpz-web.{{ domain }}" # TODO - unused, but should point to ELB?
+migrate_dest_db_ca_host: "{{ hostvars[(groups['db-master'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy
+migrate_pg_pool_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+migrate_rabbit_host: "{{ hostvars[(groups['migrate-rabbit'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+migrate_source_db_ca_host: "{{ hostvars[(groups['migrate-db'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy 
+reporting_rabbit_services_host: "{{ hostvars[(groups['reporting-rabbit-services'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+reporting_rabbit_extract_host: "{{ hostvars[(groups['reporting-rabbit-extract'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+lz_host: "{{ hostvars[(groups['lz'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+tsb_trigger_host: "{{ hostvars[(groups['tsb-trigger'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+
+# gluster-server 
+# TODO: need to figure out why there are two vars
+# TODO: not used - check melvin's mount code
+gluster_server_1: "srl-gluster-1.{{ domain }}"
+gluster_server_2: "srl-gluster-2.{{ domain }}"
 
 #-------------------------------------------------------------#
 #                   Application Specific Config
@@ -61,9 +77,12 @@ sso_saml_login_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAli
 sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp"
 sso_saml_issuer_name: "http://srl-reporting-web"
 sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
-hpz_base_url: "http://srl-hpz-web.{{ ec2_tag_environment }}.ae1.sbac2dc.net:8443"
-reporting_base_url_host: "http://srl-web-reporting.{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+
+# ELB? # TODO: dip
+hpz_base_url: "http://srl-hpz-web.{{ domain }}:8443"
+reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
+
 disable_stack_trace: False
 
 # Must be dynamically looked up from inventory
-cache_hosts: "{{ groups['memcached']  | append_to_each(':11211') | join(';') }}"
+cache_hosts: "{{ groups['memcached']  | intersect(locals) | append_to_each(':11211') | join(';') }}"
