@@ -15,7 +15,7 @@
     shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
 
   - name: recovery.conf file
-    template : src=roles/db-slave/templates/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
+    template: src=roles/db-slave/templates/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
 
   - name: copy archive
     shell: "su - postgres -c 'scp {{ reporting_db_master_ip }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
