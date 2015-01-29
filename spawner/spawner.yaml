@@ -215,6 +215,50 @@ apps:
       dev: 1
       prod: 1
 
+  # TODO: Temp Reorder to get UDL and LZ out first
+    - name: lz
+    ami_app_name: lz
+    security_groups:
+      - srl-default
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: file-grabber
+    ami_app_name: file-grabber
+    security_groups:
+      - srl-default
+      - srl-logging
+    instance_type: t1.micro
+    spawn_count:
+      dev: 1
+      prod: 1
+ 
+  - name: file-trigger
+    ami_app_name: file-trigger 
+    security_groups:
+      - srl-default
+      - srl-logging
+      - srl-rmq-client
+      - srl-glusterfs-udl-client
+    instance_type: t1.micro 
+    spawn_count:
+      dev: 1
+      prod: 1
+
+  - name: udl
+    ami_app_name: udl
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-logging
+    instance_type: m3.2xlarge
+    spawn_count:
+      dev: 2
+      prod: 3
+
   # - name: db-pgbouncer
     # ami_app_name: base # TODO: remove this when the real AMI is available
     # security_groups:
@@ -308,49 +352,6 @@ apps:
     spawn_count:
       dev: 1
       prod: 1
-
-  - name: lz
-    ami_app_name: lz
-    security_groups:
-      - srl-default
-      - srl-logging
-    instance_type: m3.xlarge
-    spawn_count:
-      dev: 1
-      prod: 1
-
-  - name: file-grabber
-    ami_app_name: file-grabber
-    security_groups:
-      - srl-default
-      - srl-logging
-    instance_type: t1.micro
-    spawn_count:
-      dev: 1
-      prod: 1
- 
-  - name: file-trigger
-    ami_app_name: file-trigger 
-    security_groups:
-      - srl-default
-      - srl-logging
-      - srl-rmq-client
-      - srl-glusterfs-udl-client
-    instance_type: t1.micro 
-    spawn_count:
-      dev: 1
-      prod: 1
-
-  - name: udl
-    ami_app_name: udl
-    security_groups:
-      - srl-default
-      - srl-db-client
-      - srl-logging
-    instance_type: m3.2xlarge
-    spawn_count:
-      dev: 2
-      prod: 3
 
   - name: hpz-web
     ami_app_name: hpz-web
