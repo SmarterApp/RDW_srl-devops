@@ -12,7 +12,7 @@
     shell: "su - postgres -c 'scp {{ db_master.host }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
 
   - name: configure repmgr.conf
-    template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/opt/edware/conf/repmgr.conf
+    template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
 
   - name: register slave
     shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf standby register'"
