@@ -5,6 +5,7 @@
     ansible_devs:
       - cwolfe
       - crochedutch
+      - dip
   roles:
     # - common # TODO: only include when groups[loghost] intersect env is nonempty
     - ansible-bootstrap
