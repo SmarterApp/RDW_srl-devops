@@ -216,7 +216,7 @@ apps:
       # prod: 1
 
   # TODO: Temp Reorder to get UDL and LZ out first
-    - name: lz
+  - name: lz
     ami_app_name: lz
     security_groups:
       - srl-default
