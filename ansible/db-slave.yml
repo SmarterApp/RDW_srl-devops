@@ -6,9 +6,8 @@
 
   roles:
     - common
-    - db
     - db-slave
 
-  var:
+  vars:
      reporting_db_master_ip: "{{ groups['db-master'] | intersect(groups [ ec2_tag_environment ]) | first }}"
 # We might need to update postgres user names and password

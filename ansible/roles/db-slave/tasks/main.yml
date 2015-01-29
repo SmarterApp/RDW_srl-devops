@@ -1,18 +1,27 @@
 ---
-  - name: clone master
-    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -d edware -p 5432 -R postgres --verbose standby clone {{ db_master.host }}'"
+  - name: stop PostgreSQL
+    service: name=postgresql-9.2 state=stopped
 
-  - name: update recovery.conf
-    lineinfile: dest=/var/lib/pgsql/9.2/data/recovery.conf line='$item'
-    with_items:
-      - "restore_command = 'gunzip < /var/lib/pgsql/9.2/archive/%f.gz > %p'"
-      - "archive_cleanup_command = '/usr/pgsql-9.2/bin/pg_archivecleanup /var/lib/pgsql/9.2/archive %r'"
+  - name: clean up database directory
+    shell: rm -rf /var/lib/pgsql/9.2/data/*
 
-  - name: copy archive
-    shell: "su - postgres -c 'scp {{ db_master.host }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
+  - name: clean up database archive directory
+    shell: rm -rf /var/lib/pgsql/9.2/archive/*
 
   - name: configure repmgr.conf
     template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
+
+  - name: clone master
+    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
+
+  - name: recovery.conf file
+    template : src=roles/db-slave/template/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
+
+  - name: copy archive
+    shell: "su - postgres -c 'scp {{ reporting_db_master_ip }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
+
+  - name: start PostgreSQL
+    service: name=postgresql-9.2 state=started
 
   - name: register slave
     shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf standby register'"
