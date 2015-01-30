@@ -1,0 +1,26 @@
+vpc_cidr_block: 10.167.32.0/20
+vpc_resource_tags: { "Environment":"prod", "Name":"Prod VPC" }
+vpc_subnets:
+  - cidr: 10.167.36.0/22
+    az: us-east-1e
+    resource_tags: { "Environment":"prod", "Tier":"Public", "Name":"Prod-Public" }
+  - cidr: 10.167.32.0/22
+    az: us-east-1e
+    resource_tags: { "Environment":"prod", "Tier":"Private", "Name":"Prod-Private" }
+  - cidr: 10.167.40.0/22
+    az: us-east-1e
+    resource_tags: { "Environment":"prod", "Tier":"LZ", "Name":"Prod-LZ" }
+vpc_internet_gateway: True
+vpc_route_tables:
+          - subnets:
+              - 10.167.36.0/22 # Public
+              - 10.167.32.0/22 # Private
+            routes:
+              - dest: 0.0.0.0/0
+                gw: igw
+          - subnets:
+              - 10.167.40.0/22 # LZ
+            routes:
+              - dest: 0.0.0.0/0
+                gw: igw
+vpc_region: us-east-1
