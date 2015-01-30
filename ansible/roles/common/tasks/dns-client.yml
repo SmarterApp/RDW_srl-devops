@@ -51,3 +51,8 @@
   shell: "ssh -oStrictHostKeyChecking=no -t -t ansible@{{ bind_host }} sudo /opt/itops/bin/AWS_bind_refresh.sh"
   delegate_to: 127.0.0.1
   when: dig_lookup|failed
+
+
+- name: delete dhclient-exit-hooks
+  file: name=/etc/dhcp/dhclient-exit-hooks state=absent
+ 
