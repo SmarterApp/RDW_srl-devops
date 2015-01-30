@@ -55,4 +55,8 @@
 
 - name: delete dhclient-exit-hooks
   file: name=/etc/dhcp/dhclient-exit-hooks state=absent
- 
+  register: dhclient-exit-hooks
+
+- name: refresh resolv.conf
+  shell: "/etc/dhcp/dhclient-enter-hooks"
+  when: dhclient-exit-hooks
