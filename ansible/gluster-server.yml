@@ -4,12 +4,11 @@
   connection: local
   gather_facts: no
   vars:
-    region: 'us-east-1'
-    aws_access_key: "{{ lookup('pipe', 'pass dev/aws/access_id') }}"
-    aws_secret_key: "{{ lookup('pipe', 'pass dev/aws/secret_key') }}"
+    region: 'us-east-1' # TODO
     node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
     node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
   roles:
+    - aws-creds
     - gluster-storage
 
 - name: Install GlusterFS servers

@@ -1,3 +1,5 @@
+aws_access_key: "{{ aws_access_id }}"
+
 storage_devices:
   - { name: data1, size: 50, dev: xvdf }
   - { name: data2, size: 50, dev: xvdg }
