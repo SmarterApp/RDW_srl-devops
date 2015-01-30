@@ -173,7 +173,7 @@
         from_port: 49152
         to_port: 49164
         cidr_ip: 10.0.0.0/8
-      rules_egress:
+    rules_egress:
       - proto: tcp
         from_port: 111
         to_port: 111
@@ -422,6 +422,7 @@
     purge_rules: true
     purge_rules_egress: true
 - name: srl-nat security group
+  when: "{{ environ != 'prod' }}"
   ec2_group:
     name: srl-nat
     aws_access_key: "{{ aws_access_id }}"
