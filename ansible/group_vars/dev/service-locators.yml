@@ -59,7 +59,7 @@ reporting_rabbit_services_host: "{{ hostvars | srl_hostvars_lookup((groups.get('
 reporting_rabbit_extract_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-extract', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 lz_host: "{{ hostvars | srl_hostvars_lookup((groups.get('lz', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_trigger_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-trigger', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-staging_db_ca_host:"{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+staging_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 
