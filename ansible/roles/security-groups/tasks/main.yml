@@ -171,37 +171,9 @@
         cidr_ip: 10.0.0.0/8
       - proto: tcp
         from_port: 49152
-        to_port: 49152
+        to_port: 49164
         cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49153
-        to_port: 49153
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49154
-        to_port: 49154
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49155
-        to_port: 49155
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49156
-        to_port: 49156
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49157
-        to_port: 49157
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49158
-        to_port: 49158
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49159
-        to_port: 49159
-        cidr_ip: 10.0.0.0/8
-    rules_egress:
+      rules_egress:
       - proto: tcp
         from_port: 111
         to_port: 111
@@ -212,36 +184,9 @@
         cidr_ip: 10.0.0.0/8
       - proto: tcp
         from_port: 49152
-        to_port: 49152
+        to_port: 49164
         cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49153
-        to_port: 49153
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49154
-        to_port: 49154
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49155
-        to_port: 49155
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49156
-        to_port: 49156
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49157
-        to_port: 49157
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49158
-        to_port: 49158
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49159
-        to_port: 49159
-        cidr_ip: 10.0.0.0/8
+      
     purge_rules: true
     purge_rules_egress: true
 - name: srl-glusterfs-pdf-client security group
