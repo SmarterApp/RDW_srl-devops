@@ -17,8 +17,11 @@ def srl_hostvars_lookup(hostvars, ip):
     # hostvars is a dict-like object that lies - keys() and get() operate on a different keyset than [ ]
     # such hate
     try:
-        info = hostvars[ip]
-        return info
+        if ip is not None:
+           info = hostvars[ip]
+           return info
+        else:
+           return { 'ec2_tag_Name': 'dummy' }
     except AnsibleError:
         # OK, no host with that IP.
         # Return a dummy hash.
