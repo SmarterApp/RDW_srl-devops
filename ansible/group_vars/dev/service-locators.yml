@@ -18,6 +18,8 @@ pdf_base_url_host: ha-int-pyweb0.qa.dum.edwdc.net
 tsb_rabbit_host: dwqldr0.qa.dum.edwdc.net
 tsb_db_host: dbpgudl0.qa.dum.edwdc.net
 
+ldap_urls:
+  - ldaps://wgdc07.wgenhq.net
 
 #-------------------------------------------------------------#
 #                   Application Specific Config

@@ -3,7 +3,6 @@
   lineinfile: 
     dest: /etc/sssd/sssd.conf 
     regexp: '^ldap_uri = ldaps://(.*)$' 
-    line: 'ldap_url = ldaps://10.119.0.20, ldaps://10.119.0.21' 
+    line: "ldap_uri = {{ ldap_urls | join(', ') }} "
     backrefs: yes
   notify: restart sssd
-  when: spawner_env == 'prod'

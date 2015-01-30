@@ -4,4 +4,4 @@
 - include: dns-client.yml
   when: "{{ 'bind' not in group_names }}"
 - include: nessus.yml
-- include: prod-sssd.yml 
+- include: sssd.yml 

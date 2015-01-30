@@ -6,6 +6,9 @@
 # These values are only used in prod.  If you can dynamically calculate the value, please do so, and
 # place it in roles/common/defaults/service-locators.yml
 
+ldap_urls:
+  - ldaps://10.119.0.20
+  - ldaps://10.119.0.21
 
 #-------------------------------------------------------------#
 #                   Application Specific Config
