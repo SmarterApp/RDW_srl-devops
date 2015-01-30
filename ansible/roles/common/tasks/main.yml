@@ -1,4 +1,5 @@
 ---
+- include: set-s3-yum-repos.yml
 - include: patch-glibc.yml
 - include: logging.yml
 - include: dns-client.yml
@@ -6,4 +7,4 @@
 - include: nessus.yml
 - include: sssd.yml 
 - include: resize-root.yml
-- include: set-s3-yum-repos.yml
+
