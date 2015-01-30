@@ -1,5 +1,7 @@
 ---
 
+#     ~~~   DEV   ~~~
+
 # Variables used to locate services.  
 
 #-------------------------------------------------------------#
@@ -10,14 +12,47 @@
 pickup_host: lzsftpudl0.qa.dum.edwdc.net
 sso_host: sso.sbac2.net # TODO: This does not resolve in Dev VPC bind or public DNS
 extract_keyserver_host: rbtmqdw0.qa.dum.edwdc.net
-lz_host: lzsftpudl0.qa.dum.edwdc.net
-tsb_trigger_host: tsb.qa.dum.edwdc.net
 # This setting makes no sense to me: not sure what app, and why is it a RMQ host?
 sftp_remote_lz_host: rbtmqudl0.qa.dum.edwdc.net
 pdf_base_url_host: ha-int-pyweb0.qa.dum.edwdc.net
 tsb_rabbit_host: dwqldr0.qa.dum.edwdc.net
 tsb_db_host: dbpgudl0.qa.dum.edwdc.net
 
+
+#-------------------------------------------------------------#
+#                   Application Specific Config
+#-------------------------------------------------------------#
+# Use sbac (old) parser for SSO when we use internal SSO for testing
+auth_oauth2_identity_parser: "smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser"
+sso_oauth_verify_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/"
+auth_saml_identity_parser: "smarter_common.security.sbac_identity_parser.SbacIdentityParser"
+auth_policy_secure: False
+sso_saml_login_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp"
+sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp"
+sso_saml_issuer_name: "http://srl-reporting-web"
+sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
+
+# ELB? # TODO: dip
+hpz_base_url: "http://srl-hpz-web.{{ domain }}:8443"
+reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
+
+disable_stack_trace: False
+
+
+
+
+
+
+#===============================================================#
+#                    COMMON TO ALL ENVS
+#              TODO: push this out to a file and DRY this up
+#===============================================================#
+
+
+
+
+# Everything here is generic accross environments - if you need to hardcode something to an environment, see
+# SEE ALSO: group_vars/<envname>/service-lcoators.yml
 
 #-------------------------------------------------------------#
 #                   Internal Services
@@ -72,21 +107,6 @@ gluster_server_2: "srl-gluster-2.{{ domain }}"
 #-------------------------------------------------------------#
 #                   Application Specific Config
 #-------------------------------------------------------------#
-# Use sbac (old) parser for SSO when we use internal SSO for testing
-auth_oauth2_identity_parser: "smarter_common.security.sbac_identity_parser.SbacOauthIdentityParser"
-sso_oauth_verify_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/oauth2/tokeninfo?realm=/"
-auth_saml_identity_parser: "smarter_common.security.sbac_identity_parser.SbacIdentityParser"
-auth_policy_secure: False
-sso_saml_login_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp"
-sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp"
-sso_saml_issuer_name: "http://srl-reporting-web"
-sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
-
-# ELB? # TODO: dip
-hpz_base_url: "http://srl-hpz-web.{{ domain }}:8443"
-reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
-
-disable_stack_trace: False
-
-# Must be dynamically looked up from inventory
 cache_hosts: "{{ groups.get('memcached', [])  | intersect(locals) | append_to_each(':11211') | join(';') }}"
+
+

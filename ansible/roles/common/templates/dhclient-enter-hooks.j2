@@ -12,11 +12,11 @@ make_resolv_conf() {
         return
     fi
 
-    echo "; This file is maintained by ansible. Local changes will be lost." > ${rscf}
-    echo "search {{ dns_search_domain}}" >> ${rscf}
-    echo "nameserver {{ bind_host }}" >> ${rscf}
+    echo "; This file is maintained by ansible. Local changes will be lost." > /tmp/resolv.conf
+    echo "search {{ dns_search_domain}}" >> /tmp/resolv.conf
+    echo "nameserver {{ bind_host }}" >> /tmp/resolv.conf
 
-    change_resolv_conf ${rscf}
-    rm -f ${rscf}
+    change_resolv_conf /tmp/resolv.conf
+    rm -f /tmp/resolv.conf
     fix_context /etc/resolv.conf
 }
