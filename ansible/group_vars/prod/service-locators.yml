@@ -1,6 +1,11 @@
 ---
 
-# Variables used to locate services.  
+#     ~~~   PROD   ~~~
+
+# Variables used to locate services.
+# These values are only used in prod.  If you can dynamically calculate the value, please do so, and
+# place it in roles/common/defaults/service-locators.yml
+
 
 #-------------------------------------------------------------#
 #                   Application Specific Config
@@ -18,3 +23,75 @@ sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
 #hpz_base_url: http://srl-hpz-web.dev.ae1.sbac2dc.net:8443
 reporting_base_url_host: https://reporting.smarterbalanced.org 
 disable_stack_trace: True
+
+
+#===============================================================#
+#                    COMMON TO ALL ENVS
+#              TODO: push this out to a file and DRY this up
+#===============================================================#
+
+
+
+
+# Everything here is generic accross environments - if you need to hardcode something to an environment, see
+# SEE ALSO: group_vars/<envname>/service-lcoators.yml
+
+#-------------------------------------------------------------#
+#                   Internal Services
+#            that could be dynamically looked up
+#-------------------------------------------------------------#
+locals: "{{ groups[ ec2_tag_environment ] }}" # concise
+bind_host: "{{groups.get('bind', []) | intersect(locals) | first | default('127.0.0.1')}}"
+dns_search_domain: "{{ ec2_tag_environment }}.ae1.sbac2dc.net"
+loghost: "{{groups.get('loghost', []) | intersect(locals) | first | default('127.0.0.1')}}"
+loghost_port: 10514 
+
+
+domain: "{{ dns_search_domain }}" # concise
+
+
+# All of the lookups below are just doing this:
+# groups.get('extracts-db-pgpool'] # List of IPs of all instances of that app type
+# groups.get('extracts-db-pgpool', []) | intersect(locals) # IPs of instances of that app type in the same environment as me
+# groups.get('extracts-db-pgpool', []) | intersect(locals) | first # First IP of any instance of that app type in the same environment as me
+# hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first)] All vars defined for that IP
+# hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] EC2 tag 'Name' == DNS shortname
+
+#-------------------------------------------------------------#
+#                   Internal Services
+#-------------------------------------------------------------#
+# These hostnames are machines in our VPC that have registered their names in BIND. 
+# "should" be able to rely on local DNS without having to change these values.
+
+edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+edware_extract_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
+edware_repmgr_db_host : "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+edware_stats_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('stats-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+# hpz_web_host: "srl-hpz-web.{{ domain }}" # TODO - unused, but should point to ELB?
+migrate_dest_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
+migrate_pg_pool_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+migrate_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+migrate_source_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+reporting_rabbit_services_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-services', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+reporting_rabbit_extract_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-extract', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+lz_host: "{{ hostvars | srl_hostvars_lookup((groups.get('lz', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+tsb_trigger_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-trigger', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+staging_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+
+# gluster-server 
+# TODO: need to figure out why there are two vars
+# TODO: not used - check melvin's mount code
+gluster_server_1: "srl-gluster-1.{{ domain }}"
+gluster_server_2: "srl-gluster-2.{{ domain }}"
+
+#-------------------------------------------------------------#
+#                   Application Specific Config
+#-------------------------------------------------------------#
+cache_hosts: "{{ groups.get('memcached', [])  | intersect(locals) | append_to_each(':11211') | join(';') }}"
+
+
+
+
+
