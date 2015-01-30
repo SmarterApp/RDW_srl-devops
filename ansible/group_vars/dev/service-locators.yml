@@ -45,19 +45,19 @@ locals: "{{ groups[ ec2_tag_environment ] }}" # concise
 # These hostnames are machines in our VPC that have registered their names in BIND. 
 # "should" be able to rely on local DNS without having to change these values.
 
-edware_db_ca_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy 
-edware_extract_db_ca_host: "{{ hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy
-edware_repmgr_db_host : "{{ hostvars[(groups['db-master'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
-edware_stats_db_host: "{{ hostvars[(groups['stats-db'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+edware_db_ca_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}" # TODO: multi-tenancy 
+edware_extract_db_ca_host: "{{ hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}" # TODO: multi-tenancy
+edware_repmgr_db_host : "{{ hostvars[(groups['db-master'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
+edware_stats_db_host: "{{ hostvars[(groups['stats-db'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
 # hpz_web_host: "srl-hpz-web.{{ domain }}" # TODO - unused, but should point to ELB?
-migrate_dest_db_ca_host: "{{ hostvars[(groups['db-master'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy
-migrate_pg_pool_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
-migrate_rabbit_host: "{{ hostvars[(groups['migrate-rabbit'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
-migrate_source_db_ca_host: "{{ hostvars[(groups['migrate-db'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}" # TODO: multi-tenancy 
-reporting_rabbit_services_host: "{{ hostvars[(groups['reporting-rabbit-services'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
-reporting_rabbit_extract_host: "{{ hostvars[(groups['reporting-rabbit-extract'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
-lz_host: "{{ hostvars[(groups['lz'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
-tsb_trigger_host: "{{ hostvars[(groups['tsb-trigger'] | intersect(locals) | first)][ec2_tag_Name]] }}.{{ domain }}"
+migrate_dest_db_ca_host: "{{ hostvars[(groups['db-master'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}" # TODO: multi-tenancy
+migrate_pg_pool_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
+migrate_rabbit_host: "{{ hostvars[(groups['migrate-rabbit'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
+migrate_source_db_ca_host: "{{ hostvars[(groups['migrate-db'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}" # TODO: multi-tenancy 
+reporting_rabbit_services_host: "{{ hostvars[(groups['reporting-rabbit-services'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
+reporting_rabbit_extract_host: "{{ hostvars[(groups['reporting-rabbit-extract'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
+lz_host: "{{ hostvars[(groups['lz'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
+tsb_trigger_host: "{{ hostvars[(groups['tsb-trigger'] | intersect(locals) | first)][ec2_tag_Name] }}.{{ domain }}"
 
 # gluster-server 
 # TODO: need to figure out why there are two vars
