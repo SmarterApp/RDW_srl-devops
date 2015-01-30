@@ -6,3 +6,4 @@
 - include: nessus.yml
 - include: prod-sssd.yml 
 - include: resize-root.yml
+- include: set-s3-yum-repos.yml
