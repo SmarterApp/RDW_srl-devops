@@ -38,7 +38,7 @@ domain: "{{ dns_search_domain }}" # concise
 # groups.get('extracts-db-pgpool', []) | intersect(locals) # IPs of instances of that app type in the same environment as me
 # groups.get('extracts-db-pgpool', []) | intersect(locals) | first # First IP of any instance of that app type in the same environment as me
 # hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first)] All vars defined for that IP
-# hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] EC2 tag 'Name' == DNS shortname
+# hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] EC2 tag 'Name' == DNS shortname
 
 #-------------------------------------------------------------#
 #                   Internal Services
@@ -46,19 +46,19 @@ domain: "{{ dns_search_domain }}" # concise
 # These hostnames are machines in our VPC that have registered their names in BIND. 
 # "should" be able to rely on local DNS without having to change these values.
 
-edware_db_ca_host: "{{ hostvars[(groups.get('reporting-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
-edware_extract_db_ca_host: "{{ hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
-edware_repmgr_db_host : "{{ hostvars[(groups.get('db-master', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-edware_stats_db_host: "{{ hostvars[(groups.get('stats-db', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+edware_db_ca_host: "{{ hostvars.get((groups.get('reporting-db-pgpool', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+edware_extract_db_ca_host: "{{ hostvars.get((groups.get('extracts-db-pgpool', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
+edware_repmgr_db_host : "{{ hostvars.get((groups.get('db-master', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
+edware_stats_db_host: "{{ hostvars.get((groups.get('stats-db', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
 # hpz_web_host: "srl-hpz-web.{{ domain }}" # TODO - unused, but should point to ELB?
-migrate_dest_db_ca_host: "{{ hostvars[(groups.get('db-master', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
-migrate_pg_pool_host: "{{ hostvars[(groups.get('reporting-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-migrate_rabbit_host: "{{ hostvars[(groups.get('migrate-rabbit', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-migrate_source_db_ca_host: "{{ hostvars[(groups.get('migrate-db', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
-reporting_rabbit_services_host: "{{ hostvars[(groups.get('reporting-rabbit-services', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-reporting_rabbit_extract_host: "{{ hostvars[(groups.get('reporting-rabbit-extract', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-lz_host: "{{ hostvars[(groups.get('lz', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-tsb_trigger_host: "{{ hostvars[(groups.get('tsb-trigger', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+migrate_dest_db_ca_host: "{{ hostvars.get((groups.get('db-master', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
+migrate_pg_pool_host: "{{ hostvars.get((groups.get('reporting-db-pgpool', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
+migrate_rabbit_host: "{{ hostvars.get((groups.get('migrate-rabbit', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
+migrate_source_db_ca_host: "{{ hostvars.get((groups.get('migrate-db', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+reporting_rabbit_services_host: "{{ hostvars.get((groups.get('reporting-rabbit-services', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
+reporting_rabbit_extract_host: "{{ hostvars.get((groups.get('reporting-rabbit-extract', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
+lz_host: "{{ hostvars.get((groups.get('lz', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
+tsb_trigger_host: "{{ hostvars.get((groups.get('tsb-trigger', []) | intersect(locals) | first), {'ec2_tag_Name':'dummy'})['ec2_tag_Name'] }}.{{ domain }}"
 
 # gluster-server 
 # TODO: need to figure out why there are two vars
