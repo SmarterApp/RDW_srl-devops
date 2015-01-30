@@ -1,0 +1,9 @@
+---
+- name: Resize root paritiion
+  command: resize2fs /dev/xvde1
+
+- name: Add resize to rc.local
+  lineinfile:
+    dest: /etc/rc.local
+    state: present
+    line: "resize2fs /dev/xvde1"
