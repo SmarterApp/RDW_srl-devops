@@ -31,3 +31,6 @@
 
 - name: add restart notification file
   file: path=/etc/not-yet-restarted-since-ghost-fix state=touch mode="u=rw,g=r,o=r"
+
+- name: restart sssd
+  service: name=sssd state=restarted
