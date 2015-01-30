@@ -1,0 +1,2 @@
+- name: Configure Yum repos
+  template: src=s3iam.repo.j2 dest=/etc/yum.repos.d/s3iam.repo
