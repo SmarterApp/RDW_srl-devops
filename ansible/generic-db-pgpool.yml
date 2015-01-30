@@ -4,6 +4,9 @@
   user: ansible
   sudo: yes
 
+  vars:
+    slave_dbs: "{{ reporting_slave_dbs }}"
+
   roles:
     - common
     - db-pgpool

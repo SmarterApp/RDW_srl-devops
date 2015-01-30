@@ -47,11 +47,14 @@ pcp_socket_dir = '/tmp'
 
 # - Backend Connection Settings -
 
-backend_hostname{{ backend_host_number }} = {{ backend_hostname }}
-backend_port{{ backend_host_number }} = 5432
-backend_weight{{ backend_host_number }} = 1
-backend_data_directory{{ backend_host_number }} = {{ backend_data_directory_path }}
-backend_flag{{ backend_host_number }} = 'ALLOW_TO_FAILOVER'
+{% for db_slave in slave_dbs %}
+backend_hostname{{ loop.index - 1}} = {{ db_slave }}
+backend_port{{ loop.index - 1 }} = 5432
+backend_weight{{ loop.index - 1 }} = 1
+#backend_data_directory{{ loop.index - 1 }} = 
+backend_flag{{ loop.index - 1 }} = 'ALLOW_TO_FAILOVER'
+
+{% endfor %}
 
 # - Authentication -
 
