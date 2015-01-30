@@ -11,6 +11,7 @@
     - ansible-lint
     - ansible
     - git
+  when: False
 
 # Install jq ?
 
@@ -19,6 +20,7 @@
   copy:
     src: gpg-agent-startup.sh
     dest: /etc/profile.d/gpg-agent-startup.sh
+  when: False
 
 - name: Useradd for users
   user:
