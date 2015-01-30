@@ -58,5 +58,6 @@
   register: dhclient-exit-hooks
 
 - name: refresh resolv.conf
+  sudo: yes
   shell: "/etc/dhcp/dhclient-enter-hooks"
   when: dhclient-exit-hooks
