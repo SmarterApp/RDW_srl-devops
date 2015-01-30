@@ -23,21 +23,22 @@ tsb_db_host: dbpgudl0.qa.dum.edwdc.net
 #                   Internal Services
 #            that could be dynamically looked up
 #-------------------------------------------------------------#
-bind_host: "{{groups['bind'] | intersect(groups[ ec2_tag_environment ]) | first | default('10.166.32.10')}}"
+locals: "{{ groups[ ec2_tag_environment ] }}" # concise
+bind_host: "{{groups.get('bind', []) | intersect(locals) | first | default('127.0.0.1')}}"
 dns_search_domain: "{{ ec2_tag_environment }}.ae1.sbac2dc.net"
-loghost: "{{groups['loghost'] | intersect(groups[ ec2_tag_environment ]) | first | default('127.0.0.1')}}"
+loghost: "{{groups.get('loghost', []) | intersect(locals) | first | default('127.0.0.1')}}"
 loghost_port: 10514 
 
 
 domain: "{{ dns_search_domain }}" # concise
-locals: "{{ groups[ ec2_tag_environment ] }}" # concise
+
 
 # All of the lookups below are just doing this:
-# groups['extracts-db-pgpool'] # List of IPs of all instances of that app type
-# groups['extracts-db-pgpool'] | intersect(locals) # IPs of instances of that app type in the same environment as me
-# groups['extracts-db-pgpool'] | intersect(locals) | first # First IP of any instance of that app type in the same environment as me
-# hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)] All vars defined for that IP
-# hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)]['ec2_tag_Name'] EC2 tag 'Name' == DNS shortname
+# groups.get('extracts-db-pgpool'] # List of IPs of all instances of that app type
+# groups.get('extracts-db-pgpool', []) | intersect(locals) # IPs of instances of that app type in the same environment as me
+# groups.get('extracts-db-pgpool', []) | intersect(locals) | first # First IP of any instance of that app type in the same environment as me
+# hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first)] All vars defined for that IP
+# hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] EC2 tag 'Name' == DNS shortname
 
 #-------------------------------------------------------------#
 #                   Internal Services
@@ -45,19 +46,19 @@ locals: "{{ groups[ ec2_tag_environment ] }}" # concise
 # These hostnames are machines in our VPC that have registered their names in BIND. 
 # "should" be able to rely on local DNS without having to change these values.
 
-edware_db_ca_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
-edware_extract_db_ca_host: "{{ hostvars[(groups['extracts-db-pgpool'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
-edware_repmgr_db_host : "{{ hostvars[(groups['db-master'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-edware_stats_db_host: "{{ hostvars[(groups['stats-db'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+edware_db_ca_host: "{{ hostvars[(groups.get('reporting-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+edware_extract_db_ca_host: "{{ hostvars[(groups.get('extracts-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
+edware_repmgr_db_host : "{{ hostvars[(groups.get('db-master', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+edware_stats_db_host: "{{ hostvars[(groups.get('stats-db', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
 # hpz_web_host: "srl-hpz-web.{{ domain }}" # TODO - unused, but should point to ELB?
-migrate_dest_db_ca_host: "{{ hostvars[(groups['db-master'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
-migrate_pg_pool_host: "{{ hostvars[(groups['reporting-db-pgpool'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-migrate_rabbit_host: "{{ hostvars[(groups['migrate-rabbit'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-migrate_source_db_ca_host: "{{ hostvars[(groups['migrate-db'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
-reporting_rabbit_services_host: "{{ hostvars[(groups['reporting-rabbit-services'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-reporting_rabbit_extract_host: "{{ hostvars[(groups['reporting-rabbit-extract'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-lz_host: "{{ hostvars[(groups['lz'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
-tsb_trigger_host: "{{ hostvars[(groups['tsb-trigger'] | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+migrate_dest_db_ca_host: "{{ hostvars[(groups.get('db-master', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
+migrate_pg_pool_host: "{{ hostvars[(groups.get('reporting-db-pgpool', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+migrate_rabbit_host: "{{ hostvars[(groups.get('migrate-rabbit', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+migrate_source_db_ca_host: "{{ hostvars[(groups.get('migrate-db', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+reporting_rabbit_services_host: "{{ hostvars[(groups.get('reporting-rabbit-services', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+reporting_rabbit_extract_host: "{{ hostvars[(groups.get('reporting-rabbit-extract', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+lz_host: "{{ hostvars[(groups.get('lz', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
+tsb_trigger_host: "{{ hostvars[(groups.get('tsb-trigger', []) | intersect(locals) | first)]['ec2_tag_Name'] }}.{{ domain }}"
 
 # gluster-server 
 # TODO: need to figure out why there are two vars
@@ -85,4 +86,4 @@ reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
 disable_stack_trace: False
 
 # Must be dynamically looked up from inventory
-cache_hosts: "{{ groups['memcached']  | intersect(locals) | append_to_each(':11211') | join(';') }}"
+cache_hosts: "{{ groups.get('memcached', [])  | intersect(locals) | append_to_each(':11211') | join(';') }}"
