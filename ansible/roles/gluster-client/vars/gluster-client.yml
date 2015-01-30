@@ -9,5 +9,5 @@ gluster_mount:
   file-grabber: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
 
 
-gfs_node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
-gfs_node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
+gfs_node1: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[0] }}"
+gfs_node2: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[1] }}"
