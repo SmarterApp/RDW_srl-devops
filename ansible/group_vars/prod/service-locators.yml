@@ -66,6 +66,9 @@ domain: "{{ dns_search_domain }}" # concise
 # These hostnames are machines in our VPC that have registered their names in BIND. 
 # "should" be able to rely on local DNS without having to change these values.
 
+reporting_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}"
+extract_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}" #Change to extract slaves later
+
 edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
 edware_extract_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
 edware_repmgr_db_host : "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
