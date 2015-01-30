@@ -1,3 +1,3 @@
 ---
 - name: Start PgPool 
-  service: name=pgpool state=started enabled=yes
+  service: name=pgpool-II-92 state=started enabled=yes
