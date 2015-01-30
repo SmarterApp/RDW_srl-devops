@@ -133,7 +133,7 @@ def spawn(hints, ec2):
                                                                             associate_public_ip_address=True)
         interfaces = boto.ec2.networkinterface.NetworkInterfaceCollection(interface)
         reservation = ec2.run_instances(hints['ami_id'],
-                                instance_type='t1.micro',
+                                instance_type = hints['instance_type'],
                                 network_interfaces=interfaces,
                                 instance_profile_name = 's3yum_access', # TODO: make a config option
                                 )
@@ -213,7 +213,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     #------
     # Verify that AMI ID for that app type exists, and get tags
     #------
-    amis = ec2_conn.get_all_images(owners=['self'])
+    amis = ec2_conn.get_all_images(owners=['self', '479572410002'])
     app_name = app_cfg.get('ami_app_name') if app_cfg.get('ami_app_name') else opts.app
     amis = [a for a in amis if a.tags.get('application') == app_name]
     if len(amis) < 1:
