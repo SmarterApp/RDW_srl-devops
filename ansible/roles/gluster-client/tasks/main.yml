@@ -14,7 +14,7 @@
   shell: 'aws s3 sync --sse s3://srl-gluster-ssl/{{ec2_tag_environment}}/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
 
 - name: create mount point
-  file: path={{ item.mount_at }} state=directory owner=root group=root mode=0600
+  file: path={{ item.mount_at }} state=directory owner={{ item.owner }} group=root mode=0750
   with_items: gluster_mount[ec2_tag_application].mounts
 
 - name: Add to fstab and mount volumes

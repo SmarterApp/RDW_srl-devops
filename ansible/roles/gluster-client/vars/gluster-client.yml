@@ -1,12 +1,12 @@
 gluster_mount:
-  reporting-worker-pdf: { subj: pdf, mounts: [ { mount_at: /opt/edware/pdf, volume: pdf }]}
-  reporting-worker-extract: { subj: data, mounts: [ { mount_at: /opt/edware/working , volume: working }, { mount_at: /opt/edware/data, volume: data } ]}
-  tsb-worker: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb }]}
-  tsb-trigger: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb }]}
-  hpz-web: { subj: uploads, mounts: [{ mount_at: /opt/edware/hpz , volume: uploads }]}
-  udl: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones }]}
-  file-trigger: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones }]}
-  file-grabber: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones }]}
+  reporting-worker-pdf: { subj: pdf, mounts: [ { mount_at: /opt/edware/pdf, volume: pdf, owner: celery }]}
+  reporting-worker-extract: { subj: data, mounts: [ { mount_at: /opt/edware/working , volume: working, owner: celery }, { mount_at: /opt/edware/data, volume: data, owner: celery } ]}
+  tsb-worker: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery }]}
+  tsb-trigger: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, onwer: celery }]}
+  hpz-web: { subj: uploads, mounts: [{ mount_at: /opt/edware/hpz , volume: uploads, owner: apache }]}
+  udl: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
+  file-trigger: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
+  file-grabber: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
 
 
 gfs_node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
