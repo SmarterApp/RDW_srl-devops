@@ -27,7 +27,7 @@ apps:
       - srl-default
       - srl-logging
       - omniti-fulton-office
-    instance_type: t1.micro
+    instance_type: m3.medium
     public_ip: True
     subnet_type: public # Colin said so!
     spawn_count:
