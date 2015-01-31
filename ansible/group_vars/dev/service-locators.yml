@@ -32,15 +32,12 @@ sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/met
 sso_saml_issuer_name: "http://srl-reporting-web"
 hpz_sso_saml_issuer_name: "http://srl-reporting-web"
 sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
+tsb_gpg_public_key: sbac@smarterbalanced.org
+disable_stack_trace: False
 
 # ELB? # TODO: dip
 hpz_base_url: "http://srl-hpz-web.{{ domain }}:8443"
 reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
-
-disable_stack_trace: False
-
-
-
 
 
 
