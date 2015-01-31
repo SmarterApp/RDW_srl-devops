@@ -3,7 +3,7 @@ PYTHONDIR=/usr/bin
 NAMEDPIDFILE=/var/run/named/named.pid
 (test ! -s $NAMEDPIDFILE) && echo "named lock file not found!" && exit
 NAMEDPID=`/bin/cat $NAMEDPIDFILE` 
-ZONEFILE=/var/named/zone/INTERNAL.{{ ec2_tag_environment }}.sbac2dc.net
+ZONEFILE=/var/named/zone/INTERNAL.{{ ec2_tag_environment }}.ae1.sbac2dc.net
 REVZONEFILE=/var/named/zone/INTERNAL.{{ ec2_private_ip_address.split('.')[1] }}.10.in-addr.arpa
 SPORKPATH=/root
 SERIAL=`/bin/date +%Y%m%d%H%S`
@@ -17,7 +17,7 @@ echo ";" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "\$TTL 1h" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
-echo "@ IN SOA  ns.{{ ec2_tag_environment }}.sbac2dc.net. {{ ec2_tag_environment }}.sbac2dc.net. (" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
+echo "@ IN SOA  ns.{{ ec2_tag_environment }}.ae1.sbac2dc.net. {{ ec2_tag_environment }}.ae1.sbac2dc.net. (" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "      $SERIAL ;serial (version)" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "          3h  ;refresh period" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "          1h  ;retry refresh this often" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
@@ -27,9 +27,9 @@ echo "      )" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "                              IN NS      ns" >> $ZONEFILE
 echo "ns                            IN A       {{ ec2_private_ip_address }}" >> $ZONEFILE
-echo "                          IN NS      ns.{{ ec2_tag_environment }}.sbac2dc.net." >> $REVZONEFILE
+echo "                          IN NS      ns.{{ ec2_tag_environment }}.ae1.sbac2dc.net." >> $REVZONEFILE
 #echo "18.55                     IN PTR     ns.{{ ec2_tag_environment }}.sbac2dc.net." >> $REVZONEFILE
-echo "{{ ec2_private_ip_address.split('.')[3] }}.{{ ec2_private_ip_address.split('.')[2] }}                     IN PTR     ns.{{ ec2_tag_environment }}.sbac2dc.net." >> $REVZONEFILE
+echo "{{ ec2_private_ip_address.split('.')[3] }}.{{ ec2_private_ip_address.split('.')[2] }}                     IN PTR     ns.{{ ec2_tag_environment }}.ae1.sbac2dc.net." >> $REVZONEFILE
 
 
 echo "Creating entries..."
@@ -54,7 +54,7 @@ do
     then
         echo "Adding $SHORTNAME"
         echo "$SHORTNAME              IN A $PRIVATE_IP" >> $ZONEFILE
-        echo "$LASTOCT.$THIRDOCT                    IN PTR $SHORTNAME.{{ ec2_tag_environment }}.sbac2dc.net." >> $REVZONEFILE
+        echo "$LASTOCT.$THIRDOCT                    IN PTR $SHORTNAME.{{ ec2_tag_environment }}.ae1.sbac2dc.net." >> $REVZONEFILE
     fi
 done <<< "$TEMPFILECONTENT"
 

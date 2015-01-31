@@ -35,7 +35,7 @@
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
     rules:
-      - proto: tcp
+      - proto: udp 
         from_port: 53
         to_port: 53
         cidr_ip: 10.0.0.0/8
