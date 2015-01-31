@@ -2,3 +2,9 @@
 - name: Configure udl 
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart celeryd-udl2 
+
+- name: create udl gpg directory
+  file: path=/dev/shm/udl/gpg state=directory owner=udl2 group=udl2 mode=0700
+
+- name: import private key
+  shell: "gpg --homedir /dev/shm/udl/gpg --allow-secret-key-import --import /dev/shm/udl/sbac_smarterbalanced_org.key "
