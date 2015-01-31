@@ -37,7 +37,7 @@ disable_stack_trace = {{ disable_stack_trace }}
 # TODO: next three should be a loop over a hash structure for each tenant
 edware.db.ca.schema_name = ca
 edware.db.ca.state_code = CA
-edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:{{ edware_db_ca_port : default(9999) }}/edware
+edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:{{ edware_db_ca_port | default(9999) }}/edware
 edware.db.echo = False
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
 edware_rep.db.url = postgresql+psycopg2://{{ edware_repmgr_db_username }}:{{ edware_repmgr_db_password }}@{{ edware_repmgr_db_host }}:5432/edware
