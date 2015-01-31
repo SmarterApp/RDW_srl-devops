@@ -27,6 +27,10 @@ sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
 reporting_base_url_host: https://reporting.smarterbalanced.org 
 disable_stack_trace: True
 
+# The following are probably not used and need to be cleaned up from smarter.ini
+extract_keyserver_host: NotUsed
+pickup_host: NotUsed
+sftp_remote_lz_host: NotUsed
 
 #===============================================================#
 #                    COMMON TO ALL ENVS
