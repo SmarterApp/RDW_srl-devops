@@ -1,4 +1,7 @@
 ---
+- vars: 
+    private_key: "{{ lookup('file','roles/udl/files/sbac_smarterbalanced_org.key') }}"
+
 - name: Configure udl 
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart celeryd-udl2 
@@ -20,16 +23,18 @@
     mode: 0700
 
 - name: move private key to celery directory
-  copy: src=roles/udl/files/sbac_smarterbalanced_org.key dest=/dev/shm/celery/sbac_smarterbalanced_org.key
+  copy: 
+  content: "{{ private_key }}"
+  dest: dest=/dev/shm/celery/sbac_smarterbalanced_org.key
 
 - name: move public key to celery directory
   copy: src=roles/udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub
 
 - name: import private key
-  shell: 'su udl2 -c "gpg --homedir /dev/shm/celery/gpg --allow-secret-key-import --import /dev/shm/celery/sbac_smarterbalanced_org.key"'
+  shell: 'su - udl2 -c "gpg --homedir /dev/shm/celery/gpg --allow-secret-key-import --import /dev/shm/celery/sbac_smarterbalanced_org.key"'
 
 - name: import public key
-  shell: 'su udl2 -c "gpg --homedir /dev/shm/celery/gpg --import /dev/shm/celery/sbac_smarterbalanced_org.pub"'
+  shell: 'su - udl2 -c "gpg --homedir /dev/shm/celery/gpg --import /dev/shm/celery/sbac_smarterbalanced_org.pub"'
 
 - name: delete private key
   shell: "rm roles/udl/files/sbac_smarterbalanced_org.key && rm /dev/shm/celery/sbac_smarterbalanced_org.key"
