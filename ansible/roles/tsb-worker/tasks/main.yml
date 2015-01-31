@@ -6,6 +6,12 @@
 - name: create celery gpg directory
   file: path=/dev/shm/celery/gpg state=directory owner=celery group=celery mode=0700
 
+- name: move private key to tsb directory
+  copy: src=roles/udl/files/sbac_smarterbalanced_org.key dest=/dev/shm/celery/sbac_smarterbalanced_org.key
+
+- name: move public key to udl directory
+  copy: src=roles/udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub
+
 - name: import private key
   shell: "gpg --homedir /dev/shm/celery/gpg --allow-secret-key-import --import /dev/shm/celery/tsb_smarterbalanced_org.key"
 
