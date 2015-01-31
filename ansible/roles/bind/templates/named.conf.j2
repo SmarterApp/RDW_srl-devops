@@ -43,7 +43,7 @@ zone "0.0.127.in-addr.arpa" {
     file "zone/127.0.0";
 };
 
-zone "{{ env }}.ae1.sbac2dc.net" {
+zone "{{ ec2_tag_environment }}.sbac2dc.net" {
     type master;
     file "/var/named/zone/INTERNAL.sbac2dc.net";
 };

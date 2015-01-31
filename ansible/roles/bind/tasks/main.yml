@@ -1,8 +1,8 @@
 ---
-- name: Install named.conf
+- name: Template named.conf
   file:
-    src: "named.conf"
-    dest: "/etc/named.conf"
+    dest: /etc/named.conf
+    src: named.conf.j2
     owner: "root"
     group: "named"
     mode: 0640
