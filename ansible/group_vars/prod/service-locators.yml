@@ -89,6 +89,8 @@ tsb_trigger_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-trigger', 
 staging_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+tsb_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+tsb_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 yum_env: "prod"
 
 # gluster-server 
