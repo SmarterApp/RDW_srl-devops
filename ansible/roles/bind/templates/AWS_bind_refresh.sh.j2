@@ -17,7 +17,7 @@ echo ";" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "\$TTL 1h" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
-echo "@ IN SOA  ns.{{ ec2_tag_environment }}.sbac2dc.net.{{ ec2_tag_environment }}.sbac2dc.net (" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
+echo "@ IN SOA  ns.{{ ec2_tag_environment }}.sbac2dc.net. {{ ec2_tag_environment }}.sbac2dc.net. (" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "      $SERIAL ;serial (version)" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "          3h  ;refresh period" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
 echo "          1h  ;retry refresh this often" | /usr/bin/tee -a $REVZONEFILE >> $ZONEFILE
