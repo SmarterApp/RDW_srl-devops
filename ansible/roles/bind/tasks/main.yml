@@ -1,6 +1,6 @@
 ---
 - name: Template named.conf
-  file:
+  template:
     dest: /etc/named.conf
     src: named.conf.j2
     owner: "root"
