@@ -30,6 +30,7 @@ auth_policy_secure: False
 sso_saml_login_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp"
 sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp"
 sso_saml_issuer_name: "http://srl-reporting-web"
+hpz_sso_saml_issuer_name: "http://srl-reporting-web"
 sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
 
 # ELB? # TODO: dip

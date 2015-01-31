@@ -21,8 +21,8 @@ auth_policy_secure: True
 sso_saml_login_url: https://sso.smarterbalanced.org/auth/SSORedirect/metaAlias/idp
 sso_saml_logout_url: https://sso.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/idp
 sso_saml_issuer_name: https://reporting.smarterbalanced.org
+hpz_sso_saml_issuer_name: https://reportdownload.smarterbalanced.org
 sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
-#cache_hosts: srl-memcached.dev.ae1.sbac2dc.net:11211.
 hpz_base_url: https://reportingdownload.smarterbalanced.org
 reporting_base_url_host: https://reporting.smarterbalanced.org 
 disable_stack_trace: True
@@ -72,12 +72,15 @@ domain: "{{ dns_search_domain }}" # concise
 
 reporting_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}"
 extract_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}" #Change to extract slaves later
-
-edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+# TODO: TEMPORARY For simplified reporting app
+# We'll point to db-master instead of db-pgpool
+# edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
+edware_db_ca_port: 5432
+# End of Temp
 edware_extract_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
 edware_repmgr_db_host : "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 edware_stats_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('stats-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-# hpz_web_host: "srl-hpz-web.{{ domain }}" # TODO - unused, but should point to ELB?
 migrate_dest_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
 migrate_pg_pool_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 migrate_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
