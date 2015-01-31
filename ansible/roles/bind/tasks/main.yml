@@ -1,3 +1,11 @@
+---
+- name: Install named.conf
+  file:
+    src: "named.conf"
+    dest: "/etc/named/named.conf"
+    owner: "root"
+    group: "named"
+    mode: 0640
 
 - name: Put read-only AWS creds in boto config
   template:
