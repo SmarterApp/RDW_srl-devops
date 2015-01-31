@@ -2,7 +2,7 @@ gluster_mount:
   reporting-worker-pdf: { subj: pdf, mounts: [ { mount_at: /opt/edware/pdf, volume: pdf, owner: celery }]}
   reporting-worker-extract: { subj: data, mounts: [ { mount_at: /opt/edware/working , volume: working, owner: celery }, { mount_at: /opt/edware/data, volume: data, owner: celery } ]}
   tsb-worker: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery }]}
-  tsb-trigger: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, onwer: celery }]}
+  tsb-trigger: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery }]}
   hpz-web: { subj: uploads, mounts: [{ mount_at: /opt/edware/hpz , volume: uploads, owner: apache }]}
   udl: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
   file-trigger: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
