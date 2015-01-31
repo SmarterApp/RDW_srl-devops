@@ -20,10 +20,10 @@
     mode: 0700
 
 - name: move private key to celery directory
-  copy: src=roles/udl/files/sbac_smarterbalanced_org.key dest=/dev/shm/celery/sbac_smarterbalanced_org.key
+  copy: src=roles/udl/files/sbac_smarterbalanced_org.key dest=/dev/shm/celery/sbac_smarterbalanced_org.key owner=udl2 group=udl2 mode=0600
 
 - name: move public key to celery directory
-  copy: src=roles/udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub
+  copy: src=roles/udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub owner=udl2 group=udl2 mode=0600
 
 - name: import private key
   shell: "gpg --homedir /dev/shm/celery/gpg --allow-secret-key-import --import /dev/shm/celery/sbac_smarterbalanced_org.key"
