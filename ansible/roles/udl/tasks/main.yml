@@ -4,7 +4,20 @@
   notify: restart celeryd-udl2 
 
 - name: create udl gpg directory
-  file: path=/dev/shm/udl/gpg state=directory owner=udl2 group=udl2 mode=0700
+  file: 
+    path: /dev/shm/udl/gpg 
+    state: directory 
+    owner: udl2
+    group: udl2
+    mode: 0700
+
+- name: create celery directory
+  file: 
+    path: /dev/shm/celery 
+    state: directory 
+    owner: udl2
+    group: udl2
+    mode: 0700
 
 - name: move private key to celery directory
   copy: src=roles/udl/files/sbac_smarterbalanced_org.key dest=/dev/shm/celery/sbac_smarterbalanced_org.key
