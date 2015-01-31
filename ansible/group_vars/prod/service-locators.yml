@@ -22,8 +22,8 @@ sso_saml_login_url: https://sso.smarterbalanced.org/auth/SSORedirect/metaAlias/i
 sso_saml_logout_url: https://sso.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/idp
 sso_saml_issuer_name: https://reporting.smarterbalanced.org
 sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
-#cache_hosts: srl-memcached.dev.ae1.sbac2dc.net:11211
-#hpz_base_url: http://srl-hpz-web.dev.ae1.sbac2dc.net:8443
+#cache_hosts: srl-memcached.dev.ae1.sbac2dc.net:11211.
+hpz_base_url: https://reportingdownload.smarterbalanced.org
 reporting_base_url_host: https://reporting.smarterbalanced.org 
 disable_stack_trace: True
 
