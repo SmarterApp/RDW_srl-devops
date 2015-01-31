@@ -1,6 +1,7 @@
 ---
-- vars: 
-    private_key: "{{ lookup('file','roles/udl/files/sbac_smarterbalanced_org.key') }}"
+- name: decrypt vault file 
+  local_action:  ansible-vault view roles/udl/files/sbac_smarterbalanced_org.key
+  register: cleartext_key
 
 - name: Configure udl 
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
@@ -24,8 +25,8 @@
 
 - name: move private key to celery directory
   copy: 
-  content: "{{ private_key }}"
-  dest: dest=/dev/shm/celery/sbac_smarterbalanced_org.key
+  content: "{{ cleartext_key }}"
+  dest: /dev/shm/celery/sbac_smarterbalanced_org.key
 
 - name: move public key to celery directory
   copy: src=roles/udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub
