@@ -233,7 +233,7 @@ apps:
     security_groups:
       - srl-default
       - srl-logging
-    instance_type: t1.micro
+    instance_type: m3.large
     spawn_count:
       dev: 1
       prod: 1
@@ -245,7 +245,7 @@ apps:
       - srl-logging
       - srl-rmq-client
       - srl-glusterfs-udl-client
-    instance_type: t1.micro 
+    instance_type: m3.large
     spawn_count:
       dev: 1
       prod: 1
