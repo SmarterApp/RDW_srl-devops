@@ -3,9 +3,9 @@
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart celeryd-udl2 
 
-- name: create udl gpg directory
+- name: create gpg directory
   file: 
-    path: /dev/shm/udl/gpg 
+    path: /dev/shm/celery/gpg 
     state: directory 
     owner: udl2
     group: udl2
@@ -26,7 +26,7 @@
   copy: src=roles/udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub
 
 - name: import private key
-  shell: "gpg --homedir /dev/shm/udl/gpg --allow-secret-key-import --import /dev/shm/celery/sbac_smarterbalanced_org.key"
+  shell: "gpg --homedir /dev/shm/celery/gpg --allow-secret-key-import --import /dev/shm/celery/sbac_smarterbalanced_org.key"
 
 - name: import public key
   shell: "gpg --homedir /dev/shm/celery/gpg --import /dev/shm/celery/sbac_smarterbalanced_org.pub"
