@@ -17,6 +17,7 @@ auth.saml.name_qualifier = {{ sso_saml_name_qualifier }}
 auth.session.timeout = 1200
 auth.skip.verify = False
 auth.state.secret = {{ auth_state_secret }}
+batch.user.session.timeout = 300000
 cache.expire = 3600
 cache.lock_dir = /tmp/memcache
 cache.regions = session
