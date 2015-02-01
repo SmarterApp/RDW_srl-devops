@@ -29,7 +29,7 @@ notification_timeout_interval = 30
 passphrase = {{ udl_passphrase }}
 # Tenant Specific Configuration - This should be readonly db, not master
 prod_db_conn.ca.db_schema = ca
-prod_db_conn.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:9999/edware
+prod_db_conn.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_port | default(9999) }}/edware
 quiet_mode = False
 rabbitmq.RABBITMQ_SERVER_PATH = ['/opt/local/sbin/rabbitmq-server', '/usr/local/sbin/rabbitmq-server']
 # Tenant Specific Staging database
