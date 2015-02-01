@@ -7,16 +7,16 @@
   file: 
     path: /dev/shm/celery/gpg 
     state: directory 
-    owner: tsb
-    group: tsb
+    owner: celery
+    group: celery
     mode: 0700
 
 - name: create celery directory
   file: 
     path: /dev/shm/celery 
     state: directory 
-    owner: tsb
-    group: tsb
+    owner: celery
+    group: celery
     mode: 0700
 
 - name: move private key to celery directory
