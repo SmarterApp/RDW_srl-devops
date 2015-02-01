@@ -393,7 +393,7 @@ apps:
       # - srl-logging
     # #instance_type: r3.2xlarge # TODO: existing image is PV, r3 requires HVM
     # #instance_type: m2.4xlarge # TODO not supported
-    # instance_tyep: m3.2xlarge
+    # instance_type: m3.2xlarge
     # spawn_count:
       # dev: 2
       # prod: 10
