@@ -35,4 +35,4 @@
   shell: 'su - udl2 -c "gpg --homedir /dev/shm/celery/gpg --import /dev/shm/celery/sbac_smarterbalanced_org.pub"'
 
 - name: delete private key
-  shell: "rm roles/udl/files/sbac_smarterbalanced_org.key && rm /dev/shm/celery/sbac_smarterbalanced_org.key"
+  shell: "rm -f /dev/shm/celery/d_sbac_smarterbalanced_org.key && rm -f /dev/shm/celery/sbac_smarterbalanced_org.key"
