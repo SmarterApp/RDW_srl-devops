@@ -25,6 +25,7 @@ hpz_sso_saml_issuer_name: https://reportdownload.smarterbalanced.org
 sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
 hpz_base_url: https://reportingdownload.smarterbalanced.org
 reporting_base_url_host: https://reporting.smarterbalanced.org 
+hpz_download_base_url: https://reportdownload.smarterbalanced.org
 disable_stack_trace: True
 tsb_gpg_public_key: sbac@smarterbalanced.org
 
