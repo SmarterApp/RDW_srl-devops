@@ -25,6 +25,7 @@ hpz_sso_saml_issuer_name: https://reportdownload.smarterbalanced.org
 sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
 hpz_base_url: https://reportingdownload.smarterbalanced.org
 reporting_base_url_host: https://reporting.smarterbalanced.org 
+hpz_download_base_url: https://reportdownload.smarterbalanced.org
 disable_stack_trace: True
 tsb_gpg_public_key: sbac@smarterbalanced.org
 
@@ -95,6 +96,7 @@ udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | inte
 udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+hpz_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('hpz-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 yum_env: "prod"
 
 # gluster-server 
