@@ -18,8 +18,8 @@ auth_oauth2_identity_parser: smarter_common.security.sbac_live_identity_parser.S
 sso_oauth_verify_url: https://sso.smarterbalanced.org/auth/oauth2/tokeninfo?realm=/sbac
 auth_saml_identity_parser: smarter_common.security.sbac_live_identity_parser.SbacIdentityParser
 auth_policy_secure: True
-sso_saml_login_url: https://sso.smarterbalanced.org/auth/SSORedirect/metaAlias/idp
-sso_saml_logout_url: https://sso.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/idp
+sso_saml_login_url: https://sso.smarterbalanced.org/auth/SSORedirect/metaAlias/sbac/idp
+sso_saml_logout_url: https://sso.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/sbac/idp
 sso_saml_issuer_name: https://reporting.smarterbalanced.org
 hpz_sso_saml_issuer_name: https://reportdownload.smarterbalanced.org
 sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
