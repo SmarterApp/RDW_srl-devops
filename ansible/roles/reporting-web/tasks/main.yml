@@ -3,3 +3,6 @@
 - name: Configure reporting-web
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart httpd 
+
+- name: Configure IDP sso
+  copy: src=files/{{ env }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
