@@ -7,5 +7,6 @@
   roles:
     - common
     - db
+    - gluster-client
 
 # We might need to update postgres user names and password

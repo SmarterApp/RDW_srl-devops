@@ -1,12 +1,13 @@
 gluster_mount:
-  reporting-worker-pdf: { subj: pdf, mounts: [ { mount_at: /opt/edware/pdf, volume: pdf, owner: celery }]}
-  reporting-worker-extract: { subj: data, mounts: [ { mount_at: /opt/edware/working , volume: working, owner: celery }, { mount_at: /opt/edware/data, volume: data, owner: celery } ]}
-  tsb-worker: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery }]}
-  tsb-trigger: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery }]}
-  hpz-web: { subj: uploads, mounts: [{ mount_at: /opt/edware/hpz , volume: uploads, owner: apache }]}
-  udl: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
-  file-trigger: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
-  file-grabber: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2 }]}
+  reporting-worker-pdf: { subj: pdf, mounts: [ { mount_at: /opt/edware/pdf, volume: pdf, owner: celery, group: root }]}
+  reporting-worker-extract: { subj: data, mounts: [ { mount_at: /opt/edware/working , volume: working, owner: celery, group: root }, { mount_at: /opt/edware/data, volume: data, owner: celery, group: root } ]}
+  tsb-worker: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery, group: root }]}
+  tsb-trigger: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery, group: root }]}
+  hpz-web: { subj: uploads, mounts: [{ mount_at: /opt/edware/hpz , volume: uploads, owner: apache, group: root }]}
+  udl: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
+  udl-db: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
+  file-trigger: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: root }]}
+  file-grabber: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: root }]}
 
 
 gfs_node1: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[0] }}"
