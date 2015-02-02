@@ -14,5 +14,11 @@
 - name: copy pool_hba.conf
   copy: src=roles/db-pgpool/files/pool_hba.conf dest="/etc/pgpool-II-92/pool_hba.conf" owner=root group=root mode=0644
 
+- name: empty pool_passwd file
+  file: dest=/etc/pgpool-II-92/pool_passwd state=touch owner=postgres group=postgres mode=640
+
+- name: create pool_passwd file
+  shell: /usr/bin/pg_md5 -u {{ edware_db_ca_username }} -m {{ edware_db_ca_password }}
+
 - name: Start PgPool 
   service: name=pgpool-II-92 state=started enabled=yes

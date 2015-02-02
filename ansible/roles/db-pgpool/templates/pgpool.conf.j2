@@ -58,7 +58,7 @@ backend_flag{{ loop.index - 1 }} = 'ALLOW_TO_FAILOVER'
 
 # - Authentication -
 
-enable_pool_hba = off
+enable_pool_hba = on
                                    # Use pool_hba.conf for client authentication
 pool_passwd = 'pool_passwd'
                                    # File name of pool_passwd for md5 authentication.
@@ -123,7 +123,7 @@ client_idle_limit = 0
 
 # - Where to log -
 
-log_destination = 'stderr'
+log_destination = 'syslog'
                                    # Where to log
                                    # Valid values are combinations of stderr,
                                    # and syslog. Default to stderr.
@@ -196,7 +196,7 @@ reset_query_list = 'ABORT; DISCARD ALL'
 # REPLICATION MODE
 #------------------------------------------------------------------------------
 
-replication_mode = on
+replication_mode = off
                                    # Activate replication mode
                                    # (change requires restart)
 replicate_select = off
