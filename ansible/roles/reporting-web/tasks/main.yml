@@ -5,4 +5,4 @@
   notify: restart httpd 
 
 - name: Configure IDP sso
-  copy: src=files/{{ env }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
+  copy: src=files/{{ environ }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
