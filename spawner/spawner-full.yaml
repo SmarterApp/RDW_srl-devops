@@ -360,6 +360,7 @@ apps:
     ami_app_name: hpz-web
     security_groups:
       - srl-default
+      - srl-web
       - srl-db-client
       - srl-glusterfs-hpz-client
       - srl-logging

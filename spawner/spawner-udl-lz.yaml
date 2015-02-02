@@ -361,6 +361,7 @@ apps:
     # security_groups:
       # - srl-default
       # - srl-db-client
+      # - srl-web
       # - srl-glusterfs-hpz-client
       # - srl-logging
     # instance_type: m3.xlarge
