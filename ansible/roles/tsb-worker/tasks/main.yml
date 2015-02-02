@@ -18,18 +18,29 @@
     owner: celery
     group: celery
     mode: 0700
+    
+- name: create gpg directory
+  file: 
+    path: /opt/edware/gpg 
+    state: directory 
+    owner: celery
+    group: celery
+    mode: 0700
 
 - name: move private key to celery directory
-  copy: src=roles/tsb/files/tsb_smarterbalanced_org.key dest=/dev/shm/celery/tsb_smarterbalanced_org.key
+  copy: src=tsb_smarterbalanced_org.key dest=/dev/shm/celery/tsb_smarterbalanced_org.key owner=celery group=celery mode=0600
 
 - name: move public key to celery directory
-  copy: src=roles/tsb/files/tsb_smarterbalanced_org.pub dest=/dev/shm/celery/tsb_smarterbalanced_org.pub
+  copy: src=tsb_smarterbalanced_org.pub dest=/dev/shm/celery/tsb_smarterbalanced_org.pub owner=celery group=celery mode=0600
+
+- name: decrypt private key
+  shell: openssl aes-256-cbc -salt -a -d -in /dev/shm/celery/tsb_smarterbalanced_org.key -out /dev/shm/celery/d_tsb_smarterbalanced_org.key -k {{ gpg_openssl_key }}
 
 - name: import private key
-  shell: "gpg --homedir /dev/shm/celery/gpg --allow-secret-key-import --import /dev/shm/celery/tsb_smarterbalanced_org.key"
+  shell: 'su - celery -c "gpg --homedir /opt/edware/gpg  --allow-secret-key-import --import /dev/shm/celery/d_tsb_smarterbalanced_org.key"'
 
 - name: import public key
-  shell: "gpg --homedir /dev/shm/celery/gpg --import /dev/shm/celery/tsb_smarterbalanced_org.pub"
+  shell: 'su - celery -c "gpg --homedir /opt/edware/gpg  --import /dev/shm/celery/tsb_smarterbalanced_org.pub"'
 
 - name: delete private key
-  shell: "rm roles/tsb/files/tsb_smarterbalanced_org.key && rm /dev/shm/celery/tsb_smarterbalanced_org.key"
+  shell: "rm -f /dev/shm/celery/d_tsb_smarterbalanced_org.key && rm -f /dev/shm/celery/tsb_smarterbalanced_org.key"

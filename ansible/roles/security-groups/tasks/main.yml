@@ -525,9 +525,13 @@
     rules:
     rules_egress:
       - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/8
+      - proto: tcp
         from_port: 443
         to_port: 443
-        cidr_ip: 10.0.0.0/8
+        cidr_ip: 0.0.0.0/8
     purge_rules: true
     purge_rules_egress: true
 - name: omniti-fulton-office security group
@@ -559,6 +563,26 @@
         from_port: 22
         to_port: 22
         cidr_ip: 108.48.124.86/32
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-elb security group
+  ec2_group:
+    name: srl-elb
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow ELB HTTP and HTTPS access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 10.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 10.0.0.0/0
     rules_egress:
     purge_rules: true
     purge_rules_egress: true

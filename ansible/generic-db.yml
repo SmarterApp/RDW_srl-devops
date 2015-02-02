@@ -1,6 +1,6 @@
 ---
 - name: Configure the standalone database postgres server 
-  hosts: hpz-db:tsb-db:udl-db:stats-db:migrate-db
+  hosts: hpz-db:tsb-db:stats-db:migrate-db
   user: ansible
   sudo: yes
 

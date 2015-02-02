@@ -1,1 +1,12 @@
-generic-db.yml
+---
+- name: Configure the standalone database postgres server 
+  hosts: udl-db
+  user: ansible
+  sudo: yes
+
+  roles:
+    - common
+    - db
+    - gluster-client
+
+# We might need to update postgres user names and password

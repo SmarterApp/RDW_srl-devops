@@ -37,7 +37,7 @@ disable_stack_trace = {{ disable_stack_trace }}
 # TODO: next three should be a loop over a hash structure for each tenant
 edware.db.ca.schema_name = ca
 edware.db.ca.state_code = CA
-edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:9999/edware
+edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:{{ edware_db_ca_port | default(9999) }}/edware
 edware.db.echo = False
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
 edware_rep.db.url = postgresql+psycopg2://{{ edware_repmgr_db_username }}:{{ edware_repmgr_db_password }}@{{ edware_repmgr_db_host }}:5432/edware
@@ -73,7 +73,7 @@ extract.sftp.route.base_dir = route
 extract.work_zone_base_dir = /opt/edware/working/extraction
 file-grabber.lz.args.landing = /opt/edware/zones/landing/arrivals/
 file-grabber.lz.args.private_key = /home/udl2/.ssh/id_rsa
-file-grabber.lz.args.remote_dir = /sftp/opt/edware/home/arrivals
+file-grabber.lz.args.remote_dir = /sftp/opt/edware/staging/
 file-grabber.lz.args.remote_host = {{ lz_host }}
 file-grabber.lz.args.remote_user = root
 file-grabber.lz.enable = True

@@ -1,30 +1,36 @@
 ---
-  - name: stop PostgreSQL
-    service: name=postgresql-9.2 state=stopped
+- name: stop PostgreSQL
+  service: name=postgresql-9.2 state=stopped
 
-  - name: clean up database directory
-    shell: rm -rf /var/lib/pgsql/9.2/data/*
+- name: Install postgresql92-contrib
+  yum: name=postgresql92-contrib state=latest
 
-  - name: clean up database archive directory
-    shell: rm -rf /var/lib/pgsql/9.2/archive/*
+- name: clean up database directory
+  shell: rm -rf /var/lib/pgsql/9.2/data/*
 
-  - name: configure repmgr.conf
-    template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
+- name: clean up database archive directory
+  shell: rm -rf /var/lib/pgsql/9.2/archive/*
 
-  - name: clone master
-    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
+- name: place repmgr password
+  copy: content="*:5432:*:repmgr:{{ edware_db_repmgr_password }}" dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
 
-  - name: recovery.conf file
-    template: src=roles/db-slave/templates/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
+- name: configure repmgr.conf
+  template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
 
-  - name: copy archive
-    shell: "su - postgres -c 'scp {{ reporting_db_master_ip }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
+- name: clone master
+  shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -U repmgr -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
 
-  - name: start PostgreSQL
-    service: name=postgresql-9.2 state=started
+- name: recovery.conf file
+  template: src=roles/db-slave/templates/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
 
-  - name: register slave
-    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf standby register'"
+- name: copy archive
+  shell: "su - postgres -c 'scp {{ reporting_db_master_ip }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
 
-  - name: add service
-    service: name=repmgrd state=started enabled=yes
+- name: start PostgreSQL
+  service: name=postgresql-9.2 state=started
+
+- name: register slave
+  shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf standby register'"
+
+- name: add service
+  service: name=repmgrd state=started enabled=yes

@@ -30,16 +30,14 @@ auth_policy_secure: False
 sso_saml_login_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp"
 sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp"
 sso_saml_issuer_name: "http://srl-reporting-web"
+hpz_sso_saml_issuer_name: "http://srl-reporting-web"
 sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
+tsb_gpg_public_key: sbac@smarterbalanced.org
+disable_stack_trace: False
 
 # ELB? # TODO: dip
 hpz_base_url: "http://srl-hpz-web.{{ domain }}:8443"
 reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
-
-disable_stack_trace: False
-
-
-
 
 
 
@@ -102,6 +100,7 @@ udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | inte
 udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+hpz_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('hpz-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 yum_env: "dev"
 # gluster-server 
 # TODO: need to figure out why there are two vars
