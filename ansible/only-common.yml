@@ -1,0 +1,8 @@
+---
+- name: Just run the common bits
+  hosts: all
+  sudo: yes
+
+  roles:
+    - common
+    
