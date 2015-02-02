@@ -4,6 +4,7 @@
 - include: set-s3-yum-repos.yml
 - include: patch-glibc.yml
 - include: logging.yml
+- include: sudoers.yml
 - include: nessus.yml
 - include: sssd.yml 
 - include: resize-root.yml
