@@ -274,16 +274,16 @@ apps:
       # dev: 0
       # prod: 0
  
-  # - name: reporting-db-slave # one for extraction and one for reporting
-    # ami_app_name: db-slave 
-    # security_groups:
-      # - srl-default
-      # - srl-db
-      # - srl-logging
-    # instance_type: m3.2xlarge
-    # spawn_count:
-      # dev: 2
-      # prod: 30
+  - name: reporting-db-slave # one for extraction and one for reporting
+    ami_app_name: db-slave 
+    security_groups:
+      - srl-default
+      - srl-db
+      - srl-logging
+    instance_type: m3.2xlarge
+    spawn_count:
+      dev: 2
+      prod: 30
 #  
   # - name: extracts-db-slave
     # ami_app_name: db-slave 
