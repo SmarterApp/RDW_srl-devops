@@ -12,7 +12,7 @@
     template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
 
   - name: place password
-    copy: content={{ edware_db_ca_password }} dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
+    copy: content="{{ reporting_db_master_ip }}:5432:edware:edware:{{ edware_db_ca_password }}" dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
 
   - name: clone master
     shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
