@@ -1,9 +1,3 @@
 ---
-- name: Install postgresql92-contrib
-  yum: name=postgresql92-contrib state=latest
-
 - name: Start Postgres 
   service: name=postgresql-9.2 state=started enabled=yes
-
-- name: place repmgr password
-  copy: content="*:5432:*:repmgr:{{ edware_db_repmgr_password }}" dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
