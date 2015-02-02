@@ -1,9 +1,9 @@
 ---
+- include: dns-client.yml
+  when: "{{ 'bind' not in group_names }}"
 - include: set-s3-yum-repos.yml
 - include: patch-glibc.yml
 - include: logging.yml
-- include: dns-client.yml
-  when: "{{ 'bind' not in group_names }}"
 - include: nessus.yml
 - include: sssd.yml 
 - include: resize-root.yml
