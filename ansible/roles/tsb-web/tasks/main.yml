@@ -10,5 +10,5 @@
   shell: 'aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-apache-internal-ssl/tsb-web /etc/pki/tls/'
 
 - name: Configure Apache SSL
-  file: src=ssl.conf dest=/etc/httpd/conf.d/ssl.conf
+  template: src=ssl.conf dest=/etc/httpd/conf.d/ssl.conf
   notify: restart httpd
