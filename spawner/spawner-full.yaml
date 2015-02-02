@@ -361,6 +361,7 @@ apps:
     security_groups:
       - srl-default
       - srl-web
+      - srl-web-hpz
       - srl-db-client
       - srl-glusterfs-hpz-client
       - srl-logging
