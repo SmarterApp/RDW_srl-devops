@@ -251,11 +251,7 @@
         to_port: 24007
         cidr_ip: 10.0.0.0/8
       - proto: tcp
-        from_port: 49154
-        to_port: 49154
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49155
+        from_port: 49152
         to_port: 49155
         cidr_ip: 10.0.0.0/8
     rules_egress:
@@ -268,11 +264,7 @@
         to_port: 24007
         cidr_ip: 10.0.0.0/8
       - proto: tcp
-        from_port: 49154
-        to_port: 49154
-        cidr_ip: 10.0.0.0/8
-      - proto: tcp
-        from_port: 49155
+        from_port: 49152
         to_port: 49155
         cidr_ip: 10.0.0.0/8
     purge_rules: true
