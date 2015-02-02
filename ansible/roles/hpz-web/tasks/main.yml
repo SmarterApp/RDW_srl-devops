@@ -16,3 +16,11 @@
 - name: Configure Apache SSL
   template: src=ssl.conf dest=/etc/httpd/conf.d/ssl.conf
   notify: restart httpd
+
+- name: Configure wsgi_frs.conf
+  template: src=wsgi_frs.conf dest=/etc/httpd/conf.d/wsgi_frs.conf
+  notify: restart httpd
+
+- name: Configure wsgi_swi.conf
+  template: src=wsgi_swi.conf dest=/etc/httpd/conf.d/wsgi_swi.conf
+  notify: restart httpd
