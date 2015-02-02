@@ -75,12 +75,7 @@ domain: "{{ dns_search_domain }}" # concise
 
 reporting_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}"
 extract_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}" #Change to extract slaves later
-# TODO: TEMPORARY For simplified reporting app
-# We'll point to db-master instead of db-pgpool
-# edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
-edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
-edware_db_ca_port: 5432
-# End of Temp
+edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
 edware_extract_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
 edware_repmgr_db_host : "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 edware_stats_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('stats-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
