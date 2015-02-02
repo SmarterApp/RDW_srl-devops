@@ -7,5 +7,6 @@
   roles:
     - common
     - edware
+    - { role: gluster-client, tags: ['gluster-client'] }
     - reporting-worker-extract
-    - gluster-client
+  
