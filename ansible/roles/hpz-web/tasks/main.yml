@@ -2,3 +2,7 @@
 - name: Configure hpz-web 
   template: src=roles/edware/templates/hpz.ini.j2 dest=/opt/edware/conf/hpz.ini
   notify: restart httpd 
+
+- name: Configure IDP sso
+  copy: src=files/{{ ec2_tag_environment }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
+  notify: restart httpd 

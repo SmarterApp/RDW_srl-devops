@@ -6,6 +6,5 @@
 
   roles:
     - common
-    - edware
     - hpz-web 
     - gluster-client
