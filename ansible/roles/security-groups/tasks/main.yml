@@ -582,7 +582,11 @@
        - proto: tcp
          from_port: 8443 
          to_port: 8443
-         cidr_ip: 10.0.0.0/8
+         cidr_ip: 54.165.82.75/32 #Prod NAT, template out for dev 
+       - proto: tcp
+         from_port: 8443
+         to_port: 8443
+         cidr_ip: 54.175.150.30/32 #Prod NAT, template out for dev 
      rules_egress:
      purge_rules: true
      purge_rules_egress: true
