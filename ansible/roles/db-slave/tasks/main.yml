@@ -11,11 +11,8 @@
   - name: configure repmgr.conf
     template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
 
-  - name: place password
-    copy: content="{{ reporting_db_master_ip }}:5432:edware:admin:{{ edware_db_admin_password }}" dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
-
   - name: clone master
-    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -U admin -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
+    shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -U repmgr -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
 
   - name: recovery.conf file
     template: src=roles/db-slave/templates/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
