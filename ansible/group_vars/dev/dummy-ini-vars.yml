@@ -53,8 +53,7 @@ reporting_rabbit_extract_host: dummy
 extract_keyserver_host: dummy
 lz_host: dummy
 tsb_trigger_host: dummy
-hpz_base_url: dummy
-hpz_base_url: dummy
+hpz_upload_base_url: dummy
 migrate_rabbit_username: dummy
 migrate_rabbit_password: dummy
 migrate_rabbit_host: dummy
