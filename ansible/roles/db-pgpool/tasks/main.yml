@@ -1,6 +1,9 @@
 ---
 - name: Template pgpool.conf
-  template: src=roles/edware/templates/pgpool.conf.j2 dest="/etc/pgpool-II-92/pgpool.conf"
+  template: src=roles/db-pgpool/templates/pgpool.conf.j2 dest="/etc/pgpool-II-92/pgpool.conf"
+
+- name: Template pcp.conf
+  template: src=roles/db-pgpool/templates/pcp.conf.j2 dest=/etc/pgpool-II-92/pcp.conf
 
 - name: Start PgPool 
   service: name=pgpool-II-92 state=started enabled=yes

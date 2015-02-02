@@ -296,17 +296,17 @@ apps:
       # dev: 2
       # prod: 30
 # 
-  # - name: reporting-db-pgpool
-    # ami_app_name: pg-pool 
-    # security_groups:
-      # - srl-default
-      # - srl-db-client
-      # - srl-db-pool
-      # - srl-logging
-    # instance_type: m3.xlarge
-    # spawn_count:
-      # dev: 1
-      # prod: 1
+  - name: reporting-db-pgpool
+    ami_app_name: pg-pool 
+    security_groups:
+      - srl-default
+      - srl-db-client
+      - srl-db-pool
+      - srl-logging
+    instance_type: m3.xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
 # 
   # - name: extracts-db-pgpool
     # ami_app_name: pg-pool 
