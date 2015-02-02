@@ -24,3 +24,7 @@
 - name: Configure Apache SSL
   template: src=ssl.conf dest=/etc/httpd/conf.d/ssl.conf
   notify: restart httpd
+
+- name: Add Slash Rewrite
+  template: src=rewrite-slash.conf dest=/etc/httpd/conf.d/rewrite-slash.conf
+  notify: restart httpd
