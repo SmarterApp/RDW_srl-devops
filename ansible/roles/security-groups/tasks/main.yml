@@ -570,3 +570,35 @@
     rules_egress:
     purge_rules: true
     purge_rules_egress: true
+ - name: srl-elb-hpz
+   ec2_group:
+     name: srl-elb-hpz
+     aws_access_key: "{{ aws_access_id }}"
+     aws_secret_key: "{{ aws_secret_key }}"
+     description: Allow ELB 8443 access internally for hpz-web 
+     vpc_id: "{{ vpc.vpc_id }}"
+     region: "{{ vpc_region }}"
+     rules:
+       - proto: tcp
+         from_port: 8443 
+         to_port: 8443
+         cidr_ip: 10.0.0.0/8
+     rules_egress:
+     purge_rules: true
+     purge_rules_egress: true
+ - name: srl-hpz-web
+   ec2_group:
+     name: srl-hpz-web
+     aws_access_key: "{{ aws_access_id }}"
+     aws_secret_key: "{{ aws_secret_key }}"
+     description: Allow 8443 access internally for hpz-web
+     vpc_id: "{{ vpc.vpc_id }}"
+     region: "{{ vpc_region }}"
+     rules:
+       - proto: tcp
+         from_port: 8443
+         to_port: 8443
+         cidr_ip: 10.0.0.0/8
+     rules_egress:
+     purge_rules: true
+     purge_rules_egress: true
