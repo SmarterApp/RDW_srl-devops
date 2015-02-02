@@ -48,7 +48,7 @@ pcp_socket_dir = '/tmp'
 # - Backend Connection Settings -
 
 {% for db_slave in slave_dbs %}
-backend_hostname{{ loop.index - 1}} = {{ db_slave }}
+backend_hostname{{ loop.index - 1}} = '{{ db_slave }}'
 backend_port{{ loop.index - 1 }} = 5432
 backend_weight{{ loop.index - 1 }} = 1
 #backend_data_directory{{ loop.index - 1 }} = 
