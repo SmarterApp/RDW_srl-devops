@@ -41,12 +41,15 @@
 
 - name: import private key
   shell: 'su - celery -c "gpg --homedir /opt/edware/gpg  --allow-secret-key-import --import /dev/shm/celery/d_tsb_smarterbalanced_org.key"'
+  ignore_errors: yes
 
 - name: import public key
   shell: 'su - celery -c "gpg --homedir /opt/edware/gpg  --import /dev/shm/celery/tsb_smarterbalanced_org.pub"'
+  ignore_errors: yes
 
 - name: import udl public key
   shell: 'su - celery -c "gpg --homedir /opt/edware/gpg  --import /dev/shm/celery/sbac_smarterbalanced_org.pub"'
+  ignore_errors: yes
 
 - name: delete private key
   shell: "rm -f /dev/shm/celery/d_tsb_smarterbalanced_org.key && rm -f /dev/shm/celery/tsb_smarterbalanced_org.key"
