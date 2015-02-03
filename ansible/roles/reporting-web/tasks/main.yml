@@ -28,3 +28,7 @@
 - name: Add Slash Rewrite
   template: src=rewrite-slash.conf dest=/etc/httpd/conf.d/rewrite-slash.conf
   notify: restart httpd
+
+- name: Rewrite http to https
+  template: src=rewrite-http.conf dest=/etc/httpd/conf.d/rewrite-http.conf
+  notify: restart httpd
