@@ -24,6 +24,7 @@
 - name: Check current mount status
   shell: mount
   register: mount_out
+  ignore_errors: yes
 
 - name: Mount volume via the glusterfs command
   shell: /usr/sbin/glusterfs --volfile-server="{{gfs_node1}}" --secure-mgmt=false --volfile-id="/{{item.volume}}" "{{ item.mount_at }}"
