@@ -1,0 +1,3 @@
+---
+- name: restart celeryd-edmigrate 
+  service: name=celeryd-edmigrate  state=restarted

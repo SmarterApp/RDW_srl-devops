@@ -1,0 +1,10 @@
+---
+- name: Install edmigrate
+  yum: name=edmigrate state=latest
+
+- name: enable edmigrate-conductor
+  service: name=edmigrate-conductor enabled=yes
+
+- name: Configure migrate 
+  template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
+  notify: restart celeryd-conductor 
