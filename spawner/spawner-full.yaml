@@ -164,10 +164,7 @@ apps:
     ami_app_name: rabbit
     security_groups:
       - srl-ssh-intra-vpc
-      - srl-db-pool-client
-      - srl-rmq-client
-      - srl-web-client
-      - srl-glusterfs-extract-client
+      - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
     spawn_count:
