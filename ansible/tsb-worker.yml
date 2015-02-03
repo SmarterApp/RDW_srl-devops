@@ -7,5 +7,5 @@
   roles:
     - common
     - edware
-    - tsb-worker 
-    - gluster-client
+    - { role: gluster-client, tags: ['gluster-client'] }
+    - tsb-worker

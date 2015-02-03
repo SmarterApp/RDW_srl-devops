@@ -7,6 +7,5 @@
   roles:
     - common
     - edware
-    - gluster-client
+    - { role: gluster-client, tags: ['gluster-client'] }
     - file-grabber
-    
