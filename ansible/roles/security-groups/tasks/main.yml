@@ -1,9 +1,29 @@
-- name: srl-default security group
+- name: srl-ssh-intra-vpc security group
   ec2_group:
-    name: srl-default
+    name: srl-ssh-intra-vpc
     aws_access_key: "{{ aws_access_id }}"
     aws_secret_key: "{{ aws_secret_key }}"
-    description: Default security group for all instances
+    description: Allow SSH from any node in the AWS VPC
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: "{{ vpc_cidr_block }}"
+    rules_egress:
+      - proto: all
+        from_port: all
+        to_port: all
+        cidr_ip: 0.0.0.0/0
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-ssh-from-amplify
+  ec2_group:
+    name: srl-ssh-from-amplify
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow SSH access from the Amplify DUMBO office and Amplify VPN egress
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
     rules:
@@ -15,15 +35,27 @@
         from_port: 22
         to_port: 22
         cidr_ip: 38.117.157.251/32
-      - proto: tcp
-        from_port: 22
-        to_port: 22
-        cidr_ip: "{{ vpc_cidr_block }}"
     rules_egress:
       - proto: all
         from_port: all
         to_port: all
         cidr_ip: 0.0.0.0/0
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-ssh-from-vestibule
+  ec2_group:
+    name: srl-ssh-from-vestibule
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow SSH access from the production Vestibule jumpbox
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0 # TODO: identify vestibule egress range
+    rules_egress:
     purge_rules: true
     purge_rules_egress: true
 - name: srl-bind security group
@@ -518,12 +550,12 @@
         cidr_ip: 0.0.0.0/8
     purge_rules: true
     purge_rules_egress: true
-- name: omniti-fulton-office security group
+- name: srl-ssh-from-omniti security group
   ec2_group:
-    name: omniti-fulton-office
+    name: srl-ssh-from-omniti
     aws_access_key: "{{ aws_access_id }}"
     aws_secret_key: "{{ aws_secret_key }}"
-    description: OmniTI Fulton secure office connection (two factor openvpn)
+    description: Allows SSH from the contractor OmniTI, from their TFA VPN egress
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
     rules:
