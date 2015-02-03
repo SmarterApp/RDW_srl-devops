@@ -8,5 +8,6 @@
     - common
     - db
     - db-master
+    - migrate-conductor
 
 # We might need to update postgres user names and password

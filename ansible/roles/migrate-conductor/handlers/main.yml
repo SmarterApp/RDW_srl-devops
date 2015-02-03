@@ -1,0 +1,3 @@
+---
+- name: restart edmigrate-conductor
+  service: name=edmigrate-conductor  state=restarted
