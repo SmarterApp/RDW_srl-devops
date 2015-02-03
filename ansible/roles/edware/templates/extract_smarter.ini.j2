@@ -88,7 +88,7 @@ file-grabber.tsb.schedule.cron.minute = */1
 # TODO:  This should be the ELB for HPZ's address
 hpz.file_registration_url = {{ hpz_upload_base_url }}/registration
 hpz.file_upload_base_url = {{ hpz_upload_base_url }}/files
-hpz.ignore_certificate = True
+hpz.ignore_certificate = {{ hpz_ignore_certificate | default('True') }}
 ldap.base.dn = ou=environment,dc=edwdc,dc=net
 migrate.broadcast.queue = edmigrate_players
 migrate.celery.BROKER_URL = amqp://{{ migrate_rabbit_username }}:{{ migrate_rabbit_password }}@{{ migrate_rabbit_host }}:5671/edmigrate
