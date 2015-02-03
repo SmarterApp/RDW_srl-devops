@@ -92,8 +92,7 @@ hpz.ignore_certificate = {{ hpz_ignore_certificate | default('True') }}
 ldap.base.dn = ou=environment,dc=edwdc,dc=net
 migrate.broadcast.queue = edmigrate_players
 migrate.celery.BROKER_URL = amqp://{{ migrate_rabbit_username }}:{{ migrate_rabbit_password }}@{{ migrate_rabbit_host }}:5671/edmigrate
-migrate.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': 
-'/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
+migrate.celery.BROKER_USE_SSL = {'ca_certs': '/opt/edware/conf/testca/cacert.pem', 'keyfile': '/opt/edware/conf/client/key.pem', 'certfile': '/opt/edware/conf/client/cert.pem', 'cert_reqs': True }
 migrate.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
 migrate.celery.CELERY_DEFAULT_QUEUE = celery
 migrate.celery.CELERY_DEFAULT_ROUTING_KEY = default

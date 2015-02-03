@@ -1,6 +1,6 @@
 ---
 - name: Install edmigrate
-  yum: name=edmigrate state=latest
+  yum: name=smarter state=latest
 
 - name: enable celeryd-edmigrate
   service: name=celeryd-edmigrate enabled=yes
