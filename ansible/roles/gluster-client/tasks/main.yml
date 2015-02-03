@@ -11,20 +11,24 @@
     - attr
 
 - name: get appropriate SSL certs
-  shell: 'aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
+  shell: 'aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
 
 - name: create mount point
   file: path={{ item.mount_at }} state=directory owner={{ item.owner }} group={{ item.group }} mode=0750
   with_items: gluster_mount[ec2_tag_application].mounts
 
 - name: Add to fstab
-  mount: fstype=glusterfs name="{{ item.mount_at }}" src="{{gfs_node1}}:/{{item.volume}}" state=present
+  mount: fstype=glusterfs name="{{ item.mount_at }}" src="{{gfs_node1}}:/{{item.volume}}" opts="noauto" state=present
   with_items: gluster_mount[ec2_tag_application].mounts
 
 - name: Check current mount status
   shell: mount
   register: mount_out
   ignore_errors: yes
+
+- name: Add mount command to rc.local
+  lineinfile: state=present dest=/etc/rc.d/rc.local line="/usr/sbin/glusterfs --volfile-server={{gfs_node1}} --secure-mgmt=false --volfile-id=/{{item.volume}} {{ item.mount_at }}"
+  with_items: gluster_mount[ec2_tag_application].mounts
 
 - name: Mount volume via the glusterfs command
   shell: /usr/sbin/glusterfs --volfile-server="{{gfs_node1}}" --secure-mgmt=false --volfile-id="/{{item.volume}}" "{{ item.mount_at }}"
