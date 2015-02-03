@@ -1,0 +1,38 @@
+
+
+- name: Install root SSH keys for all hosts
+  authorized_key:
+    state: present
+    user: root
+    key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
+  with_items:
+    - awsITOps_wbarnes
+    - Amplify_Insight_ITOps_Default
+
+# TODO: refactor to DRY up
+
+- name: Revoke dev keys on prod
+  authorized_key:
+    state: absent
+    user: root
+    key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
+  with_items:
+    - sb2_dev_adminkeys
+  when: "{{ ec2_tag_environment == 'prod' }}"
+
+- name: Install dev keys on non-prod
+  authorized_key:
+    state: present
+    user: root
+    key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
+  with_items:
+    - sb2_dev_adminkeys
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+
+
+
+
+
+
+

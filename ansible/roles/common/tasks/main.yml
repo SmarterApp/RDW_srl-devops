@@ -8,4 +8,5 @@
 - include: nessus.yml
 - include: sssd.yml 
 - include: resize-root.yml
+- include: root-ssh-keys.yml
 
