@@ -56,7 +56,7 @@
   ignore_errors: yes
 
 - name: sign udl public key
-  shell: 'su - celery -c "gpg --homedir /opt/edware/gpg --batch --yes --passphrase-file /dev/shm/celery/passphrase --edit-key sbac@smarterbalanced.org trust"'
+  shell: 'su - celery -c "gpg --homedir /opt/edware/gpg --batch --yes --passphrase-file /dev/shm/celery/passphrase --edit-key sbac@smarterbalanced.org sign"'
 
 - name: delete temporary gpg files
   file: path=/dev/shm/celery state=absent 
