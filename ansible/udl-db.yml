@@ -6,7 +6,6 @@
 
   roles:
     - common
+    - { role: gluster-client, tags: ['gluster-client'] }
     - db
-    - gluster-client
-
 # We might need to update postgres user names and password

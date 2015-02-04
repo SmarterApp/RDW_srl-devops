@@ -62,7 +62,7 @@ smarter_score_batcher.celery.CELERY_TASK_RESULT_EXPIRES = 18000
 smarter_score_batcher.celery_timeout = 30
 smarter_score_batcher.db.schema_name = edware_tsb
 smarter_score_batcher.db.url = postgresql+psycopg2://{{ tsb_db_username }}:{{ tsb_db_password }}@{{ tsb_db_host }}:5432/edware
-smarter_score_batcher.gpg.homedir = /opt/edware/keys
+smarter_score_batcher.gpg.homedir = /opt/edware/gnupg
 smarter_score_batcher.gpg.public_key.ca = {{ tsb_gpg_public_key }}
 smarter_score_batcher.metadata.default = /opt/edware/resources/meta/default
 smarter_score_batcher.metadata.performance = /opt/edware/resources/meta/performance
@@ -71,7 +71,7 @@ smarter_score_batcher.metadata_queue = smarter_score_batcher_metadata
 smarter_score_batcher.sync_queue = smarter_score_batcher_sync
 smarter_score_batcher.xsd.path = /opt/edware/resources/sample_xsd.xsd
 trigger.assessment.enable = {{ trigger_assessment_enable | default('False') }}
-trigger.assessment.schedule.cron.day = */30
+trigger.assessment.schedule.cron.minute = */30
 use = egg:smarter_score_batcher
 [formatter_generic]
 format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s

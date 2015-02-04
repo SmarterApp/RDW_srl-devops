@@ -7,5 +7,5 @@
   roles:
     - common
     - edware
+    - { role: gluster-client, tags: ['gluster-client'] }
     - file-trigger 
-    - gluster-client

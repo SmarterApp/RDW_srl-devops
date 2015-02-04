@@ -6,5 +6,5 @@
 
   roles:
     - common
+    - { role: gluster-client, tags: ['gluster-client'] }
     - hpz-web 
-    - gluster-client
