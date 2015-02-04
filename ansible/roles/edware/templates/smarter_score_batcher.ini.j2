@@ -71,7 +71,7 @@ smarter_score_batcher.metadata_queue = smarter_score_batcher_metadata
 smarter_score_batcher.sync_queue = smarter_score_batcher_sync
 smarter_score_batcher.xsd.path = /opt/edware/resources/sample_xsd.xsd
 trigger.assessment.enable = {{ trigger_assessment_enable | default('False') }}
-trigger.assessment.schedule.cron.day = */30
+trigger.assessment.schedule.cron.minute = */30
 use = egg:smarter_score_batcher
 [formatter_generic]
 format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
