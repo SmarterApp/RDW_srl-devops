@@ -71,6 +71,8 @@ def read_cli_opts():
                         help="Which playbook in ../ansible/*.yml to run.  Defaults to same name as -a.")
     parser.add_option("-s", "--skip-ansible", dest="run_ansible", action="store_false", default=True,
                         help="Do not run ansible playbook after spawning.")
+    parser.add_option("-t", "--tag", dest="extra_tag", type="string",
+                        help="Extra tag to apply to the instances, in the form key:value.")
     parser.add_option("-V", "--app-version", dest="app_version", metavar="APP_VERSION", type="string",
                        help="Which application version (AMI) to use.  AMI is selected by looking for an AMI tagged with the application and version.  Optional, latest version is default.")
     
@@ -244,7 +246,12 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     # Regardless of what the AMI was, tag it according to the app and env that was requested
     hints['tags']['application'] = opts.app
     hints['tags']['environment'] = opts.env
-            
+
+    # If extra tags were provided, pass them on.
+    if opts.extra_tag:
+        (key, value) = opts.extra_tag.split(':')
+        hints['tags'][key] = value
+                        
     #------
     # Check VPC selection (via opts.vpc matching on VPC 'environment' tag)
     #------
