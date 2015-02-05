@@ -30,11 +30,11 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        cidr_ip: 38.117.159.162/32
-      - proto: tcp
-        from_port: 22
-        to_port: 22
-        cidr_ip: 38.117.157.251/32
+        cidr_ip: 38.117.159.162/32   # DUMBO office egress IP.  TODO: verify Global protect VPN egress comes through here
+      #- proto: tcp
+      #  from_port: 22
+      #  to_port: 22
+      #  cidr_ip: 38.117.157.251/32       # This is the old 45 Main St egress IP, apparently
     rules_egress:
       - proto: all
         from_port: all
@@ -54,10 +54,27 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        cidr_ip: 10.119.0.0/16
+        cidr_ip: 10.119.4.0/24 # Insight group's vestibule is on this CIDR.  Tunnelled to AWS through the VPN node.
     rules_egress:
     purge_rules: true
     purge_rules_egress: true
+- name: srl-ssh-from-anywhere
+  ec2_group:
+    name: srl-ssh-from-anywhere
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow SSH access from anywhere.  Intended for LZ.
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+
 - name: srl-bind security group
   ec2_group:
     name: srl-bind
@@ -438,7 +455,6 @@
     purge_rules: true
     purge_rules_egress: true
 - name: srl-nat security group
-  when: "{{ environ != 'prod' }}"
   ec2_group:
     name: srl-nat
     aws_access_key: "{{ aws_access_id }}"
@@ -447,14 +463,22 @@
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
     rules:
-      - proto: all
-        from_port: all
-        to_port: all
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: "{{ vpc_cidr_block }}"
+      - proto: tcp
+        from_port: 443
+        to_port: 443
         cidr_ip: "{{ vpc_cidr_block }}"
     rules_egress:
-      - proto: all
-        from_port: all
-        to_port: all
+      - proto: tcp
+        from_port: 80 
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
         cidr_ip: 0.0.0.0/0
     purge_rules: true
     purge_rules_egress: true
@@ -582,26 +606,6 @@
     rules_egress:
     purge_rules: true
     purge_rules_egress: true
-- name: srl-elb security group
-  ec2_group:
-    name: srl-elb
-    aws_access_key: "{{ aws_access_id }}"
-    aws_secret_key: "{{ aws_secret_key }}"
-    description: Allow ELB HTTP and HTTPS access
-    vpc_id: "{{ vpc.vpc_id }}"
-    region: "{{ vpc_region }}"
-    rules:
-      - proto: tcp
-        from_port: 80
-        to_port: 80
-        cidr_ip: 10.0.0.0/0
-      - proto: tcp
-        from_port: 443
-        to_port: 443
-        cidr_ip: 10.0.0.0/0
-    rules_egress:
-    purge_rules: true
-    purge_rules_egress: true
 - name: srl-elb-hpz
   ec2_group:
     name: srl-elb-hpz
@@ -638,3 +642,40 @@
     rules_egress:
     purge_rules: true
     purge_rules_egress: true
+- name: srl-vpn-from-vestibule
+  ec2_group:
+    name: srl-vpn-inbound
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allows incoming VPN connection from the Vestibule public IP (Equivalent of SBAC2-base-environment-VPNAccess-1R2RY80NN0FV0)
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 50080
+        to_port: 50080
+        cidr_ip: 64.106.129.100/32 # Public IP of Vestibule
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+- name: srl-elb security group
+  ec2_group:
+    name: srl-elb
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow ELB HTTP and HTTPS access
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 10.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 10.0.0.0/0
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+  
