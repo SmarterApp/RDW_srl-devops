@@ -678,4 +678,4 @@
     rules_egress:
     purge_rules: true
     purge_rules_egress: true
-  
+    ignore_errors: yes   # TODO: AWS API auto-adds a 0.0.0.0/0 80->80 rule, and it doesn't get purged; when we re-submit it, it results in a 400 Duplicate Error.
