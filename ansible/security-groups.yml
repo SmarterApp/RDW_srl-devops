@@ -1,0 +1,24 @@
+---
+- name: Create Security Groups
+  hosts: localhost
+  gather_facts: no
+  connection: local
+
+  vars:
+    vpc:
+      vpc_id: "{{ vpc_id }}"
+
+  tasks:
+    - name: Require environ variable
+      fail: 
+        msg: "You must provide the 'environ' variable via the -e option"
+      when: environ is not defined
+
+    - name: Require vpc_id variable
+      fail: 
+        msg: "You must provide the 'vpc_id' variable via the -e option"
+      when: vpc_id is not defined
+
+    - include_vars: roles/vpc/vars/envs/{{ environ }}.yml
+    - include: roles/aws-creds/tasks/main.yml
+    - include: roles/security-groups/tasks/main.yml

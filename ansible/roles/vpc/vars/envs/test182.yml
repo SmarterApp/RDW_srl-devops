@@ -1,0 +1,27 @@
+vpc_cidr_block: 10.182.48.0/20
+vpc_resource_tags: { "Environment":"test182", "Name":"test182 VPC" }
+vpc_subnets:
+  - cidr: 10.182.48.0/22 # Public
+    az: us-east-1c
+    resource_tags: { "Environment":"test182", "Tier":"Public", "Name":"test182-Public" }
+  - cidr: 10.182.52.0/22
+    az: us-east-1c
+    resource_tags: { "Environment":"test182", "Tier":"Private", "Name":"test182-Private" }
+  - cidr: 10.182.56.0/22
+    az: us-east-1c
+    resource_tags: { "Environment":"test182", "Tier":"LZ", "Name":"test182-LZ" }
+vpc_internet_gateway: True
+vpc_route_tables:
+  # TODO - this is wrong, does not support SSL tunnel
+  - subnets:
+      - "10.182.48.0/22" # Public
+      - "10.182.52.0/22" # Private
+    routes:
+      - dest: 0.0.0.0/0
+        gw: igw
+  - subnets:
+      - "10.182.56.0/22" # LZ
+    routes:
+      - dest: 0.0.0.0/0
+        gw: igw
+vpc_region: us-east-1
