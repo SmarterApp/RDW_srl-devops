@@ -220,7 +220,7 @@ apps:
   - name: lz
     ami_app_name: lz
     security_groups:
-      - srl-ssh-intra-vpc
+      - srl-ssh-from-anywhere # LZ receives SFTP from the world
       - srl-logging
     instance_type: m3.xlarge
     subnet_type: lz
