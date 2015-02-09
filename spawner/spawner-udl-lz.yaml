@@ -206,12 +206,12 @@ apps:
       prod: 1
 
   # - name: db-master
-    # ami_app_name: db-master 
+    # ami_app_name: db-master-hvm
     # security_groups:
       # - srl-ssh-intra-vpc
       # - srl-db
       # - srl-logging
-    # instance_type: m3.2xlarge
+    # instance_type: r3.2xlarge
     # spawn_count:
       # dev: 1
       # prod: 1
@@ -275,23 +275,23 @@ apps:
       # prod: 0
  
   - name: reporting-db-slave # one for extraction and one for reporting
-    ami_app_name: db-slave 
+    ami_app_name: db-slave-hvm
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db
       - srl-logging
-    instance_type: m3.2xlarge
+    instance_type: r3.2xlarge
     spawn_count:
       dev: 2
       prod: 30
  
   - name: extracts-db-slave
-    ami_app_name: db-slave 
+    ami_app_name: db-slave-hvm
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db
       - srl-logging
-    instance_type: m3.2xlarge
+    instance_type: r3.2xlarge
     spawn_count:
       dev: 2
       prod: 30
