@@ -4,28 +4,26 @@ import boto.ec2
 import boto.vpc
 from optparse import OptionParser
 import logging
+import yaml
 import os
 import os.path
 from subprocess import Popen, PIPE
+from jinja2 import Template
 import time
+
 
 def main():
     opts = read_options()
-    hints = preflight(opts)
-    create_vpc_and_security_groups(hints)
-    init_iam(hints)
-    create_ansible_host(hints)
-    
-#===========================================================#
-#                    
-#===========================================================#
+    cfg = read_config_file(opts)
+    hints = preflight(opts, cfg)
+    create_roles(hints, cfg)
+    create_instance_profiles(hints, cfg)
 
-# TODO: copypasta from spawner.py, DRY up
-def backtick(cmd):
-    output = Popen(cmd, stdout=PIPE, shell=True).communicate()[0].rstrip()
-    return output
+    #for p in cfg['instance_profiles']:
+    #	for r in p['profile_roles']:
+    #		logging.info("Profile {0} will get created with {1}".format(p['name'],r))
 
-# TODO: copypasta from spawner.py, DRY up
+ # TODO: copypasta from spawner.py, DRY up
 def get_aws_creds():
     if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
         return (os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY'))
@@ -52,16 +50,18 @@ def connect_to_vpc():
     logging.info("connected to AWS VPC OK")
     return vpc_conn
 
+def connect_to_iam():
+	(access_id, secret_key) = get_aws_creds()
+	iam_conn = boto.connect_iam(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
+	logging.info("connected to AWS IAM OK")
+	return iam_conn
 
 def read_options():
     parser = OptionParser()
     parser.add_option("-d", "--debug", dest="debug", action="store_true",
                         help="Debug level output")
     parser.add_option("-e", "--env", dest="env", metavar="ENV", type="string",
-                       help="Required.  Which environment (VPC) to target.  'dev' not permitted.  If the VPC exists, will create instances there; if not will create the VPC. Values are the Environment tags on the VPCs.")
-    parser.add_option("-b", "--block", dest="block", metavar="BLOCK", type="int",
-                       help="Required.  Which CIDR B-block to place the VPC in under 10.BLOCK.0.0.")
-
+                       help="Required.  Which environment (VPC) to target.  If the VPC exists, will create iam roles.")
         
     (options, args) = parser.parse_args()
      
@@ -70,26 +70,27 @@ def read_options():
         logging.debug("Debugging output enabled.")
     else:
         logging.basicConfig(level=logging.INFO)
+        logging.info("INFO logging enabled.")
         
     if options.env == None:
         logging.error("Must specify an Environment to spawn with -e.  See -h for more help.")
         exit(1)
-        
-    if options.env == 'dev':
-        logging.error("No, you're not allowed to deploy to the 'dev' env because that would break just literally everything.")
-        exit(2)
+
     return options
 
-def preflight(opts):
+def preflight(opts, cfg):
     hints = {}
 
     #--------------
     # Verify VPC
     #--------------
     hints['vpc'] = {}
+    hints['iam'] = {}
     vpc_conn = connect_to_vpc()
     hints['vpc']['conn'] = vpc_conn
     hints['vpc']['env'] = opts.env
+    iam_conn = connect_to_iam()
+    hints['iam']['conn'] = iam_conn
     vpcs = [ v for v in vpc_conn.get_all_vpcs() if v.tags.get('Environment') == opts.env ]
     if len(vpcs) > 1:
         logging.error("Yipes, VPC environment {0} is non-unique!".format(opts.env))
@@ -99,44 +100,50 @@ def preflight(opts):
         hints['vpc']['obj'] = vpcs[0]
         hints['vpc']['id'] = vpcs[0].id
     if len(vpcs) == 0:
-        logging.info("We'll be creating a new VPC environment {0}".format(opts.env))
-        
-    # TODO - check for b-block collision
-    hints['vpc']['block'] = opts.block
+        logging.info("VPC Not found {0}".format(opts.env))
+        exit(3)
             
     return hints
 
-def create_vpc_and_security_groups(hints):
-    if hints['vpc'].get('obj'):
-        return
+def read_config_file(opts):
+    logging.info("Reading config file from ./iam_s3_roles.yaml")
+    cfg = yaml.load(open("./iam_s3_roles.yaml", 'r'))
+    return cfg
 
-    os.environ['SBAC_ENVIRO_BUILDER_VPC_BLOCK'] = str(hints['vpc']['block'])
-    os.environ['SBAC_ENVIRO_BUILDER_MODE'] = 'dynamic'
-    os.environ['SBAC_ENVIRO_BUILDER_ENV_NAME'] = hints['vpc']['env']
+def create_roles(hints, cfg):
+	iam_conn = hints['iam']['conn']
 
-    os.chdir('ansible')
-    os.system('ansible-playbook vpc-and-security-groups.yml')
-    os.chdir('..')
+	for r in cfg['roles']:
+		template = Template(cfg['roles'][r])
+		policy = template.render(env=hints['vpc']['env'])
+		policy_name = r + "_policy"
+		try:
+			iam_conn.create_role(r)
+			logging.info("Role {0} created".format(r))
+		except Exception:
+			logging.error("Role {0} threw an exception. Hope that's ok.".format(r))
+		try:
+			iam_conn.put_role_policy(r, policy_name, policy)
+			logging.info("Policy {0} added to role {1}".format(policy_name, r))
+			logging.debug("policy is \n{0}".format(policy))
+		except Exception:
+			logging.error("Policy {0} on role {1} threw an exception. Hope that's ok. Text:\n".format(policy_name, r))
 
-def init_iam(hints):
-    os.chdir('tools')
-    os.system("./initialize_iam_s3_roles.py -e {0}".format(hints['vpc']['env']))
-    os.chdir('..')
+def create_instance_profiles(hints, cfg):
+	iam_conn = hints['iam']['conn']
 
-def create_ansible_host(hints):
+	for p in cfg['instance_profiles']:
+		try:
+			iam_conn.create_instance_profile(p['name'])
+			logging.info("Profile {0} created".format(p['name']))
+		except Exception:
+			logging.error("Profile {0} not created. hope that's ok".format(p['name']))
+		for r in p['profile_roles']:
+			time.sleep(1)
+			try:
+				iam_conn.add_role_to_instance_profile(p['name'], r)
+				logging.info("Role {0} added to profile {1}".format(r,p['name']))	
+			except Exception:
+				logging.error("Error adding role {0} to profile {1}. hope that's ok".format(r,p['name']))
 
-    # Spawn, but do not ansiblize, the ansible server.
-    os.chdir('spawner')
-
-    os.system("./spawner.py -a ansible -e {0} -s".format(hints['vpc']['env']))
-    os.system("./spawner.py -a nat -e {0} -s".format(hints['vpc']['env'])) 
-    os.chdir('..')
-
-    
-    # Now run ansible with special inventory program mode for bootstrapping
-    os.chdir('ansible')
-    os.environ['EC2_INI_PATH'] = 'inventories/ec2-public.ini'
-    os.system("ansible-playbook -i inventories/srl.py -l{0} ansible-bootstrap.yml".format(hints['vpc']['env']))
-    os.chdir('..')
-    
 main()

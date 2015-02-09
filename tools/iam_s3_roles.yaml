@@ -1,0 +1,214 @@
+---
+roles:
+  yum_read_role: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo*"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo/*"]
+        }
+      ]
+    }
+  yum_write_role: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo*"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+           ],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo/*"]
+        }
+      ]
+    }
+  gluster_ssl_read_role: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl/*"]
+        }
+      ]
+    }
+  gluster_ssl_write_role: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+           ],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl/*"]
+        }
+      ]
+    }
+  apache_ssl_read_role: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-apache-internal-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-apache-internal-ssl/*"]
+        }
+      ]
+    }
+  apache_ssl_write_role: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-apache-internal-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+           ],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-apache-internal-ssl/*"]
+        }
+      ]
+    }
+instance_profiles:
+  - name: ansible_profile
+    profile_roles:
+      - yum_read_role
+  - name: nat_profile
+    profile_roles:
+      - yum_read_role
+  - name: bind_profile
+    profile_roles:
+      - yum_read_role
+  - name: gluster-server_profile
+    profile_roles:
+      - yum_read_role
+      - gluster_ssl_read_role
+  - name: loghost_profile
+    profile_roles:
+      - yum_read_role
+  - name: memcached_profile
+    profile_roles:
+      - yum_read_role
+  - name: hpz-db_profile
+    profile_roles:
+      - yum_read_role
+  - name: tsb-db_profile
+    profile_roles:
+      - yum_read_role
+  - name: stats-db_profile
+    profile_roles:
+      - yum_read_role
+  - name: udl-db_profile
+    profile_roles:
+      - yum_read_role
+  - name: migrate-db_profile
+    profile_roles:
+      - yum_read_role
+  - name: migrate-rabbit_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-rabbit-extract_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-rabbit-services_profile
+    profile_roles:
+      - yum_read_role
+  - name: tsb-rabbit_profile
+    profile_roles:
+      - yum_read_role
+  - name: udl-rabbit_profile
+    profile_roles:
+      - yum_read_role
+  - name: db-master_profile
+    profile_roles:
+      - yum_read_role
+  - name: lz_profile
+    profile_roles:
+      - yum_read_role
+  - name: file-grabber_profile
+    profile_roles:
+      - yum_read_role
+  - name: file-trigger_profile
+    profile_roles:
+      - yum_read_role
+  - name: udl_profile
+    profile_roles:
+      - yum_read_role
+  - name: db-pgbouncer_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-db-slave_profile
+    profile_roles:
+      - yum_read_role
+  - name: extracts-db-slave_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-db-pgpool_profile
+    profile_roles:
+      - yum_read_role
+  - name: extracts-db-pgpool_profile
+    profile_roles:
+      - yum_read_role
+  - name: tsb-worker_profile
+    profile_roles:
+      - yum_read_role
+  - name: tsb-web_profile
+    profile_roles:
+      - yum_read_role
+  - name: tsb-trigger_profile
+    profile_roles:
+      - yum_read_role
+  - name: hpz-web_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-worker-extract_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-worker-pdf_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-web_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-cache-warmer_profile
+    profile_roles:
+      - yum_read_role
+  - name: reporting-generator-pdf_profile
+    profile_roles:
+      - yum_read_role
+  - name: base_profile
+    profile_roles:
+      - yum_read_role

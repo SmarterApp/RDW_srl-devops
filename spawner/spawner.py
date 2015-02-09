@@ -125,6 +125,7 @@ def spawn(hints, ec2):
     for t in range(5,0,-1):
         logging.info("Launching in {0}...".format(t))
         time.sleep(1)
+    instance_profile = hints['tags']['application'] + "_profile"
 
     logging.info("OK, sending launch request!")
     # Make the reservation call.    
@@ -137,7 +138,7 @@ def spawn(hints, ec2):
         reservation = ec2.run_instances(hints['ami_id'],
                                 instance_type = hints['instance_type'],
                                 network_interfaces=interfaces,
-                                instance_profile_name = 's3yum_access', # TODO: make a config option
+                                instance_profile_name = instance_profile,
                                 )
     else:                
         reservation = ec2.run_instances(hints['ami_id'],
@@ -146,7 +147,7 @@ def spawn(hints, ec2):
                                         instance_type = hints['instance_type'],
                                         subnet_id = hints['subnet_id'],
                                         security_group_ids = hints['security_group_ids'],
-                                        instance_profile_name = 's3yum_access', # TODO: make a config option
+                                        instance_profile_name = instance_profile,
                                     )
 
     # Sleep a little bit.
