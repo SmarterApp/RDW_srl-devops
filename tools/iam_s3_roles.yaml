@@ -138,7 +138,7 @@ instance_profiles:
       - yum_read_role
   - name: gluster-server_profile
     profile_roles:
-      - yum_read_role
+#      - yum_read_role
       - gluster_ssl_read_role
   - name: loghost_profile
     profile_roles:
