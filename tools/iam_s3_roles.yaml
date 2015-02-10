@@ -6,6 +6,16 @@ roles:
         {
           "Effect": "Allow",
           "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-3p-yum-repo*"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-3p-yum-repo/*"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
           "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo*"]
         },
         {
@@ -18,6 +28,20 @@ roles:
   yum_write_role: >
     {
       "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-3p-yum-repo*"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+           ],
+          "Resource": ["arn:aws:s3:::smarter-{{ env }}-3p-yum-repo/*"]
+        },
         {
           "Effect": "Allow",
           "Action": ["s3:ListBucket"],
