@@ -7,6 +7,14 @@
     create: yes
     mode: 0440
 
+- name: No TTY for ansible
+  lineinfile:
+    dest: /etc/sudoers.d/user_ansible
+    line: 'Defaults:ansible !requiretty'
+    state: present
+    create: yes
+    mode: 0440
+
 - name: Reset /etc/sudoers
   copy:
     src:  sudoers
