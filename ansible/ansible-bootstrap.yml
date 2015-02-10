@@ -7,4 +7,5 @@
       - crochedutch
   roles:
     # - common # TODO: only include when groups[loghost] intersect env is nonempty
+    - ansible
     - ansible-bootstrap

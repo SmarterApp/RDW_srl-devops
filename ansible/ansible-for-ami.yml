@@ -7,4 +7,5 @@
       - ansible
   roles:
     # - common
+    - ansible
     - ansible-bootstrap
