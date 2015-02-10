@@ -2,12 +2,9 @@
   hosts: ansible
   sudo: yes
   vars:
-    ansible_devs:
+    ansible_users:
       - cwolfe
       - crochedutch
-      - dip
-  #pre_tasks:
-  #  - include: roles/common/tasks/sssd.yml
   roles:
     # - common # TODO: only include when groups[loghost] intersect env is nonempty
     - ansible-bootstrap
