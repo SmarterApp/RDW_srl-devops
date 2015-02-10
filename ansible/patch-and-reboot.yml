@@ -1,0 +1,15 @@
+---
+- name: Update all yum packages
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: yum upgrade
+      yum: name=* state=latest
+    - name: reboot
+      command: shutdown -r now "Ansible reboot"
+      async: 0
+      poll: 0
+      ignore_errors: true
+    - name: wait for server to come back
+      local_action: wait_for host={{ inventory_hostname }} state=started
+      sudo: false
