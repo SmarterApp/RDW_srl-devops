@@ -4,6 +4,8 @@
   fail: "You must set ansible_cred_set with -e"
   when: ansible_cred_set is not defined 
 
+- include: ../../../roles/common/tasks/set-s3-yum-repos.yml
+
 - name: Install ansible-required yum packages
   yum:
     state: latest
