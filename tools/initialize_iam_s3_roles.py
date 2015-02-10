@@ -19,10 +19,6 @@ def main():
     create_roles(hints, cfg)
     create_instance_profiles(hints, cfg)
 
-    #for p in cfg['instance_profiles']:
-    #	for r in p['profile_roles']:
-    #		logging.info("Profile {0} will get created with {1}".format(p['name'],r))
-
 # TODO: copypasta from spawner.py, DRY up
 def backtick(cmd):
     output = Popen(cmd, stdout=PIPE, shell=True).communicate()[0].rstrip()
@@ -116,39 +112,43 @@ def read_config_file(opts):
     return cfg
 
 def create_roles(hints, cfg):
-	iam_conn = hints['iam']['conn']
-
-	for r in cfg['roles']:
-		template = Template(cfg['roles'][r])
-		policy = template.render(env=hints['vpc']['env'])
-		policy_name = r + "_policy"
-		try:
-			iam_conn.create_role(r)
-			logging.info("Role {0} created".format(r))
-		except Exception:
-			logging.error("Role {0} threw an exception. Hope that's ok.".format(r))
-		try:
-			iam_conn.put_role_policy(r, policy_name, policy)
-			logging.info("Policy {0} added to role {1}".format(policy_name, r))
-			logging.debug("policy is \n{0}".format(policy))
-		except Exception:
-			logging.error("Policy {0} on role {1} threw an exception. Hope that's ok. Text:\n".format(policy_name, r))
+    iam_conn = hints['iam']['conn']
+    # Create the role
+    for r in cfg['iam_roles']:
+		# TODO: Improve error handling. BOTO seems to suck in this area
+        try:
+            iam_conn.create_role(r)
+            logging.info("Role {0} created".format(r))
+        except Exception:
+            logging.error("Role {0} threw an exception. Hope that's ok.".format(r))
+        # Create each of the policies in the role
+        for p in cfg['iam_roles'][r]:
+            template = Template(cfg['iam_policies'][p])
+            policy = template.render(env=hints['vpc']['env'])
+            policy_name = p
+    		# TODO: Again, BOTO crappy exceptions. Make this suck less
+            try:
+                iam_conn.put_role_policy(r, policy_name, policy)
+                logging.info("Policy {0} added to role {1}".format(policy_name, r))
+                logging.debug("policy is \n{0}".format(policy))
+            except Exception:
+                logging.error("Policy {0} on role {1} threw an exception. Hope that's ok. Text:\n".format(policy_name, r))
 
 def create_instance_profiles(hints, cfg):
 	iam_conn = hints['iam']['conn']
 
+    # Create the profile
 	for p in cfg['instance_profiles']:
 		try:
 			iam_conn.create_instance_profile(p['name'])
 			logging.info("Profile {0} created".format(p['name']))
 		except Exception:
 			logging.error("Profile {0} not created. hope that's ok".format(p['name']))
-		for r in p['profile_roles']:
-			time.sleep(1)
-			try:
-				iam_conn.add_role_to_instance_profile(p['name'], r)
-				logging.info("Role {0} added to profile {1}".format(r,p['name']))	
-			except Exception:
-				logging.error("Error adding role {0} to profile {1}. hope that's ok".format(r,p['name']))
+        # And assign the role
+        try:
+            iam_conn.add_role_to_instance_profile(p['name'], p['iam_role'])
+            logging.info("Role {0} added to profile {1}".format(p['iam_role'],p['name']))	
+        except Exception:
+            logging.error("Error adding role {0} to profile {1}. hope that's ok".format(p['iam_role'],p['name']))
 
 main()
