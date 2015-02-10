@@ -14,3 +14,6 @@
 
 - name: place repmgr password
   copy: content="*:5432:*:repmgr:{{ edware_db_repmgr_password }}" dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
+
+- name: Install psycopg locally on the ansible machine
+  local_action: yum state=present name=python-psycopg2
