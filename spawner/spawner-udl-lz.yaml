@@ -30,8 +30,8 @@ apps:
       - srl-ssh-from-omniti      # TODO remove after deploy
       - srl-logging
     instance_type: m3.medium
-    # public_ip: True
-    # subnet_type: public # Colin said so!
+    public_ip: True
+    subnet_type: public # Colin said so!
     spawn_count:
       dev: 0  # Deployed by external bootstrapper
       prod: 0 # TODO: verify
@@ -43,6 +43,7 @@ apps:
       - srl-nat
     instance_type: m3.medium
     public_ip: True
+    subnet_type: public
     spawn_count: 
       dev: 1
       prod: 0

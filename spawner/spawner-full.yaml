@@ -43,6 +43,7 @@ apps:
       - srl-nat
     instance_type: m3.medium
     public_ip: True
+    subnet_type: public
     spawn_count: 
       dev: 1
       prod: 0
