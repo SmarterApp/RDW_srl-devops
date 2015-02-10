@@ -8,7 +8,7 @@
 - include: nessus.yml
 - include: sssd.yml 
 - include: resize-root.yml
-- include: root-ssh-keys.yml
+- include: ssh-keys.yml
 - include: disable-ad-auth.yml
   when: "{{ec2_tag_environment == 'prod'}}"
 

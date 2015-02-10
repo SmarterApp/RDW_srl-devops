@@ -1,0 +1,4 @@
+users_allowed_to_have_authorized_keys:
+  - root
+  - ansible
+  - nessus

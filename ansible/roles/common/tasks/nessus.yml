@@ -6,11 +6,7 @@
     name: nessus
     state: present
 
-- name: Copy in public ssh key
-  authorized_key:
-    state: present
-    key: "{{ lookup('file', '../credentials/nessus.pub') }}"
-    user: nessus
+# SSH key placed in common/ssh-keys
 
 - name: Grant sudo to nessus
   lineinfile:

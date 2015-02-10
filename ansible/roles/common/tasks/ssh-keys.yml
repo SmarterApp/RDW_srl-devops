@@ -1,0 +1,68 @@
+
+- name: List all non-root authorized_keys files
+  shell: find /home -name authorized_keys | cut -f 3 -d'/'
+  register: ak_files
+  ignore_errors: yes
+
+- name: Purge authorized_keys for all users except those allowed, when in dev
+  file:
+    state: absent
+    path: /home/{{ item }}/.ssh/authorized_keys
+  with_items: "{{ak_files.stdout_lines | difference(users_allowed_to_have_authorized_keys) }}"
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+- name: Purge authorized_keys for all users when in prod
+  shell: find /home -name authorized_keys | xargs rm
+  when: "{{ ec2_tag_environment == 'prod' }}"
+
+- name: Purge authorized_keys for root
+  file:
+    state: absent
+    path: /root/.ssh/authorized_keys
+
+# TODO: refactor to DRY up
+
+- name: Install root ITOps SSH keys
+  authorized_key:
+    state: present
+    user: root
+    key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
+  with_items:
+    - awsITOps_wbarnes
+    - Amplify_Insight_ITOps_Default
+
+- name: Install dev keys for root on non-prod
+  authorized_key:
+    state: present
+    user: root
+    key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
+  with_items:
+    - sb2_dev_adminkeys
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+- name: Install ansible prod key
+  authorized_key:
+    state: present
+    user: ansible
+    key: "{{ lookup('file', '../credentials/ansible-prod-2015-02-05.pem.pub') }}"   # TODO: parameterize ansible key rotation
+
+- name: Install ansible dev key on non-prod
+  authorized_key:
+    state: present
+    user: ansible
+    key: "{{ lookup('file', '../credentials/ansible.pem.pub') }}"
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+- name: install nessus key
+  authorized_key:
+    state: present
+    key: "{{ lookup('file', '../credentials/nessus.pub') }}"
+    user: nessus
+
+
+
+
+
+
+
+
