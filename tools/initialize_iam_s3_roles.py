@@ -23,6 +23,11 @@ def main():
     #	for r in p['profile_roles']:
     #		logging.info("Profile {0} will get created with {1}".format(p['name'],r))
 
+# TODO: copypasta from spawner.py, DRY up
+def backtick(cmd):
+    output = Popen(cmd, stdout=PIPE, shell=True).communicate()[0].rstrip()
+    return output
+    
  # TODO: copypasta from spawner.py, DRY up
 def get_aws_creds():
     if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
