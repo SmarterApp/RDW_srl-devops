@@ -176,6 +176,7 @@ iam_roles:
     - yum_read_pol
   udl-db_role:
     - yum_read_pol
+    - gluster_ssl_read_pol
   migrate-db_role:
     - yum_read_pol
   migrate-rabbit_role:
