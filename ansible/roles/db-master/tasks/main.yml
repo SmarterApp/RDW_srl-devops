@@ -15,5 +15,12 @@
   copy: src=roles/db-master/files/pg_hba.conf dest=/var/lib/pgsql/9.2/data/pg_hba.conf owner=postgres group=root mode=0600
   notify: restart postgres
 
+- name: delete existing repmgr record
+  shell: su - postgres -c "psql -d edware -c 'drop schema repmgr_edware_pg_cluster cascade'"
+
+
 - name: place repmgr password
   copy: content="*:5432:*:repmgr:{{ edware_db_repmgr_password }}" dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
+
+- name: register master
+  shell: su - postgres -c "PATH=$PATH:/usr/pgsql-9.2/bin repmgr --force -f /var/lib/pgsql/repmgr.conf master register"
