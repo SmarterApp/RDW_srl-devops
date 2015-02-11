@@ -361,7 +361,7 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-web
-      - srl-web-hpz
+      - srl-hpz-web
       - srl-db-client
       - srl-glusterfs-hpz-client
       - srl-logging
