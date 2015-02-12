@@ -10,7 +10,17 @@
   notify: restart celeryd-edmigrate
 
 - name: sudo requiretty
-  lineinfile: dest=/etc/sudoers state=present regexp='^Defaults:celery !requiretty' line='Defaults:celery !requiretty'
+  lineinfile: 
+    dest: /etc/sudoers.d/edmigrate-player 
+    state: present
+    create: yes
+    mode: 0440
+    line:'Defaults:celery !requiretty'
 
 - name: sudo celery
-  lineinfile: dest=/etc/sudoers state=present regexp='^/sbin/iptables -t filter -D INPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -I OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -D OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables-save' line='/sbin/iptables -t filter -D INPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -I OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -D OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables-save'
+  lineinfile:
+    dest: /etc/sudoers.d/edmigrate-player
+    state: present
+    create: yes
+    mode: 0440
+    line:'/sbin/iptables -t filter -D INPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -I OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -D OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables-save'
