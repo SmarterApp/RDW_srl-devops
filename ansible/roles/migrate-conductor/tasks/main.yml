@@ -5,6 +5,9 @@
 - name: enable edmigrate-conductor
   service: name=edmigrate-conductor enabled=yes
 
+- name: copy edmigrate-conductor
+  copy: src=roles/migrate-conductor/files/edmigrate-conductor dest=/etc/rc.d/init.d/edmigrate-conductor owner=root group=root mode=0755
+
 - name: Configure migrate 
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart edmigrate-conductor

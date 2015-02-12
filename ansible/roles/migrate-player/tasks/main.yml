@@ -8,3 +8,9 @@
 - name: Configure migrate 
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart celeryd-edmigrate
+
+- name: sudo requiretty
+  lineinfile: dest=/etc/sudoers state=present regexp='^Defaults:celery !requiretty' line='Defaults:celery !requiretty'
+
+- name: sudo celery
+  lineinfile: dest=/etc/sudoers state=present regexp='^/sbin/iptables -t filter -D INPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -I OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -D OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables-save' line='/sbin/iptables -t filter -D INPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -I OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables -t filter -D OUTPUT -j EDMIGRATE_PGSQL, /sbin/iptables-save'

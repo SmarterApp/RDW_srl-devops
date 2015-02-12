@@ -2,7 +2,7 @@
 - name: Install postgresql92-contrib
   yum: name=postgresql92-contrib state=latest
 
-- name: Install psycopg2 locally on the ansible machine
+- name: Install psycopg2 on the ansible machine
   yum: state=present name=python-psycopg2
 
 - name: configure repmgr.conf

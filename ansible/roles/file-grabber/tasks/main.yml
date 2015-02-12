@@ -4,4 +4,4 @@
   notify: restart edudl2-file-grabber 
 
 - name: create arrivals path
-  file: path=/opt/edware/zones/landing/arrivals state=directory owner=udl2 group=root mode=0750
+  file: path=/opt/edware/zones/landing/arrivals state=directory owner=udl2 group=postgres mode=0750
