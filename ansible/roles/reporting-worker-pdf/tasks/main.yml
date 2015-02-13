@@ -1,7 +1,4 @@
 ---
-- name: Make celery user pdf directory owner
-  shell: chown celery /opt/edware/pdf
-
 # Note: this allows a "conditional handler" - the edware role
 # can't notify this, becuase it may or may not be in the playbook.
 - name: restart celeryd-services when smarter.ini changes
