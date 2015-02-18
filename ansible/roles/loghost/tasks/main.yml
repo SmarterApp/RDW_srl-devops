@@ -12,7 +12,7 @@
   yum: name=logstash state=present
 
 - name: Install Elasticsearch 
-  yum: name=elasticsearch state=present
+  yum: name=elasticsearch state=latest
 
 #The default configuration is fine for ES
 - name: Start Elasticsearch
@@ -24,3 +24,15 @@
 
 - name: Start Logstash 
   service: name=logstash state=started enabled=yes
+
+- name: Make Kibana dir
+  file: path=/opt/kibana state=directory
+
+- name: Unpack Kibana
+  unarchive: src=kibana-rc1.tgz dest=/opt/kibana
+
+- name: Copy Kibana init script
+  file: src=kibana.init path=/etc/init.d/kibana owner=root group=root mode=0755
+
+- name: Start Kibana
+  service: name=kibana state=started enabled=yes
