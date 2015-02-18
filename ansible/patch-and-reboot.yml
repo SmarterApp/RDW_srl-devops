@@ -3,10 +3,14 @@
   hosts: all
   sudo: yes
   tasks:
+    - name: Verify /etc/grub.conf file
+      file: src=/boot/grub/grub.conf dest=/etc/grub.conf state=link
 #    - name: yum full upgrade
 #      yum: name=* state=latest
     - name: yum kernel upgrade
       yum: name=kernel* state=latest
+    - name: fix grub.conf
+      lineinfile: dest=/boot/grub/grub.conf regexp="^default=" line="default=0"
     - name: yum bind upgrade
       yum: name=bind* state=latest
     - name: yum cups upgrade

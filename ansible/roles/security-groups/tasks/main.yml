@@ -431,6 +431,10 @@
         from_port: 10514
         to_port: 10514
         cidr_ip: "{{ vpc_cidr_block }}"
+      - proto: tcp
+        from_port: 5601 
+        to_port: 5601 
+        cidr_ip: "{{ vpc_cidr_block }}"
     rules_egress:
     purge_rules: true
     purge_rules_egress: true

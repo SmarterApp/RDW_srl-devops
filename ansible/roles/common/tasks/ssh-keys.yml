@@ -11,9 +11,9 @@
   with_items: "{{ak_files.stdout_lines | difference(users_allowed_to_have_authorized_keys) }}"
   when: "{{ not ec2_tag_environment == 'prod' }}"
 
-- name: Purge authorized_keys for all users when in prod
-  shell: find /home -name authorized_keys | xargs rm
-  when: "{{ ec2_tag_environment == 'prod' }}"
+# - name: Purge authorized_keys for all users when in prod
+#   shell: find /home -name authorized_keys | xargs rm
+#   when: "{{ ec2_tag_environment == 'prod' }}"
 
 - name: Purge authorized_keys for root
   file:

@@ -26,7 +26,7 @@ cache.session.url = {{ cache_hosts }}
 cache.type = ext:memcached
 disable_stack_trace = {{ disable_stack_trace }}
 hpz.PATH = /usr/local/bin
-hpz.db.pool_size = 20
+hpz.db.pool_size = 5
 hpz.db.schema_name = hpz
 hpz.db.url = postgresql+psycopg2://{{ hpz_db_username }}:{{ hpz_db_password }}@{{ hpz_db_host }}:5432/hpz
 # This is different from hpz_base_url as port number is different

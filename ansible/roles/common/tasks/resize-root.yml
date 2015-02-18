@@ -1,6 +1,6 @@
 ---
 - name: Resize root paritiion
-  command: resize2fs /dev/xvde1
+  shell: resize2fs `df|grep -e "/$"|cut -d ' ' -f1`
 
 - name: Add resize to rc.local
   lineinfile:

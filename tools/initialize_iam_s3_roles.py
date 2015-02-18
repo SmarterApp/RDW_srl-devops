@@ -52,10 +52,10 @@ def connect_to_vpc():
     return vpc_conn
 
 def connect_to_iam():
-	(access_id, secret_key) = get_aws_creds()
-	iam_conn = boto.connect_iam(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
-	logging.info("connected to AWS IAM OK")
-	return iam_conn
+    (access_id, secret_key) = get_aws_creds()
+    iam_conn = boto.connect_iam(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
+    logging.info("connected to AWS IAM OK")
+    return iam_conn
 
 def read_options():
     parser = OptionParser()
@@ -115,7 +115,7 @@ def create_roles(hints, cfg):
     iam_conn = hints['iam']['conn']
     # Create the role
     for r in cfg['iam_roles']:
-		# TODO: Improve error handling. BOTO seems to suck in this area
+        # TODO: Improve error handling. BOTO seems to suck in this area
         try:
             iam_conn.create_role(r)
             logging.info("Role {0} created".format(r))
@@ -126,7 +126,7 @@ def create_roles(hints, cfg):
             template = Template(cfg['iam_policies'][p])
             policy = template.render(env=hints['vpc']['env'])
             policy_name = p
-    		# TODO: Again, BOTO crappy exceptions. Make this suck less
+            # TODO: Again, BOTO crappy exceptions. Make this suck less
             try:
                 iam_conn.put_role_policy(r, policy_name, policy)
                 logging.info("Policy {0} added to role {1}".format(policy_name, r))
@@ -135,19 +135,18 @@ def create_roles(hints, cfg):
                 logging.error("Policy {0} on role {1} threw an exception. Hope that's ok. Text:\n".format(policy_name, r))
 
 def create_instance_profiles(hints, cfg):
-	iam_conn = hints['iam']['conn']
+    iam_conn = hints['iam']['conn']
 
     # Create the profile
-	for p in cfg['instance_profiles']:
-		try:
-			iam_conn.create_instance_profile(p['name'])
-			logging.info("Profile {0} created".format(p['name']))
-		except Exception:
-			logging.error("Profile {0} not created. hope that's ok".format(p['name']))
-        # And assign the role
+    for p in cfg['instance_profiles']:
+        try:
+            iam_conn.create_instance_profile(p['name'])
+            logging.info("Profile {0} created".format(p['name']))
+        except Exception:
+            logging.error("Profile {0} not created. hope that's ok".format(p['name']))
         try:
             iam_conn.add_role_to_instance_profile(p['name'], p['iam_role'])
-            logging.info("Role {0} added to profile {1}".format(p['iam_role'],p['name']))	
+            logging.info("Role {0} added to profile {1}".format(p['iam_role'],p['name']))
         except Exception:
             logging.error("Error adding role {0} to profile {1}. hope that's ok".format(p['iam_role'],p['name']))
 

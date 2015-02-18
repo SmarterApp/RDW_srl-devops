@@ -1,0 +1,98 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          kibana 
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+### END INIT INFO
+
+KIBANA_BIN="/opt/kibana/bin/kibana"
+KIBANA_PID="/var/run/kibana.pid"
+TMP_FILE="/tmp/kibana_status"
+
+STATUS_CODE[0]="Is Running"
+STATUS_CODE[1]="Not Running"
+STATUS_CODE[2]="Stopped incorrectly"
+STATUS_CODE[9]="Default Status, should not be seen" 
+
+. /etc/init.d/functions
+
+start() {
+  checkpid
+    STATUS=$?
+  if [ $STATUS -ne 0 ] ;
+  then 
+    echo "Starting Kibana..."
+    nohup $KIBANA_BIN > /dev/null 2>&1 < /dev/null &
+    echo PID $!
+    echo $! > $KIBANA_PID
+    statusit
+  else 
+    echo "Kibana already running"
+  fi   
+}
+
+stop() {
+  checkpid
+    STATUS=$?
+  if [ $STATUS -eq 0 ] ;
+  then
+    echo "Stopping Kibana..."
+    kill `cat $KIBANA_PID`
+    rm $KIBANA_PID
+    statusit
+  else
+    echo "Kibana already stopped..."
+  fi 
+}
+
+checkpid(){
+  STATUS=9
+  if [ -f $KIBANA_PID ] ;
+  then
+    ps -Fp `cat $KIBANA_PID` | grep "kibana" > $TMP_FILE
+    if [ -f $TMP_FILE -a -s $TMP_FILE ] ;
+      then
+        STATUS=0
+      else
+        STATUS=2
+      fi
+    rm -f $TMP_FILE
+  else
+    STATUS=1
+  fi
+  return $STATUS
+}
+ 
+statusit() {
+  checkpid
+  STATUS=$?
+  EXITSTATUS=${STATUS_CODE[STATUS]}
+  if [ $STATUS -eq 0 ] ;
+  then
+    EXITSTATUS=${STATUS_CODE[STATUS]}" (PID `cat $KIBANA_PID`)"
+  fi
+  echo "Kibana - $EXITSTATUS"
+} 
+
+case "$1" in
+  start)
+      start
+      ;;
+  stop)
+      stop
+      ;;
+  restart)
+      stop
+      start
+      ;;
+  status)
+      statusit
+      ;;
+  *)
+      echo "Usage: $0 {start|stop|status|restart}"
+      exit 1
+      ;;
+esac
+
+exit 0

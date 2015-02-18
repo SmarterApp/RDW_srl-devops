@@ -2,7 +2,7 @@
 - include_vars: gluster-server.yml
 
 - name: Install packages required for GlusterFS
-  yum: name={{item}} state=installed
+  yum: name={{item}} state=latest
   with_items:
     - fuse
     - fuse-libs

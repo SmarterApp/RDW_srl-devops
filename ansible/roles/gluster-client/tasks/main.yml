@@ -2,8 +2,9 @@
 - include_vars: gluster-client.yml
 
 - name: Install packages required for GlusterFS client
-  yum: name={{item}} state=installed
+  yum: name={{item}} state=latest
   with_items:
+    - glusterfs
     - fuse
     - fuse-libs
     - glusterfs-fuse
