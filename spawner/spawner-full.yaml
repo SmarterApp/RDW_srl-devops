@@ -74,6 +74,7 @@ apps:
     ami_app_name: base # Playbook runs from base
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-kibana-from-vestibule
       - srl-logstash
     instance_type: m2.xlarge 
     spawn_count:
