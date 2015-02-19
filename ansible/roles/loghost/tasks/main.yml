@@ -32,7 +32,7 @@
   unarchive: src=kibana-rc1.tgz dest=/opt/kibana
 
 - name: Copy Kibana init script
-  file: src=kibana.init path=/etc/init.d/kibana owner=root group=root mode=0755
+  copy: src=kibana.init dest=/etc/init.d/kibana owner=root group=root mode=0755
 
 - name: Start Kibana
   service: name=kibana state=started enabled=yes

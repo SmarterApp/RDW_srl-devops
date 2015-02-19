@@ -1,5 +1,5 @@
 ---
-- name: Update all yum packages
+- name: Update specific yum packages for security
   hosts: all
   sudo: yes
   tasks:
