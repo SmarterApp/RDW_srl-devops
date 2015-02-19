@@ -691,3 +691,19 @@
     purge_rules: true
     purge_rules_egress: true
   ignore_errors: yes   # TODO: AWS API auto-adds a 0.0.0.0/0 80->80 rule, and it doesn't get purged; when we re-submit it, it results in a 400 Duplicate Error.
+- name: srl-kibana-from-vestibule 
+  ec2_group:
+    name: srl-kibana-from-vestibule
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow Kibana access from production Vestibule machine 
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 5601 
+        to_port: 5601 
+        cidr_ip: 10.119.4.0/24 
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true

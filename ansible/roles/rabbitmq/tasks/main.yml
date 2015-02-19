@@ -1,0 +1,12 @@
+
+- name: Copy RabbitMQ 3.4.4 RPM to rabbit server
+  copy: src=../../../files/rpms/rabbitmq-server-3.4.4-1.noarch.rpm dest=./rabbitmq-server-3.4.4-1.noarch.rpm owner=ansible group=ansible mode=644
+
+- name: Install RabbitMQ 3.4.4 RPM
+  command: sudo rpm --freshen rabbitmq-server-3.4.4-1.noarch.rpm
+
+- name: Update RabbitMQ config file
+  replace: dest=/etc/rabbitmq/rabbitmq.config regexp='(\{ssl_listeners, \[5671\]\},)$' replace='\1        {ssl_allow_poodle_attack, true},'
+
+- name: Restart RabbitMQ 3.4.4
+  command: sudo service rabbitmq-server restart
