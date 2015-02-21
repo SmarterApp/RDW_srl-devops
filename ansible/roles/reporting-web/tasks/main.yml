@@ -32,3 +32,7 @@
 - name: Rewrite http to https
   template: src=rewrite-http.conf dest=/etc/httpd/conf.d/rewrite-http.conf
   notify: restart httpd
+
+- name: Install the latest smarter application
+  yum: name=smarter state=latest
+  notify: restart httpd
