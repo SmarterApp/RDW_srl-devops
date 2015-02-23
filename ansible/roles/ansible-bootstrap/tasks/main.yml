@@ -6,12 +6,18 @@
 
 - include: ../../../roles/common/tasks/set-s3-yum-repos.yml
 
+# This has a bad RPM manifest, but does in fact install correctly
+- name: Install the borked python-ordereddict package
+  yum:
+    state: latest
+    name: python-ordereddict
+  ignore_errors: yes
+
 - name: Install ansible-required yum packages
   yum:
     state: latest
     name: "{{ item }}"
   with_items:
-    # TODO: fix ordering or whatever is busting the install
     - curl
     - unzip
     - python
@@ -20,6 +26,7 @@
     - ansible-lint
     - ansible
     - git
+  ignore_errors: yes
 
 - name: Install jq
   get_url:
