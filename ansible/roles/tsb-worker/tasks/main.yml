@@ -1,4 +1,8 @@
 ---
+- name: Install the latest smarter_score_batcher
+  yum: name=smarter_score_batcher state=latest
+  notify: Restart smarter_score_batcher
+
 - name: Configure tsb-worker
   template: src=roles/edware/templates/smarter_score_batcher.ini.j2 dest=/opt/edware/conf/smarter_score_batcher.ini
   notify: restart celeryd-smarter_score_batcher 
