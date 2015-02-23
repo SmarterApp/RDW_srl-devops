@@ -1,0 +1,59 @@
+---
+#TODO: Split up into differnt files so it's not one huge runbook
+- name: Install postgresql
+  yum: name=postgresql state=present
+
+- name: Install postgresql92server
+  yum: name=postgresql92server state=present
+
+- name: Install postgresql92libs
+  yum: name=postgresql92libs state=present
+
+- name: Install postgresql92-contrib
+  yum: name=postgresql92-contrib state=present
+
+- name: Install postgresql92devel
+  yum: name=postgresql92devel state=present
+
+- name: Install repmgr
+  yum: name=repmgr state=present
+
+#TODO:create ebs volume here
+
+#TODO:use variables for src, fstype, etc. 
+- name: Mount /mnt/pgsql
+  mount: name=/mnt/pgsql src=/dev/xvdb fstype=ext4 opts=default,nofail state=mounted
+
+#TODO:Make the pgsql version a variable
+- name: Symlink /var/lib/pgsql/9.2
+  file: src=/mnt/pgsql/9.2 dest=/var/lib/pgsql/9.2 state=link
+
+#TODO:Make archive dir a variable
+- name: Create archive directory
+  file: path=/var/lib/pgsql/9.2/archive state=directory owner=postgres group=postgres mode=0755
+
+- name: Postgres initdb
+  shell: service postgresql-9.2 initdb
+
+- name: Install psycopg2 on the ansible machine
+  yum: state=present name=python-psycopg2
+
+- name: configure repmgr.conf
+  template: src=roles/db-master/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
+
+- name: create repmgr user
+  postgresql_user: login_host=localhost name=repmgr password={{ edware_db_repmgr_password }} role_attr_flags=SUPERUSER,LOGIN
+
+- name: copy pg_hba.conf
+  copy: src=roles/db-master/files/pg_hba.conf dest=/var/lib/pgsql/9.2/data/pg_hba.conf owner=postgres group=root mode=0600
+  notify: restart postgres
+
+- name: delete existing repmgr record
+  shell: su - postgres -c "psql -d edware -c 'drop schema repmgr_edware_pg_cluster cascade'"
+
+
+- name: place repmgr password
+  copy: content="*:5432:*:repmgr:{{ edware_db_repmgr_password }}" dest=/var/lib/pgsql/.pgpass owner=postgres group=postgres mode=0600
+
+- name: register master
+  shell: su - postgres -c "PATH=$PATH:/usr/pgsql-9.2/bin repmgr --force -f /var/lib/pgsql/repmgr.conf master register"

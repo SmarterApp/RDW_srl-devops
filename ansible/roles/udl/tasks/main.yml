@@ -1,4 +1,8 @@
 ---
+- name: Install the latest edudl2
+  yum: name=edudl2 state=latest
+  notify: Restart edudl2
+
 - name: Configure udl 
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart celeryd-udl2 
