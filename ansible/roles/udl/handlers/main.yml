@@ -1,0 +1,5 @@
+---
+- name: Restart edudl2
+    service:
+      name: celeryd-udl2
+      state: restarted
