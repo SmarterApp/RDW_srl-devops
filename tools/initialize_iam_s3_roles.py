@@ -124,7 +124,11 @@ def create_roles(hints, cfg):
         # Create each of the inline policies in the role        
         for p in cfg['iam_roles'][r]:
             template = Template(cfg['iam_policies'][p])
-            policy = template.render(env=hints['vpc']['env'])
+
+            # If we are in a test env, just use the dev yum repo
+            s3_env = 'dev' if hints['vpc']['env'].startswith('test') else hints['vpc']['env']
+            
+            policy = template.render(env = s3_env)
             policy_name = p
             logging.info("Updating policy {0} on role {1}".format(policy_name, role_name))
             iam_conn.put_role_policy(role_name, policy_name, policy)        
