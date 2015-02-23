@@ -34,15 +34,6 @@ def get_aws_creds():
         secret_key = backtick('pass $SBAC_ENV/aws/secret_key')
         return (access_id, secret_key)
     
-# TODO: copypasta from spawner.py, DRY up
-def connect_to_ec2(region):
-    (access_id, secret_key) = get_aws_creds()
-    conn = boto.ec2.connect_to_region(region,
-        aws_access_key_id=access_id,
-        aws_secret_access_key=secret_key
-    )
-    logging.info("connected to AWS EC2 OK")
-    return conn
 
 # TODO: copypasta from spawner.py, DRY up
 def connect_to_vpc():
