@@ -1,0 +1,5 @@
+---
+- name: Restart smarter_score_batcher
+  service:
+    name: celeryd-smarter_score_batcher
+    state: restarted
