@@ -152,6 +152,9 @@ iam_policies:
 # Roles are associated to instance profiles (defined below).
 # There should be a 1:1 relationship between roles and instance
 # profiles since a profile can have only one role
+
+# In dev/test, these roles have a suffix _role_ENVNAME
+# In prod, these policies have suffix _role
 iam_roles:
   ansible_role:
     - yum_write_pol
@@ -241,79 +244,3 @@ iam_roles:
   base_role:
     - yum_read_pol
 
-# Each instance will be launched with a profile that cannot be changed. 
-# There should be one profile for each application, and each instance
-# profile can contain only one role (defined above)
-instance_profiles:
-- name: ansible_profile
-  iam_role: ansible_role
-- name: nat_profile
-  iam_role: nat_role
-- name: bind_profile
-  iam_role: bind_role
-- name: gluster-server_profile
-  iam_role: gluster-server_role
-- name: loghost_profile
-  iam_role: loghost_role
-- name: memcached_profile
-  iam_role: memcached_role
-- name: hpz-db_profile
-  iam_role: hpz-db_role
-- name: tsb-db_profile
-  iam_role: tsb-db_role
-- name: stats-db_profile
-  iam_role: stats-db_role
-- name: udl-db_profile
-  iam_role: udl-db_role
-- name: migrate-db_profile
-  iam_role: migrate-db_role
-- name: migrate-rabbit_profile
-  iam_role: migrate-rabbit_role
-- name: reporting-rabbit-extract_profile
-  iam_role: reporting-rabbit-extract_role
-- name: reporting-rabbit-services_profile
-  iam_role: reporting-rabbit-services_role
-- name: tsb-rabbit_profile
-  iam_role: tsb-rabbit_role
-- name: udl-rabbit_profile
-  iam_role: udl-rabbit_role
-- name: db-master_profile
-  iam_role: db-master_role
-- name: lz_profile
-  iam_role: lz_role
-- name: file-grabber_profile
-  iam_role: file-grabber_role
-- name: file-trigger_profile
-  iam_role: file-trigger_role
-- name: udl_profile
-  iam_role: udl_role
-- name: db-pgbouncer_profile
-  iam_role: db-pgbouncer_role
-- name: reporting-db-slave_profile
-  iam_role: reporting-db-slave_role
-- name: extracts-db-slave_profile
-  iam_role: extracts-db-slave_role
-- name: reporting-db-pgpool_profile
-  iam_role: reporting-db-pgpool_role
-- name: extracts-db-pgpool_profile
-  iam_role: extracts-db-pgpool_role
-- name: tsb-worker_profile
-  iam_role: tsb-worker_role
-- name: tsb-web_profile
-  iam_role: tsb-web_role
-- name: tsb-trigger_profile
-  iam_role: tsb-trigger_role
-- name: hpz-web_profile
-  iam_role: hpz-web_role
-- name: reporting-worker-extract_profile
-  iam_role: reporting-worker-extract_role
-- name: reporting-worker-pdf_profile
-  iam_role: reporting-worker-pdf_role
-- name: reporting-web_profile
-  iam_role: reporting-web_role
-- name: reporting-cache-warmer_profile
-  iam_role: reporting-cache-warmer_role
-- name: reporting-generator-pdf_profile
-  iam_role: reporting-generator-pdf_role
-- name: base_profile
-  iam_role: base_role

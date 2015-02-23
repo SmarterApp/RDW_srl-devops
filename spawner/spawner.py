@@ -131,7 +131,8 @@ def spawn(hints, ec2):
     for t in range(5,0,-1):
         logging.info("Launching in {0}...".format(t))
         time.sleep(1)
-    instance_profile = hints['tags']['application'] + "_profile"
+    profile_suffix = '' if hints['tags']['environment'] == 'prod' else '_' + hints['tags']['environment']
+    instance_profile = hints['tags']['application'] + "_profile" + profile_suffix
 
     logging.info("OK, sending launch request!")
     # Make the reservation call.    
