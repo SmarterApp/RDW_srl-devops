@@ -99,17 +99,23 @@ def run_ansible(opts, hints):
         logging.info("Skipping ansible run due to -s")
         return
 
-    logging.info("Waiting at least 60 sec to run ansible...")
-    # TODO: make this smarter; we could poll, and continue when the IP's are up
-    time.sleep(60 + 1.0*hints['count'])
-    
-    playbook_name = opts.playbook if opts.playbook else opts.app
+    logging.info("Waiting 30 seconds for AWS inventory to be consistent, eventually...")
+    time.sleep(30)
     
     os.chdir(os.environ['SBAC_DEVOPS'] + '/ansible')    
-    # already validated existence of playbook
+    logging.info("Using Ansible to detect when SSH is up...")
     cmd = []
     cmd.append("ansible-playbook")
-    cmd.append('-i'); cmd.append('inventories/srl.py')
+    cmd.append('-l'); cmd.append(':'.join(hints['ips'].values())) # Limit to newly-created instances
+    cmd.append('wait-for-ssh.yml')
+    rv = os.system(' '.join(cmd))
+    if not rv == 0:
+        logging.error("Hrm, never got a good SSH port opening!")
+        exit(10)
+    
+    playbook_name = opts.playbook if opts.playbook else opts.app
+    cmd = []
+    cmd.append("ansible-playbook")
     cmd.append('-e'); cmd.append('spawner_env=' + opts.env)
     cmd.append('-l'); cmd.append(':'.join(hints['ips'].values())) # Limit to newly-created instances
     cmd.append(playbook_name + '.yml')
@@ -151,15 +157,18 @@ def spawn(hints, ec2):
                                     )
 
     # Sleep a little bit.
-    logging.info("Launch request sent.  Waiting a little bit to start tagging...")
-    # TODO: make this smarter; we could poll, and continue when the reservation has the expected number of instances
-    time.sleep(10 + 0.25*hints['count'])
-
-    # Re-fetch the reservation, which "should" now have the instances populated
-    # TODO: figure out the filter parameter to this call
-    all_res = ec2.get_all_reservations()
-    reservation = [r for r in all_res if r.id == reservation.id][0]
-    
+    logging.info("Launch request sent.  Waiting for instances to be created...")
+    time.sleep(5)
+    reservation_id = reservation.id
+    sentinel = 0
+    while len(reservation.instances) != hints['count'] or [ i for i in reservation.instances if i.private_ip_address == None ]:
+        print '.'
+        time.sleep(2)
+        sentinel = sentinel + 1
+        if sentinel > 30:
+            logging.error("Giving up!")
+            exit(11)            
+        reservation = ec2.get_all_reservations(filters={"reservation-id":reservation_id})        
 
     hints['ips'] = {}
     
