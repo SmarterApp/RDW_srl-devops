@@ -1,9 +1,6 @@
 - name: Install Rsyslog 
   yum: name=rsyslog state=present
 
-- name: get appropriate CA cert
-  shell: 'aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-rsyslog-internal-ssl/rsyslog-client /etc/pki/tls/rsyslog/'
-
 - name: Configure Rsyslog
   template: src=rsyslog.conf.j2 dest=/etc/rsyslog.conf
   notify: restart rsyslog 

@@ -26,10 +26,5 @@ $ActionQueueMaxDiskSpace 1g
 $ActionQueueSaveOnShutdown on 
 $ActionQueueType LinkedList  
 $ActionResumeRetryCount -1   
-$QueueTimeoutEnqueue 0
 
-$DefaultNetstreamDriverCAFile /etc/pki/tls/rsyslog/rsyslog-ca.pem 
-$DefaultNetstreamDriver gtls 
-$ActionSendStreamDriverMode 1 
-$ActionSendStreamDriverAuthMode anon
 *.* @@{{ loghost }}:{{ loghost_port }}
