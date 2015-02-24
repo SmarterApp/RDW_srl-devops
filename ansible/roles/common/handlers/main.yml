@@ -2,9 +2,6 @@
 - name: restart httpd 
   service: name=httpd state=restarted
 
-- name: restart rsyslog 
-  service: name=rsyslog state=restarted
-
 - name: restart celeryd-services
   service: name=celeryd-services state=restarted
 
