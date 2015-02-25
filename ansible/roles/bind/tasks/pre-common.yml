@@ -1,0 +1,15 @@
+- name: Set local hostname to AWS name tag
+  hostname: 
+    name: "{{ ec2_tag_Name }}"
+
+- name: Add hostname and FQDN
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ item }}"
+  with_items:
+    - "{{ ec2_ip_address }}        {{ ec2_tag_Name }}.{{ dns_search_domain }} {{ ec2_tag_Name }}"
+
+- name: refresh resolv.conf
+  lineinfile:
+    dest: "/etc/resolv.conf"
+    line: "nameserver 169.254.169.253"  # AWS provides a virtual IP to their DNS on each machine

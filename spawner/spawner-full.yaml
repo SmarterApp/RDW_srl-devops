@@ -185,7 +185,7 @@ apps:
       prod: 1
 
   - name: tsb-rabbit
-    ami_app_name: rabbit
+    ami_app_name: rabbit-encrypted
     security_groups:
       - srl-ssh-intra-vpc
       - srl-rmq

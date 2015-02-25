@@ -115,7 +115,7 @@ def create_vpc_and_security_groups(hints):
     os.environ['SBAC_ENVIRO_BUILDER_ENV_NAME'] = hints['vpc']['env']
 
     os.chdir('ansible')
-    os.system('ansible-playbook vpc-and-security-groups.yml')
+    os.system('ansible-playbook -i inventories/localhost vpc-and-security-groups.yml')
     os.chdir('..')
 
 def init_iam(hints):
@@ -131,12 +131,5 @@ def create_ansible_host(hints):
     os.system("./spawner.py -a ansible -e {0} -s".format(hints['vpc']['env']))
     os.system("./spawner.py -a nat -e {0} -s".format(hints['vpc']['env'])) 
     os.chdir('..')
-
-    
-    # Now run ansible with special inventory program mode for bootstrapping
-    os.chdir('ansible')
-    os.environ['EC2_INI_PATH'] = 'inventories/ec2-public.ini'
-    os.system("ansible-playbook -i inventories/srl.py -l{0} ansible-bootstrap.yml".format(hints['vpc']['env']))
-    os.chdir('..')
-    
+        
 main()
