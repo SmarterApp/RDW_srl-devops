@@ -71,7 +71,7 @@
 
 - name: Setup .password-store for users
   unarchive:
-    creates: "/home/{{ item }}/.password-store"
+    creates: "/home/{{ item }}/.password-store/.gpg-id"
     dest: "/home/{{ item }}"
     src: "pass-tarballs/{{ item }}.tgz"
   with_items: ansible_users
@@ -80,7 +80,7 @@
   sudo: no
   delegate_to: 127.0.0.1
   connection: local
-  shell: chdir=../../ warn=no tar czf srl-devops.tgz -h srl-devops
+  shell: chdir=../../ warn=no tar czf srl-devops.tgz --exclude-backups -h srl-devops
   register: wtf
 
 - name: Send latest srl-devops code
@@ -104,9 +104,25 @@
     line: "export SBAC_ENV={{ ansible_cred_set }}"   # TODO - probably want this dynamic
   with_items: ansible_users
 
-- name: Fix ownership on various things in homedir
+- name: Fix ownership on .gnupg things in homedir
   file:
-    path: "/home/{{ item }}/{.gnupg,.password-store,srl-devops}"
+    path: "/home/{{ item }}/.gnupg"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_users
+
+- name: Fix ownership on .password-store things in homedir
+  file:
+    path: "/home/{{ item }}/.password-store"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_users
+
+- name: Fix ownership on .srl-devops things in homedir
+  file:
+    path: "/home/{{ item }}/srl-devops"
     state: directory
     owner: "{{ item }}"
     recurse: True
