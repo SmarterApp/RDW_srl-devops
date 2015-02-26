@@ -59,6 +59,8 @@ def read_cli_opts():
     parser = OptionParser()
     parser.add_option("-a", "--app", dest="app", type="string",
                         help="Which app to spawn.  Required; values are app names from spawner.yaml", metavar="APP")
+    parser.add_option("-B", "--base-ami", dest="force_base_ami", action="store_true",
+                        help="Instead of using the applciation's AMI, force starting from the base AMI", metavar="BASE")
     parser.add_option("-b", "--begin", type="int", dest="begin",
                         help="Sequence number to begin at for naming to avoid naming collisions.  Optional, default auto.", metavar="BEGIN")
     parser.add_option("-c", "--count", type="int", dest="count", default=1,
@@ -228,6 +230,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     #------
     amis = ec2_conn.get_all_images(owners=['self', '479572410002'])
     app_name = app_cfg.get('ami_app_name') if app_cfg.get('ami_app_name') else opts.app
+    app_name = 'base' if opts.force_base_ami else app_name
     amis = [a for a in amis if a.tags.get('application') == app_name]
     if len(amis) < 1:
         logging.error("No AMIs have the tag application:{0} - you shall not pass.".format(app_name))

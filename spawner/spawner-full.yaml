@@ -26,12 +26,9 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-ssh-from-vestibule
-      - srl-ssh-from-amplify     # TODO remove after deploy
-      - srl-ssh-from-omniti      # TODO remove after deploy
       - srl-logging
     instance_type: m3.medium
-    public_ip: True
-    subnet_type: public # Colin said so!
+    subnet_type: public # Need public subnet so Vestibule can reach us
     spawn_count:
       dev: 0  # Deployed by external bootstrapper
       prod: 0 # TODO: verify

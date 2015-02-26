@@ -14,9 +14,9 @@ echo '-----------'
 echo 'Spawning....'
 echo '-----------'
 cd spawner
-./spawner.py -t ami-builder:$APPLICATION -e $BUILD_ENV -a $APPLICATION -s 2>&1 | tee ami-builder.log || exit $?
+./spawner.py -B -t ami-builder:$APPLICATION -e $BUILD_ENV -a $APPLICATION -s 2>&1 | tee ami-builder.log || exit $?
 
-# Regret
+# Regret not making it easier to get the instance ID from the spawner
 INSTANCE_ID=$(grep 'Tagging instance' ami-builder.log | egrep -o 'i-.{8}') || exit $?
 
 # password store should be unlocked now
