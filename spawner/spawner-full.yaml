@@ -28,7 +28,6 @@ apps:
       - srl-ssh-from-vestibule
       - srl-logging
     instance_type: m3.medium
-    subnet_type: public # Need public subnet so Vestibule can reach us
     spawn_count:
       dev: 0  # Deployed by external bootstrapper
       prod: 0 # TODO: verify
