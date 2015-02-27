@@ -1,4 +1,8 @@
 
+#================================================================#
+#                    Developer Accounts
+#================================================================#
+
 - name: List all non-root authorized_keys files
   shell: find /home -name authorized_keys | cut -f 3 -d'/'
   register: ak_files
@@ -11,16 +15,67 @@
   with_items: "{{ak_files.stdout_lines | difference(users_allowed_to_have_authorized_keys) }}"
   when: "{{ not ec2_tag_environment == 'prod' }}"
 
-# - name: Purge authorized_keys for all users when in prod
-#   shell: find /home -name authorized_keys | xargs rm
-#   when: "{{ ec2_tag_environment == 'prod' }}"
+- name: Purge authorized_keys for all users except ansible when in prod
+  # Important not to delete ansible, or we will fail to reconnect immediately!
+  shell: find /home -name authorized_keys | grep -v ansible | xargs --no-run-if-empty rm
+  when: "{{ ec2_tag_environment == 'prod' }}"
+
+#================================================================#
+#                   Ansible Service Account
+#================================================================#
+
+# This is a massive PITA, because we don't have 'exclusive' parameter 
+# for authorized_key yet in v1.8
+
+# When in dev, force ansible user to have exactly two keys - prod and dev
+# When in prod, force ansible user to have exactly one key - prod
+
+- name: Setup ansible user ssh dir
+  file:
+    state: directory
+    owner: ansible
+    mode: '0700'
+    path: /home/ansible/.ssh
+
+- name: Read prod ansible key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ansible-prod-????-??-??.pem.pub | tail -1)
+  register: ssh_key_ansible_prod
+  changed_when: False
+
+- name: Read dev ansible key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ansible-dev-????-??-??.pem.pub | tail -1)
+  register: ssh_key_ansible_dev
+  changed_when: False
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+- name: Everywhere but prod, write both dev and prod ansible keys
+  template:
+    mode: 0644
+    owner: ansible
+    src: ansible-ssh-keys-dev.j2
+    dest: /home/ansible/.ssh/authorized_keys
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+- name: In prod, write only prod ansible keys
+  template:
+    mode: 0644
+    owner: ansible
+    src: ansible-ssh-keys-prod.j2
+    dest: /home/ansible/.ssh/authorized_keys
+  when: "{{ ec2_tag_environment == 'prod' }}"
+
+#================================================================#
+#                   Root Account
+#================================================================#
 
 - name: Purge authorized_keys for root
   file:
     state: absent
     path: /root/.ssh/authorized_keys
-
-# TODO: refactor to DRY up
 
 - name: Install root ITOps SSH keys
   authorized_key:
@@ -40,18 +95,9 @@
     - sb2_dev_adminkeys
   when: "{{ not ec2_tag_environment == 'prod' }}"
 
-- name: Install ansible prod key
-  authorized_key:
-    state: present
-    user: ansible
-    key: "{{ lookup('file', '../credentials/ansible-prod-2015-02-05.pem.pub') }}"   # TODO: parameterize ansible key rotation
-
-- name: Install ansible dev key on non-prod
-  authorized_key:
-    state: present
-    user: ansible
-    key: "{{ lookup('file', '../credentials/ansible.pem.pub') }}"
-  when: "{{ not ec2_tag_environment == 'prod' }}"
+#================================================================#
+#                   Nessus Service Account
+#================================================================#
 
 - name: install nessus key
   authorized_key:
