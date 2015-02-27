@@ -22,7 +22,7 @@ apps:
   #    env_name: INT # 0 disables spawning from env-builder
 
   - name: ansible
-    ami_app_name: base # Playbook runs from base
+    ami_app_name: ansible # Playbook runs from base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-ssh-from-vestibule
