@@ -55,6 +55,16 @@ apps:
       dev: 1   # TODO: verify
       prod: 0  # Not managed by SRL in prod
 
+  - name: sensu
+    ami_app_name: base
+    security_groups:
+      - srl-ssh-intra-vpc
+      # TODO - SG for sensu API calls
+    instance_type: m3.medium # TODO - not yet sized
+    spawn_count:
+      dev: 1   
+      prod: 1  
+      
   - name: gluster-server
     ami_app_name: base # Playbook runs from base
     security_groups:
