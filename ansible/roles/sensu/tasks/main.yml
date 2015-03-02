@@ -3,8 +3,8 @@
 
 - include: common.yml
 
-- include: server.yml
-  when: sensu_install_server
+#- include: server.yml
+#  when: sensu_install_server
 
-- include: client.yml
-  when: sensu_install_client
+#- include: client.yml
+#  when: sensu_install_client
