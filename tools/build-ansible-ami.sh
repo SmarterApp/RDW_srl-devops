@@ -61,10 +61,12 @@ echo '-----------'
 ansible-playbook -l $PRIVATE_IP -e ansible_cred_set=$TARGET_ENV ansible-for-ami.yml || exit $?
 
 # Do the wacky patch-and-reboot play
-echo '-----------'
-echo ' Patching.... '
-echo '-----------'
-ansible-playbook -l $PRIVATE_IP patch-and-reboot.yml || exit $? 
+
+# THis takes over an hour, and the base image is currently up to date
+#echo '-----------'
+#echo ' Patching.... '
+#echo '-----------'
+#ansible-playbook -l $PRIVATE_IP patch-and-reboot.yml || exit $? 
 
 # Run again, overriding ec2_tag_environment to make it think it is in the target.
 echo '-----------'
@@ -78,7 +80,7 @@ AMI_ID=$(aws ec2 create-image --instance-id $INSTANCE_ID --name "${APPLICATION}-
 
 
 echo "Waiting for AMI to be created before tagging"
-until aws ec2 describe-images --image-id $AMI_ID > /dev/null 2>&1; do
+until [[ $(aws ec2 describe-images --image-id $AMI_ID | jq '.Images[0].State') == '"available"' ]]; do
     echo -n '.'
     sleep 3
 done
