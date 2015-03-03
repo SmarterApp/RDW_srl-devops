@@ -1,4 +1,15 @@
 ---
+
+- name: Preflight variables
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Require spawner_env
+      fail: 
+        msg: "You must provide the 'spawner_env' variable via the -e option"
+      when: spawner_env is not defined
+
 - name: Provision GlusterFS storage
   hosts: localhost
   connection: local
