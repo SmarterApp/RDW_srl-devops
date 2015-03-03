@@ -13,3 +13,5 @@ storage_devices:
   - { name: zones2, size: 50, dev: xvdo }
   - { name: pdf1, size: 50, dev: xvdp }
   - { name: pdf2, size: 50, dev: xvdq }
+  - { name: sensu1, size: 50, dev: xvdr }
+  - { name: sensu2, size: 50, dev: xvds }

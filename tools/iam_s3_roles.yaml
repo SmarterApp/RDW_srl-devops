@@ -166,6 +166,7 @@ iam_roles:
     - yum_read_pol
   sensu_role:
     - yum_read_pol
+    - gluster_ssl_read_pol
   graphite_role:
     - yum_read_pol
   gluster-server_role:
