@@ -83,7 +83,7 @@
     user: root
     key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
   with_items:
-    - awsITOps_wbarnes
+    - sb2_prd_adminkeys
     - Amplify_Insight_ITOps_Default
 
 - name: Install dev keys for root on non-prod

@@ -31,8 +31,27 @@
 - name: Unpack Kibana
   unarchive: src=kibana-rc1.tgz dest=/opt/kibana
 
+- name: Install Nginx
+  yum: name=nginx state=present
+
+- name: Copy kibana.conf to nginx
+  copy: src=kibana-nginx.conf dest=/etc/nginx/conf.d/kibana-nginx.conf 
+  notify: restart nginx
+
+- name: Copy kibana.htpasswd to nginx
+  copy: src=kibana.htpasswd dest=/etc/nginx/conf.d/kibana.htpasswd
+
+- name: Make SSL cert directory
+  file: path=/etc/pki/tls/kibana state=directory
+
+- name: Grab Nginx SSL certs
+  shell: 'aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-apache-internal-ssl/kibana /etc/pki/tls/kibana/'
+
 - name: Copy Kibana init script
   copy: src=kibana.init dest=/etc/init.d/kibana owner=root group=root mode=0755
 
 - name: Start Kibana
   service: name=kibana state=started enabled=yes
+
+- name: Start Nginx
+  service: name=nginx state=started enabled=yes
