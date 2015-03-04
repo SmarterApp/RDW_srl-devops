@@ -16,8 +16,6 @@
   gather_facts: no
   vars:
     region: 'us-east-1' # TODO
-    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
-    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
   roles:
     - aws-creds
     - gluster-storage

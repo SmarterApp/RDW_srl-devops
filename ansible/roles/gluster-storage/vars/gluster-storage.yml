@@ -1,17 +1,95 @@
 aws_access_key: "{{ aws_access_id }}"
 
 storage_devices:
-  - { name: data1, size: 50, dev: xvdf }
-  - { name: data2, size: 50, dev: xvdg }
-  - { name: working1, size: 50, dev: xvdh }
-  - { name: working2, size: 50, dev: xvdi }
-  - { name: tsb1, size: 50, dev: xvdj }
-  - { name: tsb2, size: 50, dev: xvdk }
-  - { name: uploads1, size: 50, dev: xvdl }
-  - { name: uploads2, size: 50, dev: xvdm }
-  - { name: zones1, size: 50, dev: xvdn }
-  - { name: zones2, size: 50, dev: xvdo }
-  - { name: pdf1, size: 50, dev: xvdp }
-  - { name: pdf2, size: 50, dev: xvdq }
-  - { name: sensu1, size: 50, dev: xvdr }
-  - { name: sensu2, size: 50, dev: xvds }
+  - name: data1
+    dev: xvdf
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+  - name: data2
+    dev: xvdg
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+
+  - name: working1
+    dev: xvdh
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+  - name: working2
+    dev: xvdi
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+
+  - name: tsb1
+    dev: xvdj
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+  - name: tsb2
+    dev: xvdk
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+
+  - name: uploads1
+    dev: xvdl
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+  - name: uploads2
+    dev: xvdm
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+
+  - name: zones1
+    dev: xvdn
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+  - name: zones2
+    dev: xvdo
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+
+  - name: pdf1
+    dev: xvdp
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+  - name: pdf2
+    dev: xvdq
+    size: 
+      prod: 50
+      dev: 5
+      test186: 5
+
+  - name: sensu1
+    dev: xvdr
+    size: 
+      prod: 50
+      dev: 20
+      test186: 20
+  - name: sensu2
+    dev: xvds
+    size: 
+      prod: 50
+      dev: 20
+      test186: 20
+
+
