@@ -10,6 +10,9 @@
     - glusterfs-fuse
     - nfs-utils
 
+- name: Install AWS CLI
+  script: creates=/usr/local/bin/aws install-aws-cli.sh
+
 - name: Enable and start required services
   service: name={{item}} state=started enabled=yes
   with_items:
@@ -46,7 +49,7 @@
   with_items: brick_devices
 
 - name: sync server ssl certificates
-  shell: "aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-gluster-ssl/gluster-server /etc/ssl --exclude 'certs/'"
+  shell: "/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-gluster-ssl/gluster-server /etc/ssl --exclude 'certs/'"
 
 - name: check peering
   shell: "gluster peer probe {{ node2 }}"
