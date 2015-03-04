@@ -126,7 +126,10 @@ def create_roles(hints, cfg):
             template = Template(cfg['iam_policies'][p])
 
             # If we are in a test env, just use the dev yum repo
-            s3_env = 'dev' if hints['vpc']['env'].startswith('test') else hints['vpc']['env']
+            if p.startswith('yum') and hints['vpc']['env'].startswith('test'):
+                s3_env = 'dev' 
+            else:
+                s3_env = hints['vpc']['env']
             
             policy = template.render(env = s3_env)
             policy_name = p
