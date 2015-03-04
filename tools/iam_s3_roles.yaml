@@ -148,6 +148,40 @@ iam_policies:
         }
       ]
     }
+  sensu_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl/*"]
+        }
+      ]
+    }
+  sensu_ssl_write_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+           ],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl/*"]
+        }
+      ]
+    }
 
 # Roles are associated to instance profiles (defined below).
 # There should be a 1:1 relationship between roles and instance
@@ -164,9 +198,13 @@ iam_roles:
     - yum_read_pol
   bind_role:
     - yum_read_pol
+  sensu-rabbit_role:
+    - yum_read_pol
+    - sensu_ssl_read_pol
   sensu_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_write_pol
   graphite_role:
     - yum_read_pol
   gluster-server_role:
