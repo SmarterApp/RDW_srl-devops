@@ -1,0 +1,15 @@
+---
+
+- name: Install jq
+  get_url:
+    url: http://stedolan.github.io/jq/download/linux64/jq
+    dest: /usr/local/bin/jq
+    
+- name: Set jq perms
+  file:
+    path: /usr/local/bin/jq
+    mode: 0755
+    state: file
+
+- name: Install AWS CLI
+  script: creates=/usr/local/bin/aws install-aws-cli.sh
