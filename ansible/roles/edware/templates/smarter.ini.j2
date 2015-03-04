@@ -235,7 +235,7 @@ keys = generic, json, mna
 args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL0)
 class = logging.handlers.SysLogHandler
 formatter = json
-level = WARN
+level = INFO
 [handler_console]
 args = (sys.stderr,)
 class = StreamHandler
