@@ -2,7 +2,7 @@
 # defaults file for sensu
 
 # Variable to control the installation
-#sensu_install_client: true
+sensu_install_client: true
 sensu_install_server: true
 
 sensu_user:  sensu
@@ -25,6 +25,3 @@ sensu_server_rabbitmq_hostname: "127.0.0.1"
 sensu_server_rabbitmq_user    : "sensu"
 sensu_server_rabbitmq_port    : "5671"
 sensu_server_rabbitmq_password: "placeholder"
-
-sensu_server_dashboard_host    : "127.0.0.1"
-sensu_server_dashboard_password: "placeholder"
