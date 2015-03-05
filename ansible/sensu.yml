@@ -1,9 +1,8 @@
 - name: Sensu Server (API, RMQ, redis)
   hosts: sensu
   sudo: yes
-  gather_facts: no
   roles:
     - common
-    # - rabbitmq
-    # - redis
-    - sensu
+    # - gluster-client
+    - redis
+    # - sensu
