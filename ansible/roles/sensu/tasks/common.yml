@@ -25,7 +25,12 @@
     state: directory
 
 - name: add ssl keys
-  shell: 'aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-sensu-internal-ssl/sensu /etc/sensu/ssl/'
+  shell: '/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-sensu-ssl/sensu /etc/sensu/ssl/'
+  register: sensu_s3_sync
+  changed_when: "sensu_s3_sync.stdout != ''"
+  notify:
+    - restart sensu server
+    - restart sensu client
 
 - name: generate /etc/sensu/config.json
   template:
