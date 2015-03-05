@@ -5,6 +5,12 @@
 - name: enable celeryd-edmigrate
   service: name=celeryd-edmigrate enabled=yes
 
+- name: add repmgrd service
+  service: name=repmgrd state=started enabled=yes
+
+- name: add repmgrd-watcher service
+  service: name=repmgrd-watcher state=started enabled=yes
+
 - name: Configure migrate 
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart celeryd-edmigrate

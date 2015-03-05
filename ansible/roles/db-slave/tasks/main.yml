@@ -32,9 +32,3 @@
 - name: register slave
   shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf standby register'"
   ignore_errors: yes
-
-- name: add repmgrd service
-  service: name=repmgrd state=started enabled=yes
-
-- name: add repmgrd-watcher service
-  service: name=repmgrd-watcher state=started enabled=yes
