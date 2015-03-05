@@ -9,3 +9,13 @@
   fail:
     msg: "You must provide the variable sensu_checks as a playbook variable"
   when: sensu_install_server and (sensu_checks is not defined)
+
+- name: Require sensu_rabbit_host variable
+  fail:
+    msg: "You must provide the variable sensu_rabbit_host in group_vars/ENV/secrets.yml"
+  when: sensu_rabbit_host is not defined
+
+- name: Require sensu_rabbit_password variable
+  fail:
+    msg: "You must provide the variable sensu_rabbit_password in group_vars/ENV/secrets.yml"
+  when: sensu_rabbit_password is not defined
