@@ -1,0 +1,8 @@
+---
+
+# TODO: develop a drain-then-restart feature
+
+- name: restart rabbit
+  service:
+    name: rabbitmq-server
+    state: restarted

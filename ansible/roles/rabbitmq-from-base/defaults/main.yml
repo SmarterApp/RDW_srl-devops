@@ -1,0 +1,14 @@
+
+# Required, but no default provided.
+# Node should have IAM access to this bucket, and the bucket should have
+#  rabbitmq/
+#       cacert.pem
+#       cert.pem
+#       key.pem
+
+# rabbitmq_ssl_s3_bucket: some-bucket-name
+
+rabbitmq_rpm_version: 3.4.4-1
+rabbitmq_allow_poodle_attack: 'true' # erlang requires this to be true, not True, which is what you get if you use a YAML true.
+rabbitmq_enabled_plugins:
+  - rabbitmq_managment
