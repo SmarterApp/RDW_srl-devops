@@ -45,12 +45,18 @@
   notify:
     - restart rabbit
 
-# TODO: disable guest account
-# TODO: create vhosts
-# TODO: create users
-
 - name: Enable/Start RMQ service
   service:
     name: rabbitmq-server
     enabled: yes
     state: started
+
+- name: Check for guest user
+  shell: "rabbitmqctl -q list_users | grep -q guest"
+  register: rabbitmq_guest_user_detected
+  changed_when: false
+  failed_when: false
+
+- name: Delete guest user
+  shell: "rabbitmqctl delete_user guest"
+  when: rabbitmq_guest_user_detected | success
