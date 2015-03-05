@@ -1,6 +1,8 @@
 ---
 # tasks file for sensu
 
+- include: preflight.yml
+
 - include: common.yml
 
 - include: server.yml

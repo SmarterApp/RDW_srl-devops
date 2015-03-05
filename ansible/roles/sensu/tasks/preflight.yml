@@ -1,0 +1,11 @@
+---
+
+#- name: Require VAR variable
+#  fail:
+#    msg: "You must provide the variable VAR as a playbook variable"
+#  when: VAR is not defined
+
+- name: Require sensu_checks variable
+  fail:
+    msg: "You must provide the variable sensu_checks as a playbook variable"
+  when: sensu_install_server and (sensu_checks is not defined)
