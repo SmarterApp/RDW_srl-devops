@@ -479,6 +479,10 @@
         from_port: 53
         to_port: 53
         cidr_ip: "{{ vpc_cidr_block }}" # TODO: this could be tightened to just the BIND server; but chicken-and-egg problem
+      - proto: udp
+        from_port: 123
+        to_port: 123
+        cidr_ip: "{{ vpc_cidr_block }}"
     rules_egress:
       - proto: tcp
         from_port: 80 
@@ -492,6 +496,14 @@
         from_port: 53
         to_port: 53
         cidr_ip: 0.0.0.0/0
+      - proto: udp
+        from_port: 123
+        to_port: 123
+        cidr_ip: 129.6.15.28/24 #time-a.nist.gov IP
+      - proto: udp
+        from_port: 123
+        to_port: 123
+        cidr_ip: 24.56.178.140/24 #www.nist.gov IP
     purge_rules: true
     purge_rules_egress: true
 - name: srl-rmq security group
@@ -707,3 +719,20 @@
     rules_egress:
     purge_rules: true
     purge_rules_egress: true
+- name: srl-ntp-server
+  ec2_group:
+    name: srl-ntp-server
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow internal ntp queries to the bind server 
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: udp 
+        from_port: 123 
+        to_port: 123 
+        cidr_ip: "{{ vpc_cidr_block }}" 
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+

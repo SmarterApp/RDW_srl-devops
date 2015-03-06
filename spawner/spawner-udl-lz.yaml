@@ -54,6 +54,7 @@ apps:
       - srl-ssh-intra-vpc
       - srl-logging
       - srl-bind
+      - srl-ntp-server
     instance_type: m3.medium # TODO: verify    
     spawn_count:
       dev: 1   # TODO: verify

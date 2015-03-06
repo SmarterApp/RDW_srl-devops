@@ -1,0 +1,11 @@
+---
+- name: put ntpd.conf in place
+  template: src=ntpd.conf.j2 dest=/etc/ntpd.conf
+  notify: restart ntpd
+
+- name: put ntp.conf in place
+  template: src=ntp.conf.j2 dest=/etc/ntpd.conf
+  notify: restart ntpd
+
+- name: start ntpd
+  service: name=ntpd state=started enabled=yes 
