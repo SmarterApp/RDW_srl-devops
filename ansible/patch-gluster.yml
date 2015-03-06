@@ -14,7 +14,7 @@
   sudo: yes
 
   tasks:
-    - include roles/glusterfs-patching/tasks/gluster-client.yml
+    - include: roles/glusterfs-patching/tasks/gluster-client.yml
 
 - name: Patch gluster-servers
   user: ansible
@@ -22,4 +22,4 @@
   hosts: gluster-server  
 
   tasks:
-    - include roles/glusterfs-patching/tasks/gluster-server.yml 
+    - include: roles/glusterfs-patching/tasks/gluster-server.yml 

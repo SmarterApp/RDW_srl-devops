@@ -1,0 +1,14 @@
+gluster_mount:
+  reporting-worker-pdf: { subj: pdf, mounts: [ { mount_at: /opt/edware/pdf, volume: pdf, owner: celery, group: root }]}
+  reporting-worker-extract: { subj: data, mounts: [ { mount_at: /opt/edware/working , volume: working, owner: celery, group: root }, { mount_at: /opt/edware/data, volume: data, owner: celery, group: root } ]}
+  tsb-worker: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery, group: root }]}
+  tsb-trigger: { subj: tsb, mounts: [{ mount_at: /opt/edware/data , volume: tsb, owner: celery, group: root }, { mount_at: /opt/edware/tsb , volume: tsb, owner: celery, group: root }]}
+  hpz-web: { subj: uploads, mounts: [{ mount_at: /opt/edware/hpz/uploads , volume: uploads, owner: apache, group: root }]}
+  udl: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
+  udl-db: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
+  file-trigger: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
+  file-grabber: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
+
+
+gfs_node1: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[0] }}"
+gfs_node2: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[1] }}"
