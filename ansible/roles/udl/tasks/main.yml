@@ -7,6 +7,10 @@
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart celeryd-udl2 
 
+- name: copy celeryd-udl2 file
+  copy: src=roles/udl/files/celeryd-udl2.conf dest=/opt/edware/conf/celeryd-udl2.conf owner=udl2 group=udl2 mode=0644
+  notify: Restart edudl2
+
 - name: create gpg directory
   file: 
     path: /dev/shm/celery/gpg 
