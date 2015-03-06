@@ -1,57 +1,59 @@
 ---
-- name: enable sensu-{server,api} to survive reboot
-  service: name=sensu-{{ item }} enabled=yes
+- name: enable sensu-{server,api} services
+  service: 
+    name: sensu-{{ item }} 
+    enabled: yes
   with_items:
     - server
     - api
 
 - name: generate /etc/sensu/conf.d/checks.json
   template:
-    src=checks.json.j2
-    dest=/etc/sensu/conf.d/checks.json
-    owner="{{ sensu_user }}"
-    group="{{ sensu_group }}"
-    mode=0750
+    src: checks.json.j2
+    dest: /etc/sensu/conf.d/checks.json
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
   notify:
     - restart sensu server
     - restart sensu client
 
 - name: generate /etc/sensu/conf.d/handlers.json
   template:
-    src=handlers.json.j2
-    dest=/etc/sensu/conf.d/handlers.json
-    owner="{{ sensu_user }}"
-    group="{{ sensu_group }}"
-    mode=0750
+    src: handlers.json.j2
+    dest: /etc/sensu/conf.d/handlers.json
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
   notify:
     - restart sensu server
 
 - name: copy the handlers files
   copy:
-    src=files/sensu/handlers/
-    dest=/etc/sensu/handlers/
-    owner="{{ sensu_user }}"
-    group="{{ sensu_group }}"
-    mode=0750
+    src: handlers/
+    dest: /etc/sensu/handlers/
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
   notify:
     - restart sensu server
 
 - name: copy extension files
   copy:
-    src=files/sensu/extensions/
-    dest=/etc/sensu/extensions/
-    owner=sensu
-    group=sensu
-    mode=0750
+    src: extensions/
+    dest: /etc/sensu/extensions/
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
   notify:
     - restart sensu server
 
 - name: copy conf.d files
   copy:
-    src=files/sensu/conf.d/
-    dest=/etc/sensu/conf.d/
-    owner=sensu
-    group=sensu
-    mode=0640
+    src: conf/
+    dest: /etc/sensu/conf.d/
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0640
   notify:
     - restart sensu server

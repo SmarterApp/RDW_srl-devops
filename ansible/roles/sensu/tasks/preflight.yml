@@ -25,9 +25,9 @@
     msg: "You must provide the variable sensu_rabbit_password in group_vars/ENV/secrets.yml"
   when: sensu_rabbit_password is not defined
 
-- name: Require sensu_client_susbriptions variable
+- name: Require sensu_client_subscriptions variable
   fail:
-    msg: "You must provide the variable sensu_client_susbriptions as a playbook variable"
+    msg: "You must provide the variable sensu_client_subscriptions as a playbook variable"
     # TODO: validate it is an array
     # TODO: validate its members are from a restricted vocabulary
   when: sensu_install_client and (sensu_client_subscriptions is not defined)
