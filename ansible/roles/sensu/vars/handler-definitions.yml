@@ -1,0 +1,6 @@
+ sensu_handlers:
+
+   # Simple debugging, see 
+   logevent:
+     type: pipe
+     command: "/etc/sensu/handlers/logevent.rb"

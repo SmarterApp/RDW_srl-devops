@@ -1,0 +1,13 @@
+sensu_checks:
+
+  # ================================================ #
+  #                common - metrics
+  # ================================================ #
+  disk-capacity-metrics: 
+    type: metric
+    handlers: 
+      - logevent # TODO
+    command: "/etc/sensu/plugins/disk-capacity-metrics.rb "
+    interval: 10
+    subscribers:
+      - common

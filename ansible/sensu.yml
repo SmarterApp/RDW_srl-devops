@@ -1,8 +1,17 @@
-- name: Sensu Server (API, RMQ, redis)
+- name: Sensu Server (server, client, API, redis)
   hosts: sensu
   sudo: yes
+  vars:
+    sensu_client_subscriptions:
+      - common 
+    sensu_install_server: true
+
+  vars_files:
+    - roles/sensu/vars/check+metric-definitions.yml
+    - roles/sensu/vars/handler-definitions.yml
+
   roles:
-    - common
-    # - gluster-client
-    - redis
-    # - sensu
+    - { role: common, tags: ['common']}
+    - { role: aws-cli, tags: ['aws-cli'] }
+    - { role: redis, tags: ['redis'] }
+    - { role: sensu, tags: ['sensu'] }
