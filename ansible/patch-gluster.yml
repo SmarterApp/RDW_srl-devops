@@ -1,0 +1,25 @@
+---
+- name: Patch gluster-client SSL
+  hosts: 
+    - file-grabber
+    - file-trigger
+    - hpz-web
+    - reporting-worker-extract
+    - reporting-worker-pdf
+    - tsb-trigger
+    - tsb-worker
+    - udl-db
+    - udl
+  user: ansible
+  sudo: yes
+
+  tasks:
+    - include roles/glusterfs-patching/tasks/gluster-client.yml
+
+- name: Patch gluster-servers
+  user: ansible
+  sudo: yes
+  hosts: gluster-server  
+
+  tasks:
+    - include roles/glusterfs-patching/tasks/gluster-server.yml 
