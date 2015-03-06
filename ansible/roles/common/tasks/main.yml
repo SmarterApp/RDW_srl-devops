@@ -17,4 +17,4 @@
 - include: disable-ad-auth.yml
   when: "{{ec2_tag_environment == 'prod'}}"
 - include: ntp.yml
-  when: "{{ 'bind' not in group_named }}"
+  when: "{{ 'bind' not in group_names }}"
