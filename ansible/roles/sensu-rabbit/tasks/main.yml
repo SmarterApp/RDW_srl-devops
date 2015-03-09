@@ -8,13 +8,13 @@
   when: sensu_rabbit_password is not defined
 
 - name: Check for sensu vhost
-  shell: "rabbitmqctl -q list_vhosts | grep -q /sensu"
+  shell: "rabbitmqctl -q list_vhosts | egrep -q '^sensu$'"
   register: sensu_rabbit_vhost_detected
   changed_when: false
   failed_when: false
 
 - name: Create sensu vhost
-  shell: "rabbitmqctl add_vhost /sensu"
+  shell: "rabbitmqctl add_vhost sensu"
   when: sensu_rabbit_vhost_detected | failed
 
 - name: Check for sensu user
@@ -28,5 +28,5 @@
   when: sensu_rabbit_user_detected | failed
 
 - name: Set sensu user perms
-  shell: "rabbitmqctl set_permissions -p /sensu sensu '.*' '.*' '.*' "
+  shell: "rabbitmqctl set_permissions -p sensu sensu '.*' '.*' '.*' "
   when: sensu_rabbit_user_detected | failed
