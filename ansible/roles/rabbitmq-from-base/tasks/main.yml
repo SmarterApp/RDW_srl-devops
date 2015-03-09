@@ -14,7 +14,7 @@
   file: 
     state: directory
     path: /etc/rabbitmq/ssl
-    owner: root
+    owner: rabbitmq
     mode: 0700
 
 - name: Install SSL Certs
@@ -22,8 +22,9 @@
   register: rmq_s3_sync
   changed_when: "rmq_s3_sync.stdout != ''"
   notify:
+    - chown ssl certs
     - restart rabbit
-
+    
 - name: RabbitMQ config file
   template:
     src: rabbitmq.config.j2

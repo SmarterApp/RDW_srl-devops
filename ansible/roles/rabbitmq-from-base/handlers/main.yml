@@ -2,6 +2,17 @@
 
 # TODO: develop a drain-then-restart feature
 
+- name: chown ssl certs
+  file:
+    path: "/etc/rabbitmq/ssl/{{ item }}.pem"
+    state: file
+    owner: rabbitmq
+    mode: 0600
+  with_items:
+    - cacert
+    - cert
+    - key
+
 - name: restart rabbit
   service:
     name: rabbitmq-server
