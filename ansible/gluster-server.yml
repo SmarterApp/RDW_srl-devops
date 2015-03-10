@@ -19,6 +19,8 @@
   roles:
     - aws-creds
     - gluster-storage
+  tags:
+    - slow
 
 - name: Install GlusterFS servers
   user: ansible
