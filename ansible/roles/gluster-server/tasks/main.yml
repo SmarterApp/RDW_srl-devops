@@ -9,6 +9,8 @@
     - glusterfs-server
     - glusterfs-fuse
     - nfs-utils
+  tags:
+    - slow
 
 - name: Enable and start required services
   service: name={{item}} state=started enabled=yes
@@ -22,24 +24,32 @@
 - name: create brick mount points
   file: path=/export/{{ item.label }} state=directory owner=root group=root mode=0600
   with_items: brick_devices
+  tags: 
+    - slow
 
 - name: create lvm volume groups
   lvg: pvs=/dev/{{ item.dev }} state=present vg=vg.{{ item.label }}
   with_items: brick_devices
-
+  tags: 
+    - slow
 
 - name: create lvm logical volumes
   lvol: lv=lv.{{ item.label }} state=present vg=vg.{{ item.label }} size='100%VG'
   with_items: brick_devices
-
+  tags: 
+    - slow
 
 - name: create brick file systems
   filesystem: fstype=ext4 dev=/dev/vg.{{ item.label }}/lv.{{ item.label }} opts="-m1 -L {{ item.label }}"
   with_items: brick_devices
+  tags: 
+    - slow
 
 - name: add bricks to fstab and mount
   mount: fstype=ext4 name="/export/{{ item.label }}" src="LABEL={{ item.label }}" opts=noatime state=mounted
   with_items: brick_devices
+  tags: 
+    - slow
 
 - name: create brick subdirs for volumes
   file: path=/export/{{ item.label }}/brick state=directory owner=root group=root mode=0600
