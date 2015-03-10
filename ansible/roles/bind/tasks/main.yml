@@ -1,4 +1,6 @@
 ---
+- include: ntpd.yml
+
 - name: Template named.conf
   template:
     dest: /etc/named.conf

@@ -1,0 +1,13 @@
+---
+- name: sync server ssl certificates
+  shell: "aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-gluster-ssl/gluster-server /etc/ssl --exclude 'certs/'"
+
+- name: stop glusterfsd service
+  service: name=glusterfsd state=stopped
+
+- name: restart glusterd service
+  service: name=glusterd state=restarted
+
+- name: start glusterfsd service
+  service: name=glusterfsd state=started enabled=yes
+

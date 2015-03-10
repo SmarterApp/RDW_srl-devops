@@ -1,0 +1,4 @@
+---
+- include_vars: gluster-client.yml
+- name: get appropriate SSL certs
+  shell: 'aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
