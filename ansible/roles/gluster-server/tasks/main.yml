@@ -12,9 +12,6 @@
   tags:
     - slow
 
-- name: Install AWS CLI
-  script: creates=/usr/local/bin/aws install-aws-cli.sh
-
 - name: Enable and start required services
   service: name={{item}} state=started enabled=yes
   with_items:
@@ -60,6 +57,10 @@
 
 - name: sync server ssl certificates
   shell: "/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-gluster-ssl/gluster-server /etc/ssl --exclude 'certs/'"
+  register: gluster_server_s3_sync
+  changed_when: "gluster_server_s3_sync.stdout != ''"
+  #notify:
+  #  - restart gluster server
 
 - name: check peering
   shell: "gluster peer probe {{ node2 }}"
