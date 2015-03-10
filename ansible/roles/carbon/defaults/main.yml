@@ -1,0 +1,6 @@
+carbon_local_data_dir: /opt/carbon/whisper
+carbon_storage_dir: /opt/carbon
+carbon_user: carbon
+
+carbon_receive_interface: 127.0.0.1
+carbon_query_interface: 0.0.0.0

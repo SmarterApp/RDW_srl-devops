@@ -1,0 +1,30 @@
+- name: install carbon
+  yum: 
+    name: python-carbon
+    state: present
+
+- name: Create storage dir
+  file:
+    path: "{{ carbon_storage_dir }}"
+    state: directory
+    owner: "{{ carbon_user }}"
+    mode: 0755
+
+- name: Create whisper storage dir
+  file:
+    path: "{{ carbon_local_data_dir }}"
+    state: directory
+    owner: "{{ carbon_user }}"
+    mode: 0755
+
+- name: setup carbon conf
+  template: 
+    src: carbon.conf.j2 
+    dest: /etc/carbon/carbon.conf
+  notify: restart carbon-cache
+
+- name: setup storage schemas
+  template:
+    src: storage-schemas.conf.j2
+    dest: /etc/carbon/storage-schemas.conf
+  notify: restart carbon-cache
