@@ -56,7 +56,11 @@
   with_items: brick_devices
 
 - name: sync server ssl certificates
-  shell: "aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-gluster-ssl/gluster-server /etc/ssl --exclude 'certs/'"
+  shell: "/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-gluster-ssl/gluster-server /etc/ssl --exclude 'certs/'"
+  register: gluster_server_s3_sync
+  changed_when: "gluster_server_s3_sync.stdout != ''"
+  #notify:
+  #  - restart gluster server
 
 - name: check peering
   shell: "gluster peer probe {{ node2 }}"
