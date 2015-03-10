@@ -6,8 +6,8 @@ sensu_checks:
   disk-capacity-metrics: 
     type: metric
     handlers: 
-      - logevent # TODO
+      - store_in_carbon
     command: "/etc/sensu/plugins/disk-capacity-metrics.rb "
-    interval: 10
+    interval: 300
     subscribers:
       - common

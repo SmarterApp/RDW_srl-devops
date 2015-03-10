@@ -1,0 +1,9 @@
+{
+    "store_in_carbon": {
+        "graphite": {
+            "host": "127.0.0.1",
+            "port": 2003,
+            "queue_size": 1024
+        }
+    }
+}

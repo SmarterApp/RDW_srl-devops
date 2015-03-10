@@ -1,5 +1,7 @@
  sensu_handlers:
 
+   # Note: This file is for custom hand-made handlers.  Most production handlers are defined via extensions, which automatically declare.
+
    # Simple debugging, see 
    logevent:
      type: pipe
