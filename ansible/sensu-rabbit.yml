@@ -8,3 +8,4 @@
     - { role: aws-cli, tags: [ 'aws-cli' ] }
     - { role: rabbitmq-from-base, tags: [ 'rabbitmq' ] }
     - { role: sensu-rabbit, tags: [ 'sensu-rabbit' ] }
+
