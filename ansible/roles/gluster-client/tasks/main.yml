@@ -10,9 +10,11 @@
     - glusterfs-fuse
     - nfs-utils
     - attr
+  tags:
+    - slow
 
 - name: get appropriate SSL certs
-  shell: 'aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
+  shell: '/usr/local/bin/aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
 
 - name: create mount point
   file: path={{ item.mount_at }} state=directory owner={{ item.owner }} group={{ item.group }} mode=0750

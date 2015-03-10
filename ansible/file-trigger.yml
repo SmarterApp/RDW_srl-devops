@@ -7,5 +7,6 @@
   roles:
     - common
     - edware
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
     - file-trigger 

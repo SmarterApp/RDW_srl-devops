@@ -6,5 +6,6 @@
 
   roles:
     - common
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
     - hpz-web 
