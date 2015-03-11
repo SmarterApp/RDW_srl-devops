@@ -6,3 +6,9 @@
    logevent:
      type: pipe
      command: "/etc/sensu/handlers/logevent.rb"
+
+   pagerduty:
+     type: pipe
+      # sensu_pagerduty_api_key - TODO
+     command: "/etc/sensu/handlers/pagerduty.rb"
+
