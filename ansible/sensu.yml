@@ -4,6 +4,7 @@
   vars:
     sensu_client_subscriptions:
       - common 
+      - heartbeats
     sensu_install_server: true
 
   vars_files:

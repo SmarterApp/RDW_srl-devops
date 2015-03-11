@@ -11,3 +11,15 @@ sensu_checks:
     interval: 300
     subscribers:
       - common
+
+  # ================================================ #
+  #                  heartbeats
+  # ================================================ #
+  lz-ssh-hearbeat:
+    handlers:
+      - store_in_carbon
+      # TODO add pagerduty
+    interval: 10
+    command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
+    subscribers: 
+      - heartbeats
