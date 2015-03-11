@@ -34,8 +34,12 @@ def backtick(cmd):
 def get_aws_creds():
     if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
         return (os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY'))
-    else:
+    else:        
         logging.debug("reading AWS creds from password store")
+        if not os.environ.get('SBAC_ENV').endswith('spinup'):
+            logging.error("SBAC_ENV environment variable must be set to a credential set that ends in 'security', like 'dev/security'")
+            exit(1)            
+
         access_id = backtick('pass $SBAC_ENV/aws/access_id')
         secret_key = backtick('pass $SBAC_ENV/aws/secret_key')
         return (access_id, secret_key)

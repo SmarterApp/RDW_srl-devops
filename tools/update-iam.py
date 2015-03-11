@@ -17,6 +17,8 @@ def main():
     hints = preflight(opts, cfg)
     create_roles(hints, cfg)
     create_instance_profiles(hints, cfg)
+    # create_managed_profiles(hints, cfg)
+    # create_users(hints, cfg)
 
 # TODO: copypasta from spawner.py, DRY up4
 def backtick(cmd):
@@ -28,7 +30,11 @@ def get_aws_creds():
     if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
         return (os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY'))
     else:
+        
         logging.debug("reading AWS creds from password store")
+        if not os.environ.get('SBAC_ENV').endswith('security'):
+            logging.error("SBAC_ENV environment variable must be set to a credential set that ends in 'security', like 'dev/security'")
+            exit(1)            
         access_id = backtick('pass $SBAC_ENV/aws/access_id')
         secret_key = backtick('pass $SBAC_ENV/aws/secret_key')
         return (access_id, secret_key)
@@ -93,12 +99,13 @@ def preflight(opts, cfg):
     if len(vpcs) == 0:
         logging.info("VPC Not found {0}".format(opts.env))
         exit(3)
+    hints['vpc']['all_envs'] = [ v.tags.get('Environment') for v in vpc_conn.get_all_vpcs() if v.tags.get('Environment') ]
             
     return hints
 
 def read_config_file(opts):
-    logging.info("Reading config file from ./iam_s3_roles.yaml")
-    cfg = yaml.load(open("./iam_s3_roles.yaml", 'r'))
+    logging.info("Reading config file from ./iam-config.yaml")
+    cfg = yaml.load(open("./iam-config.yaml", 'r'))
     return cfg
 
 def create_roles(hints, cfg):
@@ -116,14 +123,14 @@ def create_roles(hints, cfg):
         role_name = r + role_suffix
 
         if role_name in roles_by_name:
-            logging.info("Role {0} already exists...".format(role_name))
+            logging.info(" - OK  - Role {0} already exists...".format(role_name))
         else:
             iam_conn.create_role(role_name)
-            logging.info("Role {0} created!".format(role_name))
+            logging.info(" - NEW - Role {0} created!".format(role_name))
             
         # Create each of the inline policies in the role        
         for p in cfg['iam_roles'][r]:
-            template = Template(cfg['iam_policies'][p])
+            template = Template(cfg['inline_policies'][p])
 
             # If we are in a test env, just use the dev yum repo
             if p.startswith('yum') and hints['vpc']['env'].startswith('test'):
@@ -133,6 +140,7 @@ def create_roles(hints, cfg):
             
             policy = template.render(env = s3_env)
             policy_name = p
+            # TODO - no easy way to tell if a change is needed here, it just always writes it
             logging.info("Updating policy {0} on role {1}".format(policy_name, role_name))
             iam_conn.put_role_policy(role_name, policy_name, policy)        
 
@@ -153,21 +161,26 @@ def create_instance_profiles(hints, cfg):
         profile_name = r.replace('_role', '_profile') + suffix
 
         if profile_name in profiles_by_name:
-            logging.info("Instance Profile {0} already exists...".format(profile_name))
+            logging.info(" - OK  - Instance Profile {0} already exists...".format(profile_name))
         else:
             iam_conn.create_instance_profile(profile_name)
-            logging.info("Instance Profile {0} created!".format(profile_name))
+            logging.info(" - NEW - Instance Profile {0} created!".format(profile_name))
 
 
         # Need to idempotently ensure that the profile's role list contains exactly the right role.
         profile = iam_conn.get_instance_profile(profile_name)['get_instance_profile_response']['get_instance_profile_result']['instance_profile']
 
         if (len(profile.roles) == 1 and profile.roles.member.role_name == role_name):
-            logging.info("Instance Profile {0} already maps 1:1 to {1}".format(profile_name, role_name))
+            logging.info(" - OK  - Instance Profile {0} already maps 1:1 to {1}".format(profile_name, role_name))
         else:
             for r2 in profile.roles:
                 iam_conn.remove_role_from_instance_profile(profile_name, r2.role_name)                
             iam_conn.add_role_to_instance_profile(profile_name, role_name)
-            logging.info("Instance Profile {0} updated to map 1:1 to {1}".format(profile_name, role_name))
+            logging.info("- NEW - Instance Profile {0} updated to map 1:1 to {1}".format(profile_name, role_name))
 
+def create_managed_profiles(hints, cfg):
+    # iam_conn = hints['iam']['conn']
+    # https://github.com/boto/boto/issues/2956
+    None
+            
 main()
