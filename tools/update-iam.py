@@ -27,7 +27,7 @@ def backtick(cmd):
 def get_aws_creds():
     if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
         return (os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY'))
-    else:
+    else:        
         logging.debug("reading AWS creds from password store")
         access_id = backtick('pass $SBAC_ENV/aws/access_id')
         secret_key = backtick('pass $SBAC_ENV/aws/secret_key')
@@ -97,8 +97,8 @@ def preflight(opts, cfg):
     return hints
 
 def read_config_file(opts):
-    logging.info("Reading config file from ./iam_s3_roles.yaml")
-    cfg = yaml.load(open("./iam_s3_roles.yaml", 'r'))
+    logging.info("Reading config file from ./iam-config.yaml")
+    cfg = yaml.load(open("./iam-config.yaml", 'r'))
     return cfg
 
 def create_roles(hints, cfg):
