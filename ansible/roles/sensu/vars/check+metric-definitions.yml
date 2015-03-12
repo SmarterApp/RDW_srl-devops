@@ -5,19 +5,22 @@ sensu_checks:
   # ================================================ #
   disk-capacity-metrics: 
     type: metric
+    prefix: sys
     handlers: 
       - store_in_carbon
     command: "/etc/sensu/plugins/disk-capacity-metrics.rb "
-    interval: 300
+    interval: 10
     subscribers:
       - common
 
   # ================================================ #
   #                  heartbeats
   # ================================================ #
-  lz-ssh-hearbeat:
+  lz.heartbeat.sshbanner:
     type: metric
     output_type: nagios_check
+    prefix: app
+    auto_tag_host: 'no'
     handlers:
       - store_in_carbon
       # TODO add pagerduty
