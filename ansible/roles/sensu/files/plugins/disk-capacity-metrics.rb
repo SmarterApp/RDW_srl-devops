@@ -53,19 +53,24 @@ class DiskCapacity < Sensu::Plugin::Metric::CLI::Graphite
 
   def run
     # Get capacity metrics from DF as they don't appear in /proc
-    `df -PT`.split("\n").drop(1).each do |line|
+    `df -PT -B 1048576`.split("\n").drop(1).each do |line|
       begin
-        fs, _type, _blocks, used, avail, capacity, _mnt = line.split
-
+        fs, _type, _blocks, used, avail, capacity, mnt = line.split
+        mnt = mnt.gsub('/', '_')
         timestamp = Time.now.to_i
         if fs.match('/dev')
           fs = fs.gsub('/dev/', '')
           metrics = {
-            disk: {
-              "#{fs}.used" => used,
-              "#{fs}.avail" => avail,
-              "#{fs}.capacity" => capacity.gsub('%', '')
-            }
+            by_device: {
+              "#{fs}.used_mb" => used,
+              "#{fs}.avail_mb" => avail,
+              "#{fs}.capacity_pct" => capacity.gsub('%', '')
+            },
+            by_mount: {
+              "#{mnt}.used_mb" => used,
+              "#{mnt}.avail_mb" => avail,
+              "#{mnt}.capacity_pct" => capacity.gsub('%', '')
+            },            
           }
           metrics.each do |parent, children|
             children.each do |child, value|
@@ -81,17 +86,23 @@ class DiskCapacity < Sensu::Plugin::Metric::CLI::Graphite
     # Get inode capacity metrics
     `df -Pi`.split("\n").drop(1).each do |line|
       begin
-        fs, _inodes, used, avail, capacity, _mnt = line.split
-
+        fs, _inodes, used, avail, capacity, mnt = line.split
+        mnt = mnt.gsub('/', '_')
         timestamp = Time.now.to_i
         if fs.match('/dev')
           fs = fs.gsub('/dev/', '')
           metrics = {
-            disk: {
-              "#{fs}.iused" => used,
-              "#{fs}.iavail" => avail,
-              "#{fs}.icapacity" => capacity.gsub('%', '')
-            }
+            by_device: {
+              "#{fs}.inodes_used" => used,
+              "#{fs}.inodes_avail" => avail,
+              "#{fs}.inodes_capacity_pct" => capacity.gsub('%', '')
+            },
+            by_mount: {
+              "#{mnt}.inodes_used" => used,
+              "#{mnt}.inodes_avail" => avail,
+              "#{mnt}.inodes_capacity_pct" => capacity.gsub('%', '')
+            },            
+
           }
           metrics.each do |parent, children|
             children.each do |child, value|

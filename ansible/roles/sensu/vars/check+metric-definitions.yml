@@ -5,10 +5,9 @@ sensu_checks:
   # ================================================ #
   disk-capacity-metrics: 
     type: metric
-    prefix: sys
     handlers: 
       - store_in_carbon
-    command: "/etc/sensu/plugins/disk-capacity-metrics.rb "
+    command: "/etc/sensu/plugins/disk-capacity-metrics.rb --scheme sys.:::name:::.disk"
     interval: 10
     subscribers:
       - common
