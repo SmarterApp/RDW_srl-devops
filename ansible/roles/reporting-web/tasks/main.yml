@@ -36,3 +36,11 @@
 - name: Install the latest smarter application
   yum: name=smarter state=latest
   notify: restart httpd
+
+- name: Install wsgi config file
+  copy: src=wsgi_edware.conf dest=/etc/httpd/conf.d/wsgi_edware.conf
+  notify: restart httpd
+
+- name: Install MPM config
+  copy: src=edware_worker_mpm.conf dest=/etc/httpd/conf.d/edware_worker_mpm.conf
+  notify: restart httpd
