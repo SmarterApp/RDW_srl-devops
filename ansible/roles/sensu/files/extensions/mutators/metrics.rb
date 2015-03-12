@@ -96,8 +96,26 @@ module Sensu::Extension
           mutated = mutator.call(metric)
           @endpoints[ep_name] << mutated
         end
-      # don't mutate
+      elsif output_type == 'nagios_check'
+        @endpoints[ep_name] = ''
+        # Treat the exit code of the check as a value
+        metric = {
+          'name' => @event[:check][:name] + '.status',
+          'value' => @event[:check][:status],
+          'timestamp' => @event[:check][:executed],
+        }
+        mutated = mutator.call(metric)
+        @endpoints[ep_name] << mutated        
+
+        metric = {
+          'name' => @event[:check][:name] + '.duration',
+          'value' => @event[:check][:duration],
+          'timestamp' => @event[:check][:executed],
+        }
+        mutated = mutator.call(metric)
+        @endpoints[ep_name] << mutated
       elsif output_type == endpoint_name
+        # don't mutate
         @endpoints[ep_name] = output
       elsif output_type == 'graphite' && endpoint_name == 'opentsdb'
         @endpoints[:opentsdb] = graphite_to_opentsdb

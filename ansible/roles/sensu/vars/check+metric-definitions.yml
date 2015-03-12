@@ -16,6 +16,8 @@ sensu_checks:
   #                  heartbeats
   # ================================================ #
   lz-ssh-hearbeat:
+    type: metric
+    output_type: nagios_check
     handlers:
       - store_in_carbon
       # TODO add pagerduty
