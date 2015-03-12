@@ -65,22 +65,30 @@
 - name: check peering
   shell: "gluster peer probe {{ node2 }}"
   delegate_to: "{{ node1 }}"
+  changed_when: false
 
 - name: create volumes
-  shell: 'gluster volume info {{ item }} | grep "Status: Started\|Created" || gluster volume create {{ item }} replica 2 transport tcp {{node1}}:/export/{{ item }}1/brick {{node2}}:/export/{{ item }}1/brick {{node1}}:/export/{{ item }}2/brick {{node2}}:/export/{{ item }}2/brick && sleep 5'
+  shell: 'gluster volume info {{ item }} | grep -q "Status: Started\|Created\|Stopped" || gluster volume create {{ item }} replica 2 transport tcp {{node1}}:/export/{{ item }}1/brick {{node2}}:/export/{{ item }}1/brick {{node1}}:/export/{{ item }}2/brick {{node2}}:/export/{{ item }}2/brick && sleep 5'
   with_items: volumes
   run_once: true
   delegate_to: "{{ node1 }}"
+  register: gluster_server_create_out
+  changed_when: "gluster_server_create_out.stdout != ''"
 
 - name: configure volumes
-  shell: 'gluster volume info {{ item.vol }} | grep "Status: Started\|Created" || gluster volume set {{item.vol}} nfs.disable && gluster volume set {{item.vol}} client.ssl on && gluster volume set {{item.vol}} server.ssl on && gluster volume set {{item.vol}} performance.cache-size 256MB &&  gluster volume set {{ item.vol }} auth.ssl-allow {{ item.ssl }}'
+  shell: 'gluster volume info {{ item.vol }} | grep -q "Status: Started\|Created" || gluster volume set {{item.vol}} nfs.disable on && gluster volume set {{item.vol}} client.ssl on && gluster volume set {{item.vol}} server.ssl on && gluster volume set {{item.vol}} performance.cache-size 256MB &&  gluster volume set {{ item.vol }} auth.ssl-allow {{ item.ssl }} && echo "I made changes"'
 #  gluster volume set {{item.vol}} auth.allow '*' &&
   with_items: vol_ssl
   run_once: true
   delegate_to: "{{node1}}"
+  register: gluster_server_config_out
+  # TODO - this always shows changed, fix idempotency
+  changed_when: "gluster_server_config_out.stdout != ''"
 
 - name: start volumes
-  shell: 'gluster volume start {{item}}'
+  shell: 'gluster volume info {{ item }} | grep -q "Status: Started" || gluster volume start {{item}}'
   run_once: true
   with_items: volumes
   delegate_to: "{{node1}}"
+  register: gluster_server_start_out
+  changed_when: "gluster_server_start_out.stdout != ''"
