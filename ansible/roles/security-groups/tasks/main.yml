@@ -408,11 +408,11 @@
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
     rules:
-    rules_ingress:
       - proto: tcp
         from_port: 4567
         to_port: 4567
         cidr_ip: "{{ vpc_cidr_block }}"
+    rules_egress:
     purge_rules: true
     purge_rules_egress: true
 
@@ -425,7 +425,6 @@
     vpc_id: "{{ vpc.vpc_id }}"
     region: "{{ vpc_region }}"
     rules:
-    rules_ingress:
       - proto: tcp
         from_port: 443
         to_port: 443
@@ -434,6 +433,7 @@
         from_port: 7002  # carbon cache query port
         to_port: 7002
         cidr_ip: "{{ vpc_cidr_block }}"        
+    rules_egress:
     purge_rules: true
     purge_rules_egress: true
 
