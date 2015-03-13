@@ -13,7 +13,7 @@ TARGET_AWS_ACCOUNT=239158370733 # Account with which to share the image - prod
 echo '-----------'
 echo 'Spawning....'
 echo '-----------'
-cd spawner
+cd tools
 ./spawner.py -B -t ami-builder:$APPLICATION -e $BUILD_ENV -a $APPLICATION -s 2>&1 | tee ami-builder.log || exit $?
 
 # Regret not making it easier to get the instance ID from the spawner

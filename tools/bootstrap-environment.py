@@ -114,22 +114,17 @@ def create_vpc_and_security_groups(hints):
     os.environ['SBAC_ENVIRO_BUILDER_MODE'] = 'dynamic'
     os.environ['SBAC_ENVIRO_BUILDER_ENV_NAME'] = hints['vpc']['env']
 
-    os.chdir('ansible')
+    os.chdir('../ansible')
     os.system('ansible-playbook -i inventories/localhost vpc-and-security-groups.yml')
-    os.chdir('..')
+    os.chdir('../tools')
 
 def init_iam(hints):
-    os.chdir('tools')
-    os.system("./initialize_iam_s3_roles.py -e {0}".format(hints['vpc']['env']))
-    os.chdir('..')
+    os.system("./update-iam.py -e {0}".format(hints['vpc']['env']))
 
 def create_ansible_host(hints):
 
     # Spawn, but do not ansiblize, the ansible server.
-    os.chdir('spawner')
-
     os.system("./spawner.py -a ansible -e {0} -s".format(hints['vpc']['env']))
     os.system("./spawner.py -a nat -e {0} -s".format(hints['vpc']['env'])) 
-    os.chdir('..')
         
 main()

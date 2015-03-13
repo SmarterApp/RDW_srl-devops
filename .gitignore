@@ -1,5 +1,5 @@
 *~
 *.pyc
 ansible/play.yml
-spawner/play.py
-spawner/ami-builder.log
+tools/play.py
+tools/ami-builder.log
