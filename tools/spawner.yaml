@@ -88,7 +88,8 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-rmq-client # Needed for sensu monitoring
-      # TODO - SG for sensu API calls
+      - srl-graphite
+      - srl-sensu-api
     instance_type: m3.medium # TODO - not yet sized
     spawn_count:
       dev: 1   
