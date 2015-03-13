@@ -2,7 +2,7 @@
   hosts: sensu
   sudo: yes
   vars:
-    sensu_client_subscriptions:
+    monitoring_topics:
       - common 
       - heartbeats
     sensu_install_server: true
@@ -13,9 +13,8 @@
 
   roles:
     - { role: common, tags: ['common']}
-    - { role: aws-cli, tags: ['aws-cli'] }
     # TODO - mount glusterfs for redis and carbon
     # - { role: gluster-client, tags: ['gluster'] }
-    - { role: redis, tags: ['redis'] }
-    - { role: carbon, tags: ['carbon'] }
-    - { role: sensu, tags: ['sensu'] }
+    - { role: redis, tags: ['redis', 'app'] }
+    - { role: carbon, tags: ['carbon', 'app'] }
+    - { role: sensu, tags: ['sensu', 'app'] }
