@@ -1,11 +1,15 @@
 ---
 - name: Configure the standalone database postgres server 
   hosts: hpz-db:tsb-db:stats-db:migrate-db
-  user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - db
+    - { role: common, tags:['common']}
+    # TODO: We need to update postgres user names and password
+    - { role: db, tags: ['db', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }
 
-# We might need to update postgres user names and password
+

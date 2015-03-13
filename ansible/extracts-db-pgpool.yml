@@ -1,12 +1,14 @@
 ---
 - name: Configure PgPool for PostreSQL connection pooling, load balancing, parallel queries 
   hosts: reporting-db-pgpool:extracts-db-pgpool
-  user: ansible
   sudo: yes
 
   vars:
     slave_dbs: "{{ extract_slave_dbs }}"
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - db-pgpool
+    - { role: common, tags:['common']}
+    - { role: db-pgpool, tags: ['db-pgpool', 'app'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

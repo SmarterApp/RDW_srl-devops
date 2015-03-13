@@ -29,7 +29,9 @@
   vars:
     node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
     node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
+    monitoring_topics:
+      - common 
   roles:
-    - common
-    - aws-cli
-    - gluster-server
+    - { role: common, tags:['common']}
+    - { role: gluster-server, tags: ['gluster-server', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }
