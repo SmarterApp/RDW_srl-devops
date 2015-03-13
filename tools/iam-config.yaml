@@ -1,12 +1,7 @@
 ---
-
-managed_policies:
-    
-
-
-# IAM policies define what can be done by an instance
+# IAM policies define what can be done by an instance to an S3 bucket
 # These polcies can be included into roles (below)
-inline_policies:
+iam_policies:
   yum_read_pol: >
     {
       "Statement": [
@@ -441,8 +436,6 @@ inline_policies:
         }
       ]
     }
-
-
 
 # Roles are associated to instance profiles (defined below).
 # There should be a 1:1 relationship between roles and instance

@@ -1,6 +1,6 @@
 *~
 *.pyc
 ansible/play.yml
-spawner/play.py
-spawner/ami-builder.log
 s3-mirrors
+tools/play.py
+tools/ami-builder.log

@@ -53,8 +53,8 @@ def connect_to_vpc():
     return vpc_conn
 
 def read_config_file(opts):
-    logging.info("Reading config file from ./spawner/spawner.yaml")
-    cfg = yaml.load(open("./spawner/spawner.yaml", 'r'))
+    logging.info("Reading config file from ./spawner.yaml")
+    cfg = yaml.load(open("./spawner.yaml", 'r'))
     return cfg
 
 def read_options():
@@ -110,8 +110,6 @@ def preflight(opts):
 
 def create_app_instances(opts, cfg):
 
-    os.chdir('spawner')
-    
     start = 0
     if opts.skip_to:
         for idx, app in enumerate(cfg['apps']):
@@ -132,8 +130,5 @@ def create_app_instances(opts, cfg):
             if rc != 0:
                 logging.info('Cowardly giving up. ')
                 exit(4)
-    
-    os.chdir('..')
-
-    
+        
 main()
