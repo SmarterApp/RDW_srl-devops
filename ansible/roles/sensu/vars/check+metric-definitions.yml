@@ -8,7 +8,7 @@ sensu_checks:
     handlers: 
       - store_in_carbon
     command: "/etc/sensu/plugins/disk-capacity-metrics.rb --scheme sys.:::name:::.disk"
-    interval: 10
+    interval: 300
     subscribers: # == monitoring_topics
       - common
 
@@ -23,7 +23,7 @@ sensu_checks:
     handlers:
       - store_in_carbon
       # TODO add pagerduty
-    interval: 10
+    interval: 300
     command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
     subscribers: 
       - heartbeats # == monitoring_topics
