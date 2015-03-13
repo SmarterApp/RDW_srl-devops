@@ -9,7 +9,7 @@ sensu_checks:
       - store_in_carbon
     command: "/etc/sensu/plugins/disk-capacity-metrics.rb --scheme sys.:::name:::.disk"
     interval: 10
-    subscribers:
+    subscribers: # == monitoring_topics
       - common
 
   # ================================================ #
@@ -26,4 +26,4 @@ sensu_checks:
     interval: 10
     command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
     subscribers: 
-      - heartbeats
+      - heartbeats # == monitoring_topics

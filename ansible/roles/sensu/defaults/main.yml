@@ -15,7 +15,7 @@ sensu_client_address: "{{ ec2_private_ip_address }}"
 
 # Array of channels to which to subscribe - ie, which sets of checks/metrics apply to this client.
 # Should be in a per-playbook variable list
-# sensu_client_subscriptions: []
+# monitoring_topics: []
 
 # Sensu Server variable
 sensu_server_redis_host: "127.0.0.1"
