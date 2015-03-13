@@ -1,10 +1,14 @@
 ---
 - name: Configure the tsb-web server 
   hosts: tsb-web 
-  user: ansible
   sudo: yes
 
+  vars:
+    monitoring_topics:
+      - common 
+
   roles:
-    - common
-    - edware
-    - tsb-web 
+    - { role: common, tags: ['common'] }
+    - { role: edware, tags: ['edware', 'app'] }
+    - { role: tsb-web, tags: ['tsb-web', 'app'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

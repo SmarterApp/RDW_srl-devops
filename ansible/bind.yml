@@ -1,8 +1,12 @@
 - name: Setup bind server
   hosts: bind
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common
   pre_tasks:
     - include: roles/bind/tasks/pre-common.yml
   roles:
-    - common
-    - bind
+    - { role: common, tags:['common']}
+    - { role: bind, tags:['bind', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

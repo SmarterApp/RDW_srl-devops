@@ -1,10 +1,13 @@
 ---
 - name: Configure reporting-generator-pdf servers 
   hosts: reporting-generator-pdf 
-  user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - edware
-    - reporting-generator-pdf
+    - { role: common, tags:['common']}
+    - { role: edware, tags: ['edware', 'app'] }
+    - { role: reporting-generator-pdf, tags: ['reporting-generator-pdf', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

@@ -1,12 +1,13 @@
 ---
 - name: Configure tsb-trigger server 
   hosts: tsb-trigger 
-  user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - edware
-    - { role: aws-cli, tags: ['aws-cli'] }
+    - { role: common, tags:['common']}
     - { role: gluster-client, tags: ['gluster-client'] }
-    - tsb-trigger 
+    - { role: tsb-trigger, tags: ['tsb-trigger', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }
