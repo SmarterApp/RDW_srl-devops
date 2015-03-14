@@ -10,6 +10,15 @@
     regexp: ^EMBEDDED_RUBY=
     line: "EMBEDDED_RUBY={{ sensu_server_embedded_ruby }}"
 
+- name: install gems needed by handlers, etc
+  gem:
+    name: "{{ item }}"
+    state: present
+    executable: /opt/sensu/embedded/bin/gem
+  with_items: sensu_rubygems
+  tags:
+    - slow
+
 - name: set which user to use
   lineinfile:
     dest: /etc/default/sensu

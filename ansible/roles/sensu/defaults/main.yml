@@ -12,6 +12,9 @@ sensu_group: sensu
 sensu_client_hostname: "{{ ec2_tag_Name }}"
 sensu_client_address: "{{ ec2_private_ip_address }}"
 
+# Array of rubygems to install using the embedded sensu ruby.  These might be needed for a plugin.
+# Empty by default.
+sensu_rubygems: []
 
 # Array of channels to which to subscribe - ie, which sets of checks/metrics apply to this client.
 # Should be in a per-playbook variable list
