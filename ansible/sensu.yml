@@ -6,6 +6,8 @@
       - common 
       - heartbeats
     sensu_install_server: true
+    sensu_rubygems:
+      - redphone
 
   vars_files:
     - roles/sensu/vars/check+metric-definitions.yml

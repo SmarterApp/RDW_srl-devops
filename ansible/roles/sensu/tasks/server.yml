@@ -48,7 +48,19 @@
   notify:
     - restart sensu server
 
-- name: copy conf.d files
+- name: template any dynamic conf.d files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/sensu/conf.d/{{ item }}"
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0640
+  with_items:
+    - pagerduty-conf.json
+  notify:
+    - restart sensu server
+
+- name: copy static conf.d files
   copy:
     src: conf/
     dest: /etc/sensu/conf.d/

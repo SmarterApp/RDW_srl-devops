@@ -15,6 +15,11 @@
     msg: "You must provide the variable sensu_handlers as a playbook variable"
   when: sensu_install_server and (sensu_handlers is not defined)
 
+- name: Require sensu_pagerduty_api_key variable
+  fail:
+    msg: "You must provide the variable sensu_pagerduty_api_key in group_vars/ENV/secrets.yml"
+  when: sensu_install_server and (sensu_pagerduty_api_key is not defined)
+
 - name: Require sensu_rabbit_host variable
   fail:
     msg: "You must provide the variable sensu_rabbit_host in group_vars/ENV/secrets.yml"
