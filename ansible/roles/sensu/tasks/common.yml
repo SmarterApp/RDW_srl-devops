@@ -15,6 +15,7 @@
     name: "{{ item }}"
     state: present
     executable: /opt/sensu/embedded/bin/gem
+    user_install: no
   with_items: sensu_rubygems
   tags:
     - slow

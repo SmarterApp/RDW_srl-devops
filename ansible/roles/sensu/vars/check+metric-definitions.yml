@@ -15,6 +15,15 @@ sensu_checks:
   # ================================================ #
   #                  heartbeats
   # ================================================ #
+  check.lz.heartbeat.sshbanner:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
   lz.heartbeat.sshbanner:
     type: metric
     output_type: nagios_check
@@ -22,8 +31,7 @@ sensu_checks:
     auto_tag_host: 'no'
     handlers:
       - store_in_carbon
-      # TODO add pagerduty
-    interval: 300
+    interval: 30
     command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
     subscribers: 
       - heartbeats # == monitoring_topics
