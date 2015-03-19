@@ -11,9 +11,9 @@ def main():
     opts = read_options()
     cfg = read_config_file(opts)
     hints = preflight(opts, cfg)
-    create_roles(hints, cfg)
-    create_instance_profiles(hints, cfg)
-    # create_managed_profiles(hints, cfg)
+    create_groups(hints, cfg)
+    #create_roles(hints, cfg)
+    #create_instance_profiles(hints, cfg)
     # create_users(hints, cfg)
 
 def read_options():
@@ -141,9 +141,13 @@ def create_instance_profiles(hints, cfg):
             iam_conn.add_role_to_instance_profile(profile_name, role_name)
             logging.info("- NEW - Instance Profile {0} updated to map 1:1 to {1}".format(profile_name, role_name))
 
-def create_managed_profiles(hints, cfg):
-    # iam_conn = hints['iam']['conn']
-    # https://github.com/boto/boto/issues/2956
-    None
+def create_groups(hints, cfg):
+    # List groups and look for the ones that should exist
+    all_groups = hints['iam']['conn'].get_all_groups()
+    import pdb; pdb.set_trace()
+    
+    # For each group, list policies, and check for spurious
+    # For each group, list policies, and check for missing
+    # For each group, list policies, and update if needed
             
 main()
