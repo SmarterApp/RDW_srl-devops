@@ -1,15 +1,11 @@
 #!/usr/bin/python
 
-import boto.vpc
 from optparse import OptionParser
 import logging
 import yaml
-import os
-import os.path
-from subprocess import Popen, PIPE
 from jinja2 import Template
 import time
-
+from srl.aws import *
 
 def main():
     opts = read_options()
@@ -19,39 +15,6 @@ def main():
     create_instance_profiles(hints, cfg)
     # create_managed_profiles(hints, cfg)
     # create_users(hints, cfg)
-
-# TODO: copypasta from spawner.py, DRY up4
-def backtick(cmd):
-    output = Popen(cmd, stdout=PIPE, shell=True).communicate()[0].rstrip()
-    return output
-    
- # TODO: copypasta from spawner.py, DRY up
-def get_aws_creds():
-    if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
-        return (os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY'))
-    else:
-        
-        logging.debug("reading AWS creds from password store")
-        if not os.environ.get('SBAC_ENV').endswith('security'):
-            logging.error("SBAC_ENV environment variable must be set to a credential set that ends in 'security', like 'dev/security'")
-            exit(1)            
-        access_id = backtick('pass $SBAC_ENV/aws/access_id')
-        secret_key = backtick('pass $SBAC_ENV/aws/secret_key')
-        return (access_id, secret_key)
-    
-
-# TODO: copypasta from spawner.py, DRY up
-def connect_to_vpc():
-    (access_id, secret_key) = get_aws_creds()
-    vpc_conn = boto.vpc.VPCConnection(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
-    logging.info("connected to AWS VPC OK")
-    return vpc_conn
-
-def connect_to_iam():
-    (access_id, secret_key) = get_aws_creds()
-    iam_conn = boto.connect_iam(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
-    logging.info("connected to AWS IAM OK")
-    return iam_conn
 
 def read_options():
     parser = OptionParser()
@@ -83,10 +46,10 @@ def preflight(opts, cfg):
     #--------------
     hints['vpc'] = {}
     hints['iam'] = {}
-    vpc_conn = connect_to_vpc()
+    vpc_conn = connect_to_vpc(required_cred_class = 'security')
     hints['vpc']['conn'] = vpc_conn
     hints['vpc']['env'] = opts.env
-    iam_conn = connect_to_iam()
+    iam_conn = connect_to_iam(required_cred_class = 'security')
     hints['iam']['conn'] = iam_conn
     vpcs = [ v for v in vpc_conn.get_all_vpcs() if v.tags.get('Environment') == opts.env ]
     if len(vpcs) > 1:
@@ -130,7 +93,7 @@ def create_roles(hints, cfg):
             
         # Create each of the inline policies in the role        
         for p in cfg['iam_roles'][r]:
-            template = Template(cfg['inline_policies'][p])
+            template = Template(cfg['iam_policies'][p])
 
             # If we are in a test env, just use the dev yum repo
             if p.startswith('yum') and hints['vpc']['env'].startswith('test'):
