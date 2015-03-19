@@ -3,6 +3,8 @@
 from optparse import OptionParser
 import logging
 import yaml
+import json
+from StringIO import StringIO
 from jinja2 import Template
 import time
 from srl.aws import *
@@ -12,9 +14,8 @@ def main():
     cfg = read_config_file(opts)
     hints = preflight(opts, cfg)
     create_groups(hints, cfg)
-    #create_roles(hints, cfg)
-    #create_instance_profiles(hints, cfg)
-    # create_users(hints, cfg)
+    create_roles(hints, cfg)
+    create_instance_profiles(hints, cfg)
 
 def read_options():
     parser = OptionParser()
@@ -143,11 +144,92 @@ def create_instance_profiles(hints, cfg):
 
 def create_groups(hints, cfg):
     # List groups and look for the ones that should exist
-    all_groups = hints['iam']['conn'].get_all_groups()
-    import pdb; pdb.set_trace()
-    
-    # For each group, list policies, and check for spurious
-    # For each group, list policies, and check for missing
-    # For each group, list policies, and update if needed
+    conn = hints['iam']['conn']
+    all_groups = iam_list(conn, 'groups', 'get_all')
+
+    for tier in ['inventory', 'spinup', 'security']:
+        
+        # Ensure group exists
+        group_name = 'edware-' + tier
+        policy_name = group_name + '_pol'
+        group = all_groups.get(group_name)
+        if group:
+            logging.info("- OK  - Group {0} exists".format(group_name))
+        else:
+            group = conn.create_group(group_name)['create_group_response']['create_group_result']['group']
+            logging.info("- NEW - Group {0} created".format(group_name))
+
+        # Check policy members on group - should be exactly one 
+        current_policy_names = set(conn.get_all_group_policies(group.group_name)['list_group_policies_response']['list_group_policies_result']['policy_names']) # @#$%#$ irregular API
+        expected_policy_names = set([ policy_name ])
+        spurious_policy_names = current_policy_names - expected_policy_names
+        missing_policy_names  = expected_policy_names - current_policy_names
+        for gp in spurious_policy_names:
+            conn.delete_group_policy(group_name, gp)
+            current_policy_names = current_policy_names - set([gp])
+            logging.info("- DEL - Group {0} has spurious policy named {1}, deleting".format(group_name, gp))
+
+        desired_definition = generate_group_policy(tier, policy_name, cfg, conn)
+        current_definition = '{}'
+        if len(current_policy_names) == 1:
+            current_definition = conn.get_group_policy(group_name, policy_name)
             
+        if current_definition == desired_definition:  # These are strings of canonicalized JSON
+            logging.info("- OK  - Group {0} has correct policy named {1}".format(group_name, policy_name))
+        else:
+            conn.put_group_policy(group_name, policy_name, desired_definition)
+            if len(current_policy_names) == 1:
+                logging.info("- UPD - Group {0} needed update on policy named {1}".format(group_name, policy_name))
+            else:
+                logging.info("- NEW - Group {0} was missing policy named {1}".format(group_name, policy_name))            
+
+def iam_list(conn, subject, method = 'list', key='name', args=[], singular=None):
+    items_by_key = {}
+    if not singular:
+        singular = subject[:-1]
+    
+    raw_result = getattr(conn, method + '_' + subject)(*args)
+    # Note that the response is always packed with a 'list' prefix
+    raw_result = raw_result['list_' + subject + '_response']
+    raw_result = raw_result['list_' + subject + '_result']
+    raw_result = raw_result[subject]
+    for i in raw_result:
+        item_key = getattr(i, singular + '_' + key)
+        items_by_key[item_key] = i
+    return items_by_key
+
+
+def generate_group_policy(tier, policy_name, cfg, conn):
+    # Fetch policy definition from YAML into python dict
+    policy = json.loads(cfg['iam_policies'][policy_name])
+    
+    # If spinup, generate the pass role perms
+    if tier == 'spinup':
+        add_pass_roles_to_spinup_policy(policy, cfg, conn)
+        
+    # Convert to JSON string, canonicalizing
+    return dict2json(policy)
+
+def dict2json(thing):
+    io = StringIO()
+    json.dump(thing, io, sort_keys=True,indent=2)
+    return io.getvalue()
+    
+def add_pass_roles_to_spinup_policy(policy, cfg, conn):
+
+    # Find PassRole rule
+    rule = [r for r in policy['Statement'] if r['Action'][0] == 'iam:PassRole'][0] # TODO - seems brittle
+    # Reset targets
+    rule['Resource'] = []
+    
+    # Get a list of environments
+    for env in ['', '_test186']: # TODO: make this dynamnic, using conn to get VPC list?                
+        # Get a list of roles
+        for role in cfg['iam_roles'].keys():
+            rule['Resource'].append('arn:aws:iam::*:role/' + role + env)
+
+    rule['Resource'].sort()
+
+    return policy
+
 main()
