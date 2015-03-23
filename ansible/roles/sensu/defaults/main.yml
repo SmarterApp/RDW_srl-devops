@@ -1,0 +1,33 @@
+---
+# defaults file for sensu
+
+# Variable to control the installation
+sensu_install_client: true
+sensu_install_server: false
+
+sensu_user:  sensu
+sensu_group: sensu
+
+# Sensu client variable
+sensu_client_hostname: "{{ ec2_tag_Name }}"
+sensu_client_address: "{{ ec2_private_ip_address }}"
+
+# Array of rubygems to install using the embedded sensu ruby.  These might be needed for a plugin.
+# Empty by default.
+sensu_rubygems: []
+
+# Array of channels to which to subscribe - ie, which sets of checks/metrics apply to this client.
+# Should be in a per-playbook variable list
+# monitoring_topics: []
+
+# Sensu Server variable
+sensu_server_redis_host: "127.0.0.1"
+
+sensu_server_api_host: "127.0.0.1"
+
+sensu_server_embedded_ruby: "true"
+
+# sensu_rabbit_host: "127.0.0.1" # Dynamically set from AWS inventory in group_vars/ENV/service-locators.yml
+sensu_rabbit_user    : "sensu"
+sensu_rabbit_port    : "5671"
+# sensu_rabbit_password: "placeholder" # Set in group_vars/ENV/secrets.yml

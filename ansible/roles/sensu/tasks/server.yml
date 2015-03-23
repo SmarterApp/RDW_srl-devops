@@ -1,0 +1,71 @@
+---
+- name: enable sensu-{server,api} services
+  service: 
+    name: sensu-{{ item }} 
+    enabled: yes
+  with_items:
+    - server
+    - api
+
+- name: generate /etc/sensu/conf.d/checks.json
+  template:
+    src: checks.json.j2
+    dest: /etc/sensu/conf.d/checks.json
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
+  notify:
+    - restart sensu server
+    - restart sensu client
+
+- name: generate /etc/sensu/conf.d/handlers.json
+  template:
+    src: handlers.json.j2
+    dest: /etc/sensu/conf.d/handlers.json
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
+  notify:
+    - restart sensu server
+
+- name: copy the handlers files
+  copy:
+    src: handlers/
+    dest: /etc/sensu/handlers/
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
+  notify:
+    - restart sensu server
+
+- name: copy extension files
+  copy:
+    src: extensions/
+    dest: /etc/sensu/extensions/
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
+  notify:
+    - restart sensu server
+
+- name: template any dynamic conf.d files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/sensu/conf.d/{{ item }}"
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0640
+  with_items:
+    - pagerduty-conf.json
+  notify:
+    - restart sensu server
+
+- name: copy static conf.d files
+  copy:
+    src: conf/
+    dest: /etc/sensu/conf.d/
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0640
+  notify:
+    - restart sensu server

@@ -1,0 +1,55 @@
+---
+- name: install sensu
+  yum:
+    name: sensu
+    state: present
+
+- name: set which Ruby to use
+  lineinfile:
+    dest: /etc/default/sensu
+    regexp: ^EMBEDDED_RUBY=
+    line: "EMBEDDED_RUBY={{ sensu_server_embedded_ruby }}"
+
+- name: install gems needed by handlers, etc
+  gem:
+    name: "{{ item }}"
+    state: present
+    executable: /opt/sensu/embedded/bin/gem
+    user_install: no
+  with_items: sensu_rubygems
+  tags:
+    - slow
+
+- name: set which user to use
+  lineinfile:
+    dest: /etc/default/sensu
+    regexp: ^USER=
+    line: "USER={{ sensu_user }}"
+
+- name: create the SSL directory
+  file:
+    path: /etc/sensu/ssl
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0750
+    state: directory
+
+- name: add ssl keys
+  shell: '/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-sensu-ssl/sensu /etc/sensu/ssl/'
+  register: sensu_s3_sync
+  changed_when: "sensu_s3_sync.stdout != ''"
+  notify:
+    - restart sensu server
+    - restart sensu client
+
+- name: generate /etc/sensu/config.json
+  template:
+    src: sensu.config.json.j2
+    dest: /etc/sensu/config.json
+    owner: "{{ sensu_user }}"
+    group: "{{ sensu_group }}"
+    mode: 0640
+    backup: yes
+  notify:
+    - restart sensu server
+    - restart sensu client

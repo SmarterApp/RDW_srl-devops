@@ -1,9 +1,12 @@
 ---
 - name: Configure loghost for log aggregation 
   hosts: loghost 
-  user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - loghost 
+    - { role: common, tags:['common']}
+    - { role: loghost, tags:['loghost', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

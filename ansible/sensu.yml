@@ -1,0 +1,22 @@
+- name: Sensu Server (server, client, API, redis)
+  hosts: sensu
+  sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
+      - heartbeats
+    sensu_install_server: true
+    sensu_rubygems:
+      - redphone
+
+  vars_files:
+    - roles/sensu/vars/check+metric-definitions.yml
+    - roles/sensu/vars/handler-definitions.yml
+
+  roles:
+    - { role: common, tags: ['common']}
+    # TODO - mount glusterfs for redis and carbon
+    # - { role: gluster-client, tags: ['gluster'] }
+    - { role: redis, tags: ['redis', 'app'] }
+    - { role: carbon, tags: ['carbon', 'app'] }
+    - { role: sensu, tags: ['sensu', 'app'] }

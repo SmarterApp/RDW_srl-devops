@@ -27,6 +27,7 @@ apps:
       - srl-ssh-intra-vpc
       - srl-ssh-from-vestibule
       - srl-logging
+      - srl-rmq-client # Needed for sensu monitoring
     instance_type: m3.medium
     spawn_count:
       dev: 0  # Deployed by external bootstrapper
@@ -37,6 +38,7 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-nat
+      - srl-rmq-client # Needed for sensu monitoring
     instance_type: m3.medium
     public_ip: True
     subnet_type: public
@@ -51,6 +53,7 @@ apps:
       - srl-logging
       - srl-bind
       - srl-ntp-server
+      - srl-rmq-client # Needed for sensu monitoring
     instance_type: m3.medium # TODO: verify    
     spawn_count:
       dev: 1   # TODO: verify
@@ -62,15 +65,41 @@ apps:
       - srl-ssh-intra-vpc
       - srl-glusterfs
       - srl-logging
+      - srl-rmq-client # Needed for sensu monitoring
     instance_type: m3.medium # TODO: verify  
     spawn_count:
       dev: 2
       prod: 2
 
+  - name: sensu-rabbit
+    ami_app_name: base
+    security_groups:
+      - srl-ssh-intra-vpc
+      - srl-rmq
+      - srl-logging
+      - srl-rmq-client # Needed for sensu monitoring
+    instance_type: m3.large # TODO - not yet sized
+    spawn_count:
+      dev: 1   
+      prod: 1  
+
+  - name: sensu
+    ami_app_name: base
+    security_groups:
+      - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
+      - srl-graphite
+      - srl-sensu-api
+    instance_type: m3.medium # TODO - not yet sized
+    spawn_count:
+      dev: 1   
+      prod: 1  
+
   - name: loghost
     ami_app_name: base # Playbook runs from base
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-kibana-from-vestibule
       - srl-logstash
     instance_type: m2.xlarge 
@@ -82,6 +111,7 @@ apps:
     ami_app_name: memcached 
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-memcached
       - srl-logging
     #instance_type: m2.4xlarge #Not supported in region
@@ -94,6 +124,7 @@ apps:
     ami_app_name: db # per doris
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-logging
     instance_type: m3.2xlarge
@@ -105,6 +136,7 @@ apps:
     ami_app_name: db
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-logging
     instance_type: m3.2xlarge
@@ -116,6 +148,7 @@ apps:
     ami_app_name: db 
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-logging
     instance_type: m3.2xlarge
@@ -127,6 +160,7 @@ apps:
     ami_app_name: db 
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-logging
     instance_type: m3.2xlarge
@@ -138,6 +172,7 @@ apps:
     ami_app_name: db 
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-db-client
       - srl-db-pool-pcp
@@ -152,6 +187,7 @@ apps:
     ami_app_name: rabbit
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-logging
       - srl-rmq
     instance_type: m3.2xlarge
@@ -163,6 +199,7 @@ apps:
     ami_app_name: rabbit
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
@@ -174,6 +211,7 @@ apps:
     ami_app_name: rabbit
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
@@ -185,6 +223,7 @@ apps:
     ami_app_name: rabbit-encrypted
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
@@ -196,6 +235,7 @@ apps:
     ami_app_name: rabbit
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-rmq
       - srl-logging
     instance_type: m3.xlarge
@@ -207,6 +247,7 @@ apps:
     ami_app_name: db-master-hvm
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-logging
     instance_type: r3.2xlarge
@@ -219,6 +260,7 @@ apps:
     ami_app_name: lz
     security_groups:
       - srl-ssh-from-anywhere # LZ receives SFTP from the world
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-logging
     instance_type: m3.xlarge
     subnet_type: lz
@@ -231,6 +273,7 @@ apps:
     ami_app_name: file-grabber
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-logging
     instance_type: m3.large
     spawn_count:
@@ -241,6 +284,7 @@ apps:
     ami_app_name: file-trigger 
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-logging
       - srl-rmq-client
       - srl-glusterfs-udl-client
@@ -253,6 +297,7 @@ apps:
     ami_app_name: udl
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db-client
       - srl-logging
     instance_type: m3.2xlarge
@@ -264,6 +309,7 @@ apps:
     # ami_app_name: base # TODO: remove this when the real AMI is available
     # security_groups:
       # - srl-ssh-intra-vpc
+      # - srl-rmq-client # Needed for sensu monitoring
       # - srl-db-client
       # - srl-db-pgbouncer
       # - srl-logging
@@ -276,6 +322,7 @@ apps:
     ami_app_name: db-slave-hvm
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-logging
     instance_type: r3.2xlarge
@@ -287,6 +334,7 @@ apps:
     ami_app_name: db-slave-hvm
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db
       - srl-logging
     instance_type: r3.2xlarge
@@ -298,6 +346,7 @@ apps:
     ami_app_name: pg-pool 
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db-client
       - srl-db-pool
       - srl-logging
@@ -310,6 +359,7 @@ apps:
     ami_app_name: pg-pool 
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-db-client
       - srl-db-pool
       - srl-logging
@@ -323,7 +373,7 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db-client
-      - srl-rmq-client
+      - srl-rmq-client # Needed for app, and also sensu monitoring
       - srl-glusterfs-udl-client
       - srl-logging
     instance_type: m3.xlarge
@@ -336,7 +386,7 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-web
-      - srl-rmq-client
+      - srl-rmq-client # Needed for app, and also sensu monitoring
       - srl-sso-client
       - srl-logging
     instance_type: m3.xlarge
@@ -348,6 +398,7 @@ apps:
     ami_app_name: tsb-trigger
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-logging
     instance_type: m3.large
     spawn_count:
@@ -358,6 +409,7 @@ apps:
     ami_app_name: hpz-web
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-web
       - srl-hpz-web
       - srl-db-client
@@ -373,7 +425,7 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db-pool-client
-      - srl-rmq-client
+      - srl-rmq-client # Needed for app, and also sensu monitoring
       - srl-web-client
       - srl-glusterfs-extract-client
       - srl-logging
@@ -386,7 +438,7 @@ apps:
     ami_app_name: reporting-worker-pdf
     security_groups:
       - srl-ssh-intra-vpc
-      - srl-rmq-client
+      - srl-rmq-client # Needed for app, and also sensu monitoring
       - srl-sso-client
       - srl-web-client
       - srl-glusterfs-pdf-client
@@ -403,7 +455,7 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db-pool-client
-      - srl-rmq-client
+      - srl-rmq-client # Needed for app, and also sensu monitoring
       - srl-memcached
       - srl-web
       - srl-logging
@@ -416,6 +468,7 @@ apps:
     ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
       - srl-memcached
       - srl-logging
     instance_type: m3.large
@@ -427,7 +480,7 @@ apps:
     ami_app_name: reporting-generator # per doris
     security_groups:
       - srl-ssh-intra-vpc
-      - srl-rmq-client
+      - srl-rmq-client # Needed for app, and also sensu monitoring
       - srl-logging
     instance_type: m3.large
     spawn_count:

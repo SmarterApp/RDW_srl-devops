@@ -1,7 +1,7 @@
 ---
 # IAM policies define what can be done by an instance to an S3 bucket
 # These polcies can be included into roles (below)
-iam_policies:
+inline_policies:
   yum_read_pol: >
     {
       "Statement": [
@@ -145,6 +145,40 @@ iam_policies:
             "s3:DeleteObject"
            ],
           "Resource": ["arn:aws:s3:::srl-{{ env }}-apache-internal-ssl/*"]
+        }
+      ]
+    }
+  sensu_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl/*"]
+        }
+      ]
+    }
+  sensu_ssl_write_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+           ],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl/*"]
         }
       ]
     }
@@ -337,87 +371,130 @@ iam_roles:
     - yum_write_pol
     - gluster_ssl_write_pol
     - apache_ssl_write_pol
+    - sensu_ssl_write_pol
   nat_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   bind_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
+  sensu-rabbit_role:
+    - yum_read_pol
+    - sensu_ssl_read_pol
+  sensu_role:
+    - yum_read_pol
+    - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   gluster-server_role:
     - yum_read_pol
     - gluster_ssl_write_pol
+    - sensu_ssl_read_pol
   loghost_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   memcached_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   hpz-db_role:
-    - yum_read_pol
+    - yum_read_pol    
+    - sensu_ssl_read_pol
   tsb-db_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   stats-db_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   udl-db_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   migrate-db_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   migrate-rabbit_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-rabbit-extract_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-rabbit-services_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   tsb-rabbit_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   udl-rabbit_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   db-master_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   lz_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   file-grabber_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   file-trigger_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   udl_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   db-pgbouncer_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-db-slave_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   extracts-db-slave_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-db-pgpool_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   extracts-db-pgpool_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   tsb-worker_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
     - gluster_ssl_read_pol
   tsb-web_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
     - apache_ssl_read_pol
   tsb-trigger_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
     - gluster_ssl_read_pol
   hpz-web_role:
     - yum_read_pol
     - gluster_ssl_read_pol
     - apache_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-worker-extract_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-worker-pdf_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-web_role:
     - yum_read_pol
     - apache_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-cache-warmer_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-generator-pdf_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   base_role:
     - yum_read_pol
+
 

@@ -1,0 +1,14 @@
+ sensu_handlers:
+
+   # Note: This file is for custom hand-made handlers.  Most production handlers are defined via extensions, which automatically declare.
+
+   # Simple debugging, see 
+   logevent:
+     type: pipe
+     command: "/etc/sensu/handlers/logevent.rb"
+
+   pagerduty:
+     type: pipe
+      # sensu_pagerduty_api_key - TODO
+     command: "/etc/sensu/handlers/pagerduty.rb"
+

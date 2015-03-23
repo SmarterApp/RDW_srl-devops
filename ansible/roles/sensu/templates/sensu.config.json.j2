@@ -1,0 +1,24 @@
+{
+  "rabbitmq": {
+    "ssl": {
+      "private_key_file": "/etc/sensu/ssl/key.pem",
+      "cert_chain_file": "/etc/sensu/ssl/cert.pem"
+    },
+    "port": {{ sensu_rabbit_port }},
+    "host": "{{ sensu_rabbit_host }}",
+    "user": "{{ sensu_rabbit_user }}",
+    "password": "{{sensu_rabbit_password}}",
+    "vhost": "sensu"
+  }
+{% if sensu_install_server %}
+  ,
+  "redis": {
+    "host": "{{ sensu_server_redis_host }}",
+    "port": 6379
+  },
+  "api": {
+    "host": "{{ sensu_server_api_host }}",
+    "port": 4567
+  }
+{% endif %}
+}

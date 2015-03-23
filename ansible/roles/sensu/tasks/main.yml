@@ -1,0 +1,12 @@
+---
+# tasks file for sensu
+
+- include: preflight.yml
+
+- include: common.yml
+
+- include: server.yml
+  when: sensu_install_server
+
+- include: client.yml
+  when: sensu_install_client

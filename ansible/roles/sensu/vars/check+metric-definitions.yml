@@ -1,0 +1,37 @@
+sensu_checks:
+
+  # ================================================ #
+  #                common - metrics
+  # ================================================ #
+  disk-capacity-metrics: 
+    type: metric
+    handlers: 
+      - store_in_carbon
+    command: "/etc/sensu/plugins/disk-capacity-metrics.rb --scheme sys.:::name:::.disk"
+    interval: 300
+    subscribers: # == monitoring_topics
+      - common
+
+  # ================================================ #
+  #                  heartbeats
+  # ================================================ #
+  check.lz.heartbeat.sshbanner:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
+  lz.heartbeat.sshbanner:
+    type: metric
+    output_type: nagios_check
+    prefix: app
+    auto_tag_host: 'no'
+    handlers:
+      - store_in_carbon
+    interval: 30
+    command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
+    subscribers: 
+      - heartbeats # == monitoring_topics
