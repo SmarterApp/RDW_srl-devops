@@ -1,4 +1,0 @@
-  
-- name: dump wtf
-  debug:
-    var: wtf
