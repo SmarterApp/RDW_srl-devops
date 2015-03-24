@@ -1,7 +1,7 @@
 ---
 # IAM policies define what can be done by an instance to an S3 bucket
 # These polcies can be included into roles (below)
-inline_policies:
+iam_policies:
   yum_read_pol: >
     {
       "Statement": [
@@ -344,6 +344,7 @@ inline_policies:
             "iam:ListRoles",
             "iam:ListUserPolicies",
             "iam:ListUsers",
+            "iam:PassRole",
             "iam:PutGroupPolicy",
             "iam:PutRolePolicy",
             "iam:PutUserPolicy",
