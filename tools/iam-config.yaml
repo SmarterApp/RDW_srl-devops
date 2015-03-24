@@ -2,6 +2,33 @@
 # IAM policies define what can be done by an instance to an S3 bucket
 # These polcies can be included into roles (below)
 inline_policies:
+  archive_write_pol: >
+    {
+      "Statement": [
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:ListBucket",
+                  "s3:CreateBucket",
+                  "s3:PutBucketPolicy",
+                  "s3:PutLifecycleConfiguration"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::srl-{{ env }}-archive"
+              ]
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:GetObject",
+                  "s3:PutObject"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::srl-{{ env }}-archive/*"
+              ]
+          }
+      ]
+    }
   yum_read_pol: >
     {
       "Statement": [
@@ -436,6 +463,7 @@ iam_roles:
     - yum_read_pol
     - gluster_ssl_read_pol
     - sensu_ssl_read_pol
+    - archive_write_pol
   file-trigger_role:
     - yum_read_pol
     - gluster_ssl_read_pol
