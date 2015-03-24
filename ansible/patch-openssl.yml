@@ -1,0 +1,7 @@
+---
+- name: Update openssl package
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: yum openssl upgrade
+      yum: name=openssl* state=latest
