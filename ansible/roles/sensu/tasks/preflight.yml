@@ -22,7 +22,7 @@
 
 - name: Require sensu_rabbit_host variable
   fail:
-    msg: "You must provide the variable sensu_rabbit_host in group_vars/ENV/secrets.yml"
+    msg: "You must provide the variable sensu_rabbit_host in group_vars/ENV/service_locators.yml"
   when: sensu_rabbit_host is not defined
 
 - name: Require sensu_rabbit_password variable

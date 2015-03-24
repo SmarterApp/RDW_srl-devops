@@ -57,8 +57,7 @@ bind_host: "{{groups.get('bind', []) | intersect(locals) | first | default('127.
 dns_search_domain: "{{ ec2_tag_environment }}.ae1.sbac2dc.net"
 loghost: "{{groups.get('loghost', []) | intersect(locals) | first | default('127.0.0.1')}}"
 loghost_port: 10514 
-
-
+sensu_rabbit_host: "{{groups.get('sensu-rabbit', []) | intersect(locals) | first | default('127.0.0.1')}}"
 domain: "{{ dns_search_domain }}" # concise
 
 
