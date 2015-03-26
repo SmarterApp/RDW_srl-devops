@@ -8,8 +8,8 @@
   tags:
     - slow
 
-- name: Update Yum cache
-  command: yum makecache
-  tags:
-    - slow
+#- name: Update Yum cache
+#  command: yum makecache
+#  tags:
+#    - slow
 

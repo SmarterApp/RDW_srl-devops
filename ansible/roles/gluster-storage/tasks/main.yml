@@ -1,7 +1,9 @@
 ---
+#TODO
+#- name: "check that we have only two nodes. we fail here if we don't"
+#  failed_when: 
 
 - include_vars: gluster-storage.yml
-
 - name: provision ebs storage on gluster nodes
   local_action:
     module: ec2_vol
@@ -9,7 +11,7 @@
     aws_secret_key: "{{ aws_secret_key }}"
     instance: "{{ hostvars[item[0]].ec2_id }}"
     device_name: "/dev/{{ item[1].dev }}"
-    volume_size: "{{ item[1].size[spawner_env] }}"
+    volume_size: "{{ item[1].size }}"
     state: present
     encrypted: yes
     region: "{{ region }}"
@@ -18,15 +20,14 @@
     - storage_devices
   register: ec2_vols
 
-# - name: show me the vol ids
-#   debug:
-#     var: item
-#   with_items: ec2_vols.results
+- name: show me the vol ids
+  debug:
+    var: item.volume_id
+  with_items: ec2_vols.results
 
 - name: tag the volumes we just created 
   local_action: ec2_tag resource="{{ item.volume_id }}" state=present region="{{ region }}" aws_access_key="{{ aws_access_key }}" aws_secret_key="{{ aws_secret_key }}"
   with_items: ec2_vols.results
   args:
     tags:
-      Name: "{{ item.item[1].name }}"
-      environment: "{{ spawner_env }}"
+      Name: "gluster-{{ spawner_env }}"

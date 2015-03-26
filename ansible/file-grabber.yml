@@ -1,14 +1,12 @@
 ---
 - name: Configure file-grabber server 
   hosts: file-grabber 
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags:['common']}
-    - { role: edware, tags: ['edware', 'app'] }
+    - common
+    - edware
+    - file-grabber
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    - { role: file-grabber, tags: ['file-grabber', 'app']}
-    - { role: sensu, tags: ['sensu', 'monitoring'] }

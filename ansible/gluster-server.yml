@@ -1,21 +1,12 @@
 ---
-
-- name: Preflight variables
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  tasks:
-    - name: Require spawner_env
-      fail: 
-        msg: "You must provide the 'spawner_env' variable via the -e option"
-      when: spawner_env is not defined
-
 - name: Provision GlusterFS storage
   hosts: localhost
   connection: local
   gather_facts: no
   vars:
     region: 'us-east-1' # TODO
+    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
+    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
   roles:
     - aws-creds
     - gluster-storage
@@ -29,9 +20,7 @@
   vars:
     node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
     node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
-    monitoring_topics:
-      - common 
   roles:
-    - { role: common, tags:['common']}
-    - { role: gluster-server, tags: ['gluster-server', 'app']}
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - common
+    - aws-cli
+    - gluster-server

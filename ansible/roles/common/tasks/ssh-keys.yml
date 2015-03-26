@@ -7,7 +7,6 @@
   shell: find /home -name authorized_keys | cut -f 3 -d'/'
   register: ak_files
   ignore_errors: yes
-  changed_when: false
 
 - name: Purge authorized_keys for all users except those allowed, when in dev
   file:

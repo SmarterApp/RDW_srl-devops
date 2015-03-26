@@ -1,13 +1,11 @@
 ---
 - name: Configure HPZ Web servers 
   hosts: hpz-web 
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags:['common']}
+    - common
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    - { role: hpz-web, tags: ['hpz-web', 'app'] }
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - hpz-web 

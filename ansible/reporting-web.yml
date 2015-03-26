@@ -1,13 +1,10 @@
 ---
 - name: Configure the reporting webserver hosts
   hosts: reporting-web
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags: ['common' ] }
-    - { role: edware, tags: ['edware', 'app'] }
-    - { role: reporting-web, tags: ['reporting-web', 'app'] }
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - common
+    - edware
+    - reporting-web

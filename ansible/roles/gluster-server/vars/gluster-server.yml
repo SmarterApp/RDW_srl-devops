@@ -11,8 +11,6 @@ brick_devices:
   - { dev: xvdo, label: zones2 }
   - { dev: xvdp, label: pdf1 }
   - { dev: xvdq, label: pdf2 }
-  - { dev: xvdr, label: sensu1 }
-  - { dev: xvds, label: sensu2 }
 
 volumes:
   - data
@@ -21,7 +19,6 @@ volumes:
   - uploads
   - zones
   - pdf
-  - sensu
 
 vol_ssl:
   - { vol: data, ssl: "data" }
@@ -30,4 +27,3 @@ vol_ssl:
   - { vol: uploads, ssl: "uploads" }
   - { vol: zones, ssl: "zones" }
   - { vol: pdf, ssl: "pdf" }
-  - { vol: sensu, ssl: "sensu" }

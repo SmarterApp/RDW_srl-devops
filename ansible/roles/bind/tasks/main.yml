@@ -1,6 +1,9 @@
 ---
 - include: ntpd.yml
 
+- name: Install named
+  yum: name=bind state=present
+
 - name: Template named.conf
   template:
     dest: /etc/named.conf

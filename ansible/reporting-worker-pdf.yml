@@ -1,14 +1,13 @@
 ---
 - name: Configure the reporting PDF-making workers
   hosts: reporting-worker-pdf
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags:['common']}
-    - { role: edware, tags: ['edware', 'app'] }
+    - common
+    - edware
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    - { role: reporting-worker-pdf, tags: ['reporting-worker-pdf', 'app']}
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - reporting-worker-pdf
+

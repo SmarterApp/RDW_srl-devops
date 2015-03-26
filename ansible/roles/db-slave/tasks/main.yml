@@ -18,17 +18,17 @@
   template: src=roles/db-slave/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
 
 - name: clone master
-  shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -U repmgr -d edware -p 5432 -R postgres --verbose standby clone {{ reporting_db_master_ip }}'"
-
-- name: recovery.conf file
-  template: src=roles/db-slave/templates/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
+  shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -D /var/lib/pgsql/9.2/data -U repmgr -d edware -p 5432 -R postgres --verbose --force standby clone {{ reporting_db_master_ip }}'"
 
 - name: copy archive
   shell: "su - postgres -c 'scp {{ reporting_db_master_ip }}:/var/lib/pgsql/9.2/archive/* /var/lib/pgsql/9.2/archive/'"
+
+- name: recovery.conf file
+  template: src=roles/db-slave/templates/recovery.conf.j2 dest=/var/lib/pgsql/9.2/data/recovery.conf
 
 - name: start PostgreSQL
   service: name=postgresql-9.2 state=started
 
 - name: register slave
-  shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf standby register'"
+  shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf --force standby register'"
   ignore_errors: yes

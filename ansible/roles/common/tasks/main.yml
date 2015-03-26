@@ -18,6 +18,3 @@
   when: "{{ec2_tag_environment == 'prod'}}"
 - include: ntp.yml
   when: "{{ 'bind' not in group_names }}"
-
-- include: ../../../roles/aws-cli/tasks/main.yml
-

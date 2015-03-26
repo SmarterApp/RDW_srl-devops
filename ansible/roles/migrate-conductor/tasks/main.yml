@@ -1,6 +1,10 @@
 ---
 - name: Install edmigrate
-  yum: name=smarter state=latest
+  yum: 
+    name: smarter 
+    state: latest
+  tags:
+    - slow
 
 - name: enable edmigrate-conductor
   service: name=edmigrate-conductor enabled=yes

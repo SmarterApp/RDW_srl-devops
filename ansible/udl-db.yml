@@ -1,14 +1,12 @@
 ---
 - name: Configure the standalone database postgres server 
   hosts: udl-db
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags: ['common']}
+    - common
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    # TODO: We need to update postgres user names and password
-    - { role: db, tags: ['db', 'app'] }
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - db
+# We might need to update postgres user names and password

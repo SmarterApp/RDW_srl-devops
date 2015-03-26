@@ -1,14 +1,12 @@
 ---
 - name: Configure the udl servers 
   hosts: udl 
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags:['common']}
-    - { role: edware, tags: ['edware', 'app'] }
+    - common
+    - edware
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    - { role: udl, tags: ['udl', 'app']}
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - udl 

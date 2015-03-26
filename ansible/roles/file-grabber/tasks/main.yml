@@ -3,5 +3,8 @@
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart edudl2-file-grabber 
 
+- name: Install postgres rpm
+  yum: name=postgresql92-server state=present
+
 - name: create arrivals path
   file: path=/opt/edware/zones/landing/arrivals state=directory owner=udl2 group=postgres mode=0750

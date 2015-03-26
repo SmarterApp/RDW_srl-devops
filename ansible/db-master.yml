@@ -1,14 +1,13 @@
 ---
 - name: Configure the standalone database postgres server 
   hosts: db-master
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
+
   roles:
-    - { role: common, tags:['common']}
-    - { role: db, tags: ['db', 'app'] }
+    - common
+    - db
     - { role: db-master, tags: ['db-master', 'app'] }
-    # TODO: We need to update postgres user names and password
-    - { role: migrate-conductor, tags: ['migrate-conductor', 'app'] }
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - migrate-conductor
+
+# We might need to update postgres user names and password

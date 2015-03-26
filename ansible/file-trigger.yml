@@ -1,14 +1,12 @@
 ---
 - name: Configure file-trigger server 
   hosts: file-trigger 
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags:['common']}
-    - { role: edware, tags: ['edware', 'app'] }
+    - common
+    - edware
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    - { role: file-trigger, tags: ['file-trigger', 'app']}
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - file-trigger 

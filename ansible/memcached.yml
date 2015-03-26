@@ -1,12 +1,9 @@
 ---
 - name: Configure the memcached server 
   hosts: memcached 
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
 
   roles:
-    - { role: common, tags:['common']}
-    - { role: memcached, tags:['memcached', 'app'] }
-    - { role: sensu, tags: ['sensu', 'monitoring'] }
+    - common
+    - memcached 
