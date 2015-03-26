@@ -95,7 +95,8 @@ tsb_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-rabbit', []
 tsb_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 hpz_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('hpz-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 yum_env: "prod"
-
+lz_archive_s3_resource_name: "srl-prod-lz-archive"
+tsb_archive_s3_resource_name: "srl-prod-tsb-archive"
 # gluster-server 
 # TODO: need to figure out why there are two vars
 # TODO: not used - check melvin's mount code
