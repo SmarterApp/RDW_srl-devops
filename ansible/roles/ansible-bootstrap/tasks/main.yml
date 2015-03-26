@@ -1,0 +1,130 @@
+---
+
+- name: Require ansible_cred_set
+  fail: "You must set ansible_cred_set with -e"
+  when: ansible_cred_set is not defined 
+
+- include: ../../../roles/common/tasks/set-s3-yum-repos.yml
+
+# This has a bad RPM manifest, but does in fact install correctly
+- name: Install the borked python-ordereddict package
+  yum:
+    state: latest
+    name: python-ordereddict
+  ignore_errors: yes
+
+- name: Install ansible-required yum packages
+  yum:
+    state: latest
+    name: "{{ item }}"
+  with_items:
+    - curl
+    - unzip
+    - python
+    - python-boto
+    - pass
+    - ansible-lint
+    - ansible
+    - git
+  ignore_errors: yes
+
+- name: Install jq
+  get_url:
+    url: http://stedolan.github.io/jq/download/linux64/jq
+    dest: /usr/local/bin/jq
+    
+- name: Set jq perms
+  file:
+    path: /usr/local/bin/jq
+    mode: 0755
+    state: file
+
+- name: Install AWS CLI
+  script: creates=/usr/local/bin/aws install-aws-cli.sh
+
+# setup gpg-agent stuff in /etc/profile.d
+- name: Copy in gpg-agent stuff into /etc/profile.d
+  copy:
+    src: gpg-agent-startup.sh
+    dest: /etc/profile.d/gpg-agent-startup.sh
+
+- name: Useradd for users
+  user:
+    name: "{{ item }}"
+  with_items: ansible_userss
+
+# This is a workaround for lack of AD
+- name: Set authorized_key for users
+  authorized_key:
+    state: present
+    user: "{{ item }}"
+    key: "{{ lookup('file', 'ssh-public-keys/' + item + '.pem') }}"
+  with_items: ansible_users
+  when: "{{ item != 'ansible' }}" # We setup ansible keys in common/ssh-keys
+
+- name: Setup .gnupg for users
+  unarchive:
+    creates: "/home/{{ item }}/.gnupg"
+    dest: "/home/{{ item }}"
+    src: "gpg-tarballs/{{ item }}.tgz"
+  with_items: ansible_users
+
+- name: Setup .password-store for users
+  unarchive:
+    creates: "/home/{{ item }}/.password-store/.gpg-id"
+    dest: "/home/{{ item }}"
+    src: "pass-tarballs/{{ item }}.tgz"
+  with_items: ansible_users
+    
+- name: Pack srl-devops code
+  sudo: no
+  delegate_to: 127.0.0.1
+  connection: local
+  shell: chdir=../../ warn=no tar czf srl-devops.tgz --exclude-backups -h srl-devops
+  register: wtf
+
+- name: Send latest srl-devops code
+  unarchive:
+    # Creates flag?  or always clobber?
+    dest: "/home/{{ item }}"
+    src: "../../srl-devops.tgz"
+  with_items: ansible_users
+
+- name: Set SBAC_DEVOPS variable in bash_profile
+  lineinfile:
+    state: present
+    dest: "/home/{{ item }}/.bash_profile"
+    line: "export SBAC_DEVOPS=/home/{{ item }}/srl-devops"
+  with_items: ansible_users
+
+- name: Set SBAC_ENV variable in bash_profile
+  lineinfile:
+    state: present
+    dest: "/home/{{ item }}/.bash_profile"
+    line: "export SBAC_ENV={{ ansible_cred_set }}"   # TODO - probably want this dynamic
+  with_items: ansible_users
+
+- name: Fix ownership on .gnupg things in homedir
+  file:
+    path: "/home/{{ item }}/.gnupg"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_users
+
+- name: Fix ownership on .password-store things in homedir
+  file:
+    path: "/home/{{ item }}/.password-store"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_users
+
+- name: Fix ownership on .srl-devops things in homedir
+  file:
+    path: "/home/{{ item }}/srl-devops"
+    state: directory
+    owner: "{{ item }}"
+    recurse: True
+  with_items: ansible_users
+

@@ -1,0 +1,10 @@
+- name: Pack srl-devops code
+  sudo: no
+  delegate_to: 127.0.0.1
+  connection: local
+  shell: chdir=../../ warn=no tar czf srl-devops.tgz -h srl-devops
+  register: wtf
+  
+- name: dump wtf
+  debug:
+    var: wtf
