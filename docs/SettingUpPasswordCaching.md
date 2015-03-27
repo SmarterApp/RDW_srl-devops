@@ -48,53 +48,44 @@ From http://www.passwordstore.org/ :
 
 ## Add your Secrets
 
+You secrets are accessed using the SBAC_ENV variable.  See https://github.wgenhq.net/Ed-Ware-SBAC/srl-devops/blob/master/docs/EnvironmentVars.md for details.  
+
 ### Adding your AWS credentials
 
-    pass insert dev/aws/access_id
+    pass insert dev/inventory/aws/access_id
 
-When prompted for the "password", paste in your AWS access ID.
+When prompted for the "password", paste in the AWS access ID you use for inventory-level access (if you only have one, use that!)
 You won't be challenged for your password store passphrase at this point.
 
 Verify the access ID:
 
-    pass dev/aws/access_id
+    pass dev/inventory/aws/access_id
 
 The first time you do this, you will be challenged for your password store passphrase.
 
 Run this again to verify that your password store passphrase has been cached by the GPG agent:
 
-    pass dev/aws/access_id
+    pass dev/inventory/aws/access_id
 
 Finally, add your secret key as well:
 
-    pass insert dev/aws/secret_key
+    pass insert dev/inventory/aws/secret_key
 
 ### Add the ansible vault key
 
-pass insert ansible/vault
+pass insert dev/inventory/ansible/vault
+
+### Repeat for other security tiers
+
+If you are a nut like clinton and need to do security tier development, make more access IDs and create similar trees as dev/security/... and dev/spinup/... .  Normal devops can just symlink inventory to security and spinup.
 
 ## Feeding the vault password to ansible
 
-You can feed the vault password to Ansible like this:
-
-ansible-vault view --vault-password-file=$SBAC_DEVOPS/tools/read-vault-pass.sh
-
-Or, you can place that in ansible.cfg :
+Ansible is configured to read your vault password using ansible.cfg :
 
     # Adjust path as needed
     vault_password_file=../tools/read-vault-pass.sh
 
-
 ## Accessing AWS creds within Ansible
 
-You can set the output of a command like so:
-
-# TODO: verify this is a local action
-
-    aws_access_id: {{ lookup('pipe', 'pass dev/aws/access_id') }}
-
-Or "register" a variable by running a command locally
-
-    - name: "Read AWS Access ID"
-      local_action: command pass aws/access_id
-      register: my_aws_access_id
+This has been done once for you - simply pull in the role 'aws-creds'.  You'll get vars aws_access_id and aws_secret_key.
