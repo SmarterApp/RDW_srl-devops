@@ -35,3 +35,45 @@ sensu_checks:
     command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
     subscribers: 
       - heartbeats # == monitoring_topics
+
+  check.reportingweb.heartbeat.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response_code 200"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
+  reportingweb.heartbeat.simple:
+    type: metric
+    output_type: nagios_check
+    prefix: app
+    auto_tag_host: 'no'
+    handlers:
+      - store_in_carbon
+    interval: 30
+    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response_code 200"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
+  check.tsbweb.heartbeat.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response_code 200"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
+  tsbweb.heartbeat.simple:
+    type: metric
+    output_type: nagios_check
+    prefix: app
+    auto_tag_host: 'no'
+    handlers:
+      - store_in_carbon
+    interval: 30
+    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response_code 200"
+    subscribers: 
+      - heartbeats # == monitoring_topics

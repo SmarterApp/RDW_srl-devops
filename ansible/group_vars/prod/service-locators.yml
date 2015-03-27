@@ -26,6 +26,7 @@ sso_saml_issuer_name: https://reporting.smarterbalanced.org
 hpz_sso_saml_issuer_name: https://reportdownload.smarterbalanced.org
 sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
 reporting_base_url_host: https://reporting.smarterbalanced.org 
+tsb_base_url_host: https://reportingintake.smarterbalanced.org 
 hpz_upload_base_url: https://internal-HTTPS-Pickup-Zone-Internal-1373423153.us-east-1.elb.amazonaws.com:8443
 hpz_download_base_url: https://reportdownload.smarterbalanced.org
 hpz_ignore_certificate: False
