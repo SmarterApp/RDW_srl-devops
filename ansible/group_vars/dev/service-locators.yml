@@ -41,6 +41,7 @@ disable_stack_trace: False
 hpz_upload_base_url: "http://srl-hpz-web.{{ domain }}:8443"
 hpz_download_base_url: "http://srl-hpz-web.{{ domain }}"
 reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
+tsb_base_url_host: "http://srl-tsb-web.{{ domain }}"
 
 
 
