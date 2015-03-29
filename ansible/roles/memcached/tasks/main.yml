@@ -1,5 +1,17 @@
 ---
 
+- name: Require memcache_size_mb
+  fail:
+    msg: memcache_size_mb variable is required.  Please set it in the group_vars/ENV/performance.yml file
+  when: memcache_size_mb is not defined
+
+- name: Require memcache_connections
+  fail:
+    msg: memcache_connections variable is required.  Please set it in the group_vars/ENV/performance.yml file
+  when: memcache_connections is not defined
+
+# TODO (from base) install memcache
+
 - name: Update sysconfig/memcached
   template: 
     src: memcached.j2
