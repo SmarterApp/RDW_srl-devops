@@ -1,7 +1,16 @@
 ---
+
 - name: Update sysconfig/memcached
-  copy: src=memcached dest=/etc/sysconfig/memcached owner=root group=root mode=0644
+  template: 
+    src: memcached.j2
+    dest: /etc/sysconfig/memcached
+    owner: root 
+    group: root
+    mode: 0644
   notify: Restart Memcached
 
 - name: Start Memcached 
-  service: name=memcached state=started enabled=yes
+  service: 
+    name: memcached
+    state: started
+    enabled: yes

@@ -1,0 +1,3 @@
+# Performance / Scaling parameters
+
+memcache_connections: 4096
