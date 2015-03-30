@@ -48,7 +48,7 @@ From http://www.passwordstore.org/ :
 
 ## Add your Secrets
 
-You secrets are accessed using the SBAC_ENV variable.  See https://github.wgenhq.net/Ed-Ware-SBAC/srl-devops/blob/master/docs/EnvironmentVars.md for details.  
+You secrets are accessed using the SBAC_ENV variable.  See https://github.wgenhq.net/Ed-Ware-SBAC/srl-devops/blob/master/docs/EnvironmentVars.md for details.
 
 ### Adding your AWS credentials
 
@@ -73,11 +73,16 @@ Finally, add your secret key as well:
 
 ### Add the ansible vault key
 
-pass insert dev/inventory/ansible/vault
+    pass insert dev/inventory/ansible/vault
 
 ### Repeat for other security tiers
 
-If you are a nut like clinton and need to do security tier development, make more access IDs and create similar trees as dev/security/... and dev/spinup/... .  Normal devops can just symlink inventory to security and spinup.
+For most users, you will just need to symlink your existing tree:
+
+    ln -s inventory ~/.password-store/dev/spinup
+    ln -s inventory ~/.password-store/dev/security
+
+If you are a nut like clinton and need to do security tier development, you should make more access IDs and create similar trees instead.
 
 ## Feeding the vault password to ansible
 
