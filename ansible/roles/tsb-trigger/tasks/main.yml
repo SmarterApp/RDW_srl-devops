@@ -29,13 +29,13 @@
     mode: 0700
 
 - name: move private key to celery directory
-  copy: src=tsb_smarterbalanced_org.key dest=/dev/shm/celery/tsb_smarterbalanced_org.key owner=celery group=celery mode=0600
+  copy: src=files/{{ env }}/tsb_smarterbalanced_org.key dest=/dev/shm/celery/tsb_smarterbalanced_org.key owner=celery group=celery mode=0600
 
 - name: move public key to celery directory
-  copy: src=tsb_smarterbalanced_org.pub dest=/dev/shm/celery/tsb_smarterbalanced_org.pub owner=celery group=celery mode=0600
+  copy: src=files/{{ env }}/tsb_smarterbalanced_org.pub dest=/dev/shm/celery/tsb_smarterbalanced_org.pub owner=celery group=celery mode=0600
 
 - name: move udl public key to celery directory
-  copy: src=../../udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub owner=celery group=celery mode=0600
+  copy: src=files/{{ env }}/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub owner=celery group=celery mode=0600
 
 - name: copy passphrase
   copy: content={{ tsb_passphrase }} dest=/dev/shm/celery/passphrase owner=celery group=celery mode=0600

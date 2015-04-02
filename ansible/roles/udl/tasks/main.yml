@@ -42,10 +42,10 @@
     mode: 0700
 
 - name: move private key to celery directory
-  copy: src=roles/udl/files/sbac_smarterbalanced_org.key dest=/dev/shm/celery/sbac_smarterbalanced_org.key owner=udl2 group=udl2 mode=0600
+  copy: src=files/{{ env }}/sbac_smarterbalanced_org.key dest=/dev/shm/celery/sbac_smarterbalanced_org.key owner=udl2 group=udl2 mode=0600
 
 - name: move public key to celery directory
-  copy: src=roles/udl/files/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub owner=udl2 group=udl2 mode=0600
+  copy: src=files/{{ env }}/sbac_smarterbalanced_org.pub dest=/dev/shm/celery/sbac_smarterbalanced_org.pub owner=udl2 group=udl2 mode=0600
 
 - name: decrypt private key
   shell: openssl aes-256-cbc -salt -a -d -in /dev/shm/celery/sbac_smarterbalanced_org.key -out /dev/shm/celery/d_sbac_smarterbalanced_org.key -k {{ gpg_openssl_key }}
