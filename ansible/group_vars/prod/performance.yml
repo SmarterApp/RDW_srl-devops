@@ -1,0 +1,4 @@
+# Performance / Scaling parameters
+
+memcache_connections: 4096
+memcache_size_mb: 28672

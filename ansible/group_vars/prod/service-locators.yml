@@ -26,6 +26,7 @@ sso_saml_issuer_name: https://reporting.smarterbalanced.org
 hpz_sso_saml_issuer_name: https://reportdownload.smarterbalanced.org
 sso_saml_name_qualifier: https://sso.smarterbalanced.org/auth
 reporting_base_url_host: https://reporting.smarterbalanced.org 
+tsb_base_url_host: https://reportingintake.smarterbalanced.org 
 hpz_upload_base_url: https://internal-HTTPS-Pickup-Zone-Internal-1373423153.us-east-1.elb.amazonaws.com:8443
 hpz_download_base_url: https://reportdownload.smarterbalanced.org
 hpz_ignore_certificate: False
@@ -57,8 +58,7 @@ bind_host: "{{groups.get('bind', []) | intersect(locals) | first | default('127.
 dns_search_domain: "{{ ec2_tag_environment }}.ae1.sbac2dc.net"
 loghost: "{{groups.get('loghost', []) | intersect(locals) | first | default('127.0.0.1')}}"
 loghost_port: 10514 
-
-
+sensu_rabbit_host: "{{groups.get('sensu-rabbit', []) | intersect(locals) | first | default('127.0.0.1')}}"
 domain: "{{ dns_search_domain }}" # concise
 
 
@@ -96,8 +96,7 @@ tsb_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-rabbit', []
 tsb_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 hpz_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('hpz-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 yum_env: "prod"
-lz_archive_s3_resource_name: "srl-prod-lz-archive"
-tsb_archive_s3_resource_name: "srl-prod-tsb-archive"
+archive_s3_resource_name: "srl-prod-archive"
 # gluster-server 
 # TODO: need to figure out why there are two vars
 # TODO: not used - check melvin's mount code

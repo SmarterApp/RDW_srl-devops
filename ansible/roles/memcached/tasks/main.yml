@@ -1,3 +1,28 @@
 ---
+
+- name: Require memcache_size_mb
+  fail:
+    msg: memcache_size_mb variable is required.  Please set it in the group_vars/ENV/performance.yml file
+  when: memcache_size_mb is not defined
+
+- name: Require memcache_connections
+  fail:
+    msg: memcache_connections variable is required.  Please set it in the group_vars/ENV/performance.yml file
+  when: memcache_connections is not defined
+
+# TODO (from base) install memcache
+
+- name: Update sysconfig/memcached
+  template: 
+    src: memcached.j2
+    dest: /etc/sysconfig/memcached
+    owner: root 
+    group: root
+    mode: 0644
+  notify: Restart Memcached
+
 - name: Start Memcached 
-  service: name=memcached state=started enabled=yes
+  service: 
+    name: memcached
+    state: started
+    enabled: yes

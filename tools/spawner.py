@@ -37,7 +37,7 @@ def get_aws_creds():
     else:        
         logging.debug("reading AWS creds from password store")
         if not os.environ.get('SBAC_ENV').endswith('spinup'):
-            logging.error("SBAC_ENV environment variable must be set to a credential set that ends in 'security', like 'dev/security'")
+            logging.error("SBAC_ENV environment variable must be set to a credential set that ends in 'spinup', like 'dev/spinup'")
             exit(1)            
 
         access_id = backtick('pass $SBAC_ENV/aws/access_id')
