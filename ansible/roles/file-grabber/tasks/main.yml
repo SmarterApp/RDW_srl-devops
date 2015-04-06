@@ -8,3 +8,18 @@
 
 - name: create arrivals path
   file: path=/opt/edware/zones/landing/arrivals state=directory owner=udl2 group=postgres mode=0750
+
+- name: copy ssh private key
+  copy: src=files/$ENV/file-grabber-ssh.key dest=/dev/shm/file-grabber-ssh.key owner=udl2 group=udl2 mode=0600
+
+- name: create directory
+  file: path=/home/udl2/.ssh mode=0700 owner=udl2 group=udl2 state=directory
+
+- name: copy ssh public key
+  copy: src=files/$ENV/file-grabber-ssh.pub dest=/home/udl2/.ssh/id_rsa.pub owner=udl2 group=udl2 mode=0644
+
+- name: decrypt ssh private key
+  shell: openssl aes-256-cbc -salt -a -d -in /dev/shm/file-grabber-ssh.key -out /dev/shm/d_file-grabber-ssh.key -k {{ gpg_openssl_key }}
+
+- name: move private key
+  shell: "mv /dev/shm/d_file-grabber-ssh.key /home/udl2/.ssh/id_rsa && chown udl2.udl2 /home/udl2/.ssh/id_rsa && chmod 0600 /home/udl2/.ssh/id_rsa"
