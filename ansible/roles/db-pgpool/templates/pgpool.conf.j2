@@ -144,7 +144,7 @@ log_statement = off
 log_per_node_statement = off
                                    # Log all statements
                                    # with node and backend informations
-log_standby_delay = 'none'
+log_standby_delay = 'always'
                                    # Log standby delay
                                    # Valid values are combinations of always,
                                    # if_over_threshold, none
@@ -255,10 +255,10 @@ black_function_list = 'nextval,setval'
 # MASTER/SLAVE MODE
 #------------------------------------------------------------------------------
 
-master_slave_mode = off
+master_slave_mode = on
                                    # Activate master/slave mode
                                    # (change requires restart)
-master_slave_sub_mode = 'slony'
+master_slave_sub_mode = 'stream'
                                    # Master/slave sub mode
                                    # Valid values are combinations slony or
                                    # stream. Default is slony.
@@ -266,17 +266,17 @@ master_slave_sub_mode = 'slony'
 
 # - Streaming -
 
-sr_check_period = 0
+sr_check_period = 60
                                    # Streaming replication check period
                                    # Disabled (0) by default
-sr_check_user = 'nobody'
+sr_check_user = 'postgres'
                                    # Streaming replication check user
                                    # This is necessary even if you disable
                                    # streaming replication delay check with
                                    # sr_check_period = 0
 sr_check_password = ''
                                    # Password for streaming replication check user
-delay_threshold = 0
+delay_threshold = 1048576
                                    # Threshold before not dispatching query to standby node
                                    # Unit is in bytes
                                    # Disabled (0) by default
