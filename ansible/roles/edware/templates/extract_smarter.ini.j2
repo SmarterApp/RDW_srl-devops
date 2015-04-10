@@ -35,9 +35,11 @@ cache.type = ext:memcached
 disable.context.security = False
 disable_stack_trace = {{ disable_stack_trace }}
 # TODO: next three should be a loop over a hash structure for each tenant
-edware.db.ca.schema_name = ca
-edware.db.ca.state_code = CA
-edware.db.ca.url = postgresql+psycopg2://{{ edware_extract_db_ca_username }}:{{ edware_extract_db_ca_password }}@{{ edware_extract_db_ca_host }}:9999/edware
+{% for extract_tenant in extract_tenants %}
+edware.db.{{ extract_tenant.name }}.schema_name = {{ extract_tenant.schema_name }}
+edware.db.{{ extract_tenant.name }}.state_code = {{ extract_tenant.state_code }}
+edware.db.{{ extract_tenant.name }}.url = postgresql+psycopg2://{{ extract_tenant.edware_db_username }}:{{ extract_tenant.edware_db_password }}@{{ extract_tenant.edware_db_host }}:9999/edware
+{% endfor %}
 edware.db.echo = False
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
 edware_rep.db.url = postgresql+psycopg2://{{ edware_repmgr_db_username }}:{{ edware_repmgr_db_password }}@{{ edware_repmgr_db_host }}:5432/edware
@@ -121,9 +123,11 @@ migrate.replication_monitor.replication_lag_tolerance = 100
 migrate.replication_monitor.time_lag_tolerance = 100
 migrate.timeout = 6
 # TODO: need to loop over the tenants
-migrate_dest.db.ca.schema_name = ca
-migrate_dest.db.ca.url = postgresql+psycopg2://{{ migrate_dest_db_ca_username }}:{{ migrate_dest_db_ca_password }}@{{ migrate_dest_db_ca_host }}:5432/edware
-migrate_source.db.ca.url = postgresql+psycopg2://{{ migrate_source_db_ca_username }}:{{ migrate_source_db_ca_password }}@{{ migrate_source_db_ca_host }}:5432/edware
+{% for migrate_tenant in migrate_tenants %}
+migrate_dest.db.{{ migrate_tenant.name }}.schema_name = {{ migrate_tenant.schema_name }}
+migrate_dest.db.{{ migrate_tenant.name }}.url = postgresql+psycopg2://{{ migrate_tenant.migrate_dest_db_username }}:{{ migrate_tenant.migrate_dest_db_password }}@{{ migrate_tenant.migrate_dest_db_host }}:5432/edware
+migrate_source.db.{{ migrate_tenant.name }}.url = postgresql+psycopg2://{{ migrate_tenant.migrate_source_db_username }}:{{ migrate_tenant.migrate_source_db_password }}@{{ migrate_tenant.migrate_source_db_host }}:5432/edware
+{% endfor %}
 mode = prod
 pdf.always_generate = False
 # Note: This is the reporting app ELB URL, I wanted to put entire URL to deal with http/https differences
@@ -138,9 +142,9 @@ pdf.report_base_dir = /opt/edware/pdf
 pdf.retries_allowed = 3
 pdf.retry_delay = 0
 pdf.single_generate.queue = single_pdf_gen
-pickup.gatekeeper.cat = kswimberly
-pickup.gatekeeper.dog = skong
-pickup.gatekeeper.fish = kswimberly
+{% for tenant in tenants %}
+pickup.gatekeeper.{{ tenant.name }} = kswimberly
+{% endfor %}
 pickup.sftp.hostname = {{ pickup_host }}
 pickup.sftp.private_key_file = /opt/edware/ssh/.ssh/id_rsa
 pickup.sftp.user = filerouter

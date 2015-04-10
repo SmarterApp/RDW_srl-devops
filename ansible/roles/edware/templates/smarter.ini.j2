@@ -34,10 +34,11 @@ cache.session.url = {{ cache_hosts }}
 cache.type = ext:memcached
 disable.context.security = False
 disable_stack_trace = {{ disable_stack_trace }}
-# TODO: next three should be a loop over a hash structure for each tenant
-edware.db.ca.schema_name = {{ tenant_name }}
-edware.db.ca.state_code = CA
-edware.db.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:{{ edware_db_ca_port | default(9999) }}/edware
+{% for tenant in tenants %}
+edware.db.{{ tenant.name }}.schema_name = {{ tenant.schema_name }}
+edware.db.{{ tenant.name }}.state_code = {{ tenant.state_code }}
+edware.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.edware_db_username }}:{{ tenant.edware_db_password }}@{{ tenant.edware_db_host }}:{{ tenant.edware_db_port | default(9999) }}/edware
+{% endfor %}
 edware.db.echo = False
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
 edware_rep.db.url = postgresql+psycopg2://repmgr@127.0.0.1:5432/edware
@@ -125,10 +126,11 @@ migrate.replication_monitor.monitor_timeout = 28800
 migrate.replication_monitor.replication_lag_tolerance = 100
 migrate.replication_monitor.time_lag_tolerance = 100
 migrate.timeout = 6
-# TODO: need to loop over the tenants
-migrate_dest.db.ca.schema_name = ca
-migrate_dest.db.ca.url = postgresql+psycopg2://{{ migrate_dest_db_ca_username }}:{{ migrate_dest_db_ca_password }}@{{ migrate_dest_db_ca_host }}:5432/edware
-migrate_source.db.ca.url = postgresql+psycopg2://{{ migrate_source_db_ca_username }}:{{ migrate_source_db_ca_password }}@{{ migrate_source_db_ca_host }}:5432/edware
+{% for tenant in migrate_tenants %}
+migrate_dest.db.{{ tenant.name }}.schema_name = {{ tenant.schema_name }}
+migrate_dest.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.migrate_dest_db_username }}:{{ tenant.migrate_dest_db_password }}@{{ tenant.migrate_dest_db_host }}:5432/edware
+migrate_source.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.migrate_source_db_username }}:{{ tenant.migrate_source_db_password }}@{{ tenant.migrate_source_db_host }}:5432/edware
+{% endfor %}
 mode = prod
 pdf.always_generate = False
 # Note: This is the reporting app ELB URL, I wanted to put entire URL to deal with http/https differences
@@ -143,9 +145,9 @@ pdf.report_base_dir = /opt/edware/pdf
 pdf.retries_allowed = 3
 pdf.retry_delay = 0
 pdf.single_generate.queue = single_pdf_gen
-pickup.gatekeeper.cat = kswimberly
-pickup.gatekeeper.dog = skong
-pickup.gatekeeper.fish = kswimberly
+{% for tenant in tenants %}
+pickup.gatekeeper.{{ tenant.name }} = kswimberly
+{% endfor %}
 pickup.sftp.hostname = {{ pickup_host }}
 pickup.sftp.private_key_file = /opt/edware/ssh/.ssh/id_rsa
 pickup.sftp.user = filerouter
@@ -212,9 +214,9 @@ smarter_score_batcher.celery_timeout = 30
 smarter_score_batcher.db.schema_name = edware_tsb
 smarter_score_batcher.db.url = postgresql+psycopg2://{{ tsb_db_username }}:{{ tsb_db_password }}@{{ tsb_db_host }}:5432/edware
 smarter_score_batcher.gpg.homedir = /opt/edware/keys
-smarter_score_batcher.gpg.public_key.ca = sbac_data_provider@sbac.com
-smarter_score_batcher.gpg.public_key.nc = sbac_data_provider@sbac.com
-smarter_score_batcher.gpg.public_key.vt = sbac_data_provider@sbac.com
+{% for tenant in tenants %}
+smarter_score_batcher.gpg.public_key.{{ tenant.name }} = sbac_data_provider@sbac.com
+{% endfor %}
 smarter_score_batcher.metadata.default = /opt/edware/resources/meta/default
 smarter_score_batcher.metadata.performance = /opt/edware/resources/meta/performance
 smarter_score_batcher.metadata.static = /opt/edware/resources/meta/static

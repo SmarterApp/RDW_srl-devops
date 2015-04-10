@@ -38,9 +38,6 @@ cache_hosts: dummy
 cache_hosts: dummy
 cache_hosts: dummy
 disable_stack_trace: dummy
-edware_db_ca_username: dummy
-edware_db_ca_password: dummy
-edware_db_ca_host: dummy
 edware_repmgr_db_username: dummy
 edware_repmgr_db_password: dummy
 edware_repmgr_db_host: dummy
@@ -58,12 +55,6 @@ migrate_rabbit_username: dummy
 migrate_rabbit_password: dummy
 migrate_rabbit_host: dummy
 migrate_pg_pool_host: dummy
-migrate_dest_db_ca_username: dummy
-migrate_dest_db_ca_password: dummy
-migrate_dest_db_ca_host: dummy
-migrate_source_db_ca_username: dummy
-migrate_source_db_ca_password: dummy
-migrate_source_db_ca_host: dummy
 reporting_base_url_host: dummy
 pickup_host: dummy
 reporting_rabbit_services_username: dummy
@@ -106,9 +97,6 @@ udl_rabbit_host: dummy
 edware_stats_db_username: dummy
 edware_stats_db_password: dummy
 edware_stats_db_host: dummy
-edware_db_ca_username: dummy
-edware_db_ca_password: dummy
-edware_db_ca_host: dummy
 staging_db_ca_username: dummy
 staging_db_ca_password: dummy
 staging_db_ca_host: dummy

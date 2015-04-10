@@ -16,7 +16,7 @@ migrate_tenants:
     migrate_source_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
     migrate_source_db_username: "{{ migrate_source_db_ca_username }}"
     migrate_source_db_password: "{{ migrate_source_db_ca_password }}"
-
+ 
 staging_tenants:
   - name: ca
     staging_db_username: "{{ staging_db_ca_username }}"

@@ -87,28 +87,22 @@ domain: "{{ dns_search_domain }}" # concise
 reporting_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}"
 extract_slave_dbs: "{{ groups.get('reporting-db-slave', []) | intersect(locals) }}" #Change to extract slaves later
 
-edware_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
-edware_extract_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
 edware_repmgr_db_host : "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 edware_stats_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('stats-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 # hpz_web_host: "srl-hpz-web.{{ domain }}" # TODO - unused, but should point to ELB?
-migrate_dest_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy
 migrate_pg_pool_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 migrate_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-migrate_source_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}" # TODO: multi-tenancy 
 reporting_rabbit_services_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-services', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 reporting_rabbit_extract_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-extract', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 lz_host: "{{ hostvars | srl_hostvars_lookup((groups.get('lz', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_trigger_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-trigger', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-staging_db_ca_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 hpz_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('hpz-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 yum_env: "dev"
-lz_archive_s3_resource_name: "srl-test186-lz-archive"
-tsb_archive_s3_resource_name: "srl-dev-test186-archive"
+archive_s3_resource_name: "srl-test186-archive"
 # gluster-server 
 # TODO: need to figure out why there are two vars
 # TODO: not used - check melvin's mount code

@@ -28,12 +28,16 @@ notification_retry_interval = 30
 notification_timeout_interval = 30
 passphrase = {{ udl_passphrase }}
 # Tenant Specific Configuration - This should be readonly db, not master
-prod_db_conn.ca.db_schema = ca
-prod_db_conn.ca.url = postgresql+psycopg2://{{ edware_db_ca_username }}:{{ edware_db_ca_password }}@{{ edware_db_ca_host }}:{{ edware_db_ca_port | default(9999) }}/edware
+{% for tenant in tenants %}
+prod_db_conn.{{ tenant.name }}.db_schema = {{ tenant.schema_name }}
+prod_db_conn.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.edware_db_username }}:{{ tenant.edware_db_password }}@{{ tenant.edware_db_host }}:{{ tenant.edware_db_port | default(9999) }}/edware
+{% endfor %}
 quiet_mode = False
 rabbitmq.RABBITMQ_SERVER_PATH = ['/opt/local/sbin/rabbitmq-server', '/usr/local/sbin/rabbitmq-server']
 # Tenant Specific Staging database
-target_db_conn.ca.url = postgresql://{{ staging_db_ca_username }}:{{ staging_db_ca_password }}@{{ staging_db_ca_host }}:5432/edware
+{% for staging_tenant in staging_tenants %}
+target_db_conn.{{ staging_tenant.name }}.url = postgresql://{{ staging_tenant.staging_db_username }}:{{ staging_tenant.staging_db_password }}@{{ staging_tenant.staging_db_host }}:5432/edware
+{% endfor %}
 udl2_db_conn.db_schema = udl2
 # UDL Db
 udl2_db_conn.url = postgresql://{{ udl_db_username }}:{{ udl_db_password }}@{{ udl_db_host }}:5432/udl2
