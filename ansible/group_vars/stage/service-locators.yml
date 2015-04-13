@@ -31,16 +31,16 @@ auth_saml_identity_parser: "smarter_common.security.sbac_identity_parser.SbacIde
 auth_policy_secure: False
 sso_saml_login_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/SSORedirect/metaAlias/idp"
 sso_saml_logout_url: "http://sso.sbac2.net:8080/OpenAM-11.0.0/IDPSloRedirect/metaAlias/idp"
-sso_saml_issuer_name: "http://srl-reporting-web"
-hpz_sso_saml_issuer_name: "http://srl-reporting-web"
+sso_saml_issuer_name: https://reporting.demoreporting.smarterbalanced.org
+hpz_sso_saml_issuer_name: https://reportdownload.demoreporting.smarterbalanced.org
 sso_saml_name_qualifier: "http://sso.sbac2.net:8080/OpenAM-11.0.0"
 tsb_gpg_public_key: sbac@smarterbalanced.org
 disable_stack_trace: False
 
 # ELB? # TODO: dip
-hpz_upload_base_url: "http://srl-hpz-web.{{ domain }}:8443"
-hpz_download_base_url: "http://srl-hpz-web.{{ domain }}"
-reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"
+hpz_upload_base_url: https://internal-internal-HTTPS-Pickup-Zone-1825775226.us-east-1.elb.amazonaws.com:8443
+hpz_download_base_url: https://reportdownload.demoreporting.smarterbalanced.org
+reporting_base_url_host: https://reporting.demoreporting.smarterbalanced.org
 
 
 
