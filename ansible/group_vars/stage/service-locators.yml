@@ -39,8 +39,8 @@ disable_stack_trace: False
 
 # ELB? # TODO: dip
 hpz_upload_base_url: https://internal-internal-HTTPS-Pickup-Zone-1825775226.us-east-1.elb.amazonaws.com:8443
-hpz_download_base_url: https://reportdownload.demoreporting.smarterbalanced.org
-reporting_base_url_host: https://reporting.demoreporting.smarterbalanced.org
+hpz_download_base_url: https://reportdownload-demoreporting.smarterbalanced.org
+reporting_base_url_host: https://reporting-demoreporting.smarterbalanced.org
 
 
 
@@ -92,7 +92,7 @@ migrate_pg_pool_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-
 migrate_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 reporting_rabbit_services_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-services', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 reporting_rabbit_extract_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-extract', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-lz_host: "{{ hostvars | srl_hostvars_lookup((groups.get('lz', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+lz_host: "reportingloader-demoreporting.smarterbalanced.org"
 tsb_trigger_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-trigger', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
