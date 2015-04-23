@@ -3,6 +3,56 @@
     state: present
     name: rabbitmq-server-3.4.4-1
     
+- name: Install /etc/rabbitmq/enabled_plugins
+  copy:
+    src: enabled_plugins
+    dest: /etc/rabbitmq/enabled_plugins
+
+- name: Install /etc/rabbitmq/rabbitmq.config
+  copy:
+    src: rabbitmq.config
+    dest: /etc/rabbitmq/rabbitmq.config
+
+- name: Install /etc/rabbitmq/rabbitmq-env.conf
+  copy:
+    src: rabbitmq-env.conf
+    dest: /etc/rabbitmq/rabbitmq-env.conf
+
+- name: Ensure directory exists /etc/rabbitmq/server
+  file:
+    path: /etc/rabbitmq/server
+    state: directory
+
+- name: Install /etc/rabbitmq/server/cert.pem
+  copy:
+    src: cert.pem
+    dest: /etc/rabbitmq/server/cert.pem
+
+- name: Install /etc/rabbitmq/server/key.pem
+  copy:
+    src: key.pem
+    dest: /etc/rabbitmq/server/key.pem
+
+- name: Ensure directory exists /etc/rabbitmq/testca
+  file:
+    path: /etc/rabbitmq/testca
+    state: directory
+
+- name: Install /etc/rabbitmq/testca/cacert.pem
+  copy:
+    src: cacert.pem
+    dest: /etc/rabbitmq/testca/cacert.pem
+
+- name: Install /etc/rabbitmq/testca/cert.pem
+  copy:
+    src: cert.pem
+    dest: /etc/rabbitmq/testca/cert.pem
+
+- name: Install /etc/rabbitmq/testca/key.pem
+  copy:
+    src: key.pem
+    dest: /etc/rabbitmq/testca/key.pem
+
 - name: Update RabbitMQ config file
   replace: 
     dest: /etc/rabbitmq/rabbitmq.config
