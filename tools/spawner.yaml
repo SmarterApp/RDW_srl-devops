@@ -184,7 +184,7 @@ apps:
       prod: 1
 
   - name: migrate-rabbit
-    ami_app_name: rabbit
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-rmq-client # Needed for sensu monitoring
