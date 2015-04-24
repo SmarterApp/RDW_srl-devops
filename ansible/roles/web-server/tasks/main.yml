@@ -1,0 +1,14 @@
+---
+- name: Install RPMs for webserver
+  yum:
+    name: "{{ item }}"
+    state: present    
+  with_items:
+    - python3-3.3.0
+    - httpd-2.2.15
+    - python3-mod_wsgi-3.4
+    - xmlsec1-1.2.20
+    - xmlsec1-openssl-devel-1.2.20
+  tags:
+    - slow
+
