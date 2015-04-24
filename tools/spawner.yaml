@@ -451,7 +451,7 @@ apps:
       prod: 10
 
   - name: reporting-web
-    ami_app_name: reporting-web
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db-pool-client
