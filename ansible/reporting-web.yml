@@ -8,6 +8,7 @@
 
   roles:
     - { role: common, tags: ['common' ] }
+    - { role: aws-cli, tags: ['aws-cli'] }    
     - { role: web-server, tags: ['web-server', 'app'] }    
 #    - { role: edware, tags: ['edware', 'app'] }
 #    - { role: reporting-web, tags: ['reporting-web', 'app'] }

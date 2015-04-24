@@ -1,6 +1,4 @@
 ---
-# TODO: for from-base role, templatize /etc/httpd/conf.d/wsgi_edware.conf
-
 # Note: the smarter.ini retemaplte happens in  edware/tasks/main
 # Here, we're just watching to see if it changes, and if so, restart apache.
 # Normally we'd put a handler in edware, but edware role is used by several apps, 
@@ -11,20 +9,15 @@
     state: restarted
   when: smarter_ini.changed # This is a task reference registered by the edware role
 
+# TODO: this file is sensitive?
 - name: Configure IDP sso
   copy: src=files/{{ ec2_tag_environment }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
   notify: restart httpd 
 
-- name: Install mod_ssl
-  yum: name=mod_ssl state=latest
-
-- name: get appropriate SSL certs
-  shell: 'aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-apache-internal-ssl/reporting-web /etc/pki/tls/'
-
 - name: Configure Apache SSL
   template: src=ssl.conf dest=/etc/httpd/conf.d/ssl.conf
   notify: restart httpd
-
+  
 - name: Add Slash Rewrite
   template: src=rewrite-slash.conf dest=/etc/httpd/conf.d/rewrite-slash.conf
   notify: restart httpd
@@ -33,10 +26,12 @@
   template: src=rewrite-http.conf dest=/etc/httpd/conf.d/rewrite-http.conf
   notify: restart httpd
 
+# TODO: conside moving the 'smarter' install to edware
 - name: Install the latest smarter application
   yum: name=smarter state=latest
   notify: restart httpd
 
+# TODO: should this be templated?
 - name: Install wsgi config file
   copy: src=wsgi_edware.conf dest=/etc/httpd/conf.d/wsgi_edware.conf
   notify: restart httpd
