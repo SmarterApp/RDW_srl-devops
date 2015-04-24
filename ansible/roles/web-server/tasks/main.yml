@@ -12,3 +12,10 @@
   tags:
     - slow
 
+- name: Set sysconfig to use worker MPM
+  copy:
+    src: etc-sysconfig-httpd
+    dest: /etc/sysconfig/httpd    
+  notify:
+    - restart_httpd
+
