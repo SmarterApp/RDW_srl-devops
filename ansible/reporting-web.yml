@@ -2,10 +2,11 @@
 - name: Configure the reporting webserver hosts
   hosts: reporting-web
   sudo: yes
-  vars:
+  vars:    
     monitoring_topics:
       - common 
-
+    wsgi_process_count: 4 # Overrides default of 2 provided by web-server
+      
   roles:
     - { role: common, tags: ['common' ] }
     - { role: aws-cli, tags: ['aws-cli'] }    

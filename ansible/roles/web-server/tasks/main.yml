@@ -58,4 +58,13 @@
     - security.conf      
   notify:
     - restart_httpd
-    
+
+- name: Templated conf files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/httpd/conf.d/{{ item }}"
+  with_items:
+    - wsgi_edware.conf
+  notify:
+    - restart_httpd
+
