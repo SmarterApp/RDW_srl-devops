@@ -3,11 +3,14 @@
   hosts: reporting-worker-extract
   user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - edware
+    - { role: common, tags:['common']}
+    - { role: edware, tags: ['edware', 'app'] }
     - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    - reporting-worker-extract
-  
+    - { role: reporting-worker-extract, tags: ['reporting-worker-extract', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }
