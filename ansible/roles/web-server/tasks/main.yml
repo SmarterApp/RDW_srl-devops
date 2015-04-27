@@ -45,4 +45,17 @@
   notify:
     - restart_httpd
 
-
+- name: Remove default welcome.conf
+  file:
+    path: /etc/httpd/conf.d/welcome.conf
+    state: absent
+    
+- name: Untemplated conf files
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/httpd/conf.d/{{ item }}"
+  with_items:
+    - security.conf      
+  notify:
+    - restart_httpd
+    
