@@ -1,5 +1,10 @@
 ---
 
+- name: Require ssl_key_name
+  fail:
+    msg: Variable 'ssl_key_name' must be defined, usually in the playbook.
+  when: ssl_key_name is not defined
+
 - name: Install version-pinned RPMs for webserver
   yum:
     name: "{{ item }}"
@@ -64,6 +69,7 @@
     src: "{{ item }}.j2"
     dest: "/etc/httpd/conf.d/{{ item }}"
   with_items:
+    - ssl.conf
     - wsgi_edware.conf
   notify:
     - restart_httpd

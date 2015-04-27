@@ -14,10 +14,7 @@
   copy: src=files/{{ ec2_tag_environment }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
   notify: restart httpd 
 
-- name: Configure Apache SSL
-  template: src=ssl.conf dest=/etc/httpd/conf.d/ssl.conf
-  notify: restart httpd
-  
+
 - name: Add Slash Rewrite
   template: src=rewrite-slash.conf dest=/etc/httpd/conf.d/rewrite-slash.conf
   notify: restart httpd
@@ -26,11 +23,13 @@
   template: src=rewrite-http.conf dest=/etc/httpd/conf.d/rewrite-http.conf
   notify: restart httpd
 
+- name: Install MPM config
+  copy: src=edware_worker_mpm.conf dest=/etc/httpd/conf.d/edware_worker_mpm.conf
+  notify: restart httpd
+
+  
 # TODO: conside moving the 'smarter' install to edware
 - name: Install the latest smarter application
   yum: name=smarter state=latest
   notify: restart httpd
 
-- name: Install MPM config
-  copy: src=edware_worker_mpm.conf dest=/etc/httpd/conf.d/edware_worker_mpm.conf
-  notify: restart httpd
