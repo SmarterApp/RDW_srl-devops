@@ -30,7 +30,7 @@
     - slow
 
 - name: get appropriate SSL certs
-  shell: '/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-apache-internal-ssl/reporting-web /etc/pki/tls/'
+  shell: '/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-apache-internal-ssl/{{ec2_tag_application}} /etc/pki/tls/'
   register: rmq_s3_sync
   changed_when: "rmq_s3_sync.stdout != ''"
   notify:
@@ -57,20 +57,18 @@
     
 - name: Untemplated conf files
   copy:
-    src: "{{ item }}"
-    dest: "/etc/httpd/conf.d/{{ item }}"
+    src: "{{ item }}.conf"
+    dest: "/etc/httpd/conf.d/{{ item }}.conf"
   with_items:
-    - security.conf      
+    - security
   notify:
     - restart_httpd
 
 - name: Templated conf files
   template:
-    src: "{{ item }}.j2"
-    dest: "/etc/httpd/conf.d/{{ item }}"
-  with_items:
-    - ssl.conf
-    - wsgi_edware.conf
+    src: "{{ item }}.conf.j2"
+    dest: "/etc/httpd/conf.d/{{ item }}.conf"
+  with_items: "{{httpd_conf_templates[ec2_tag_application]}}"
   notify:
     - restart_httpd
 

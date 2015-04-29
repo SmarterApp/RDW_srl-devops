@@ -1,1 +1,11 @@
 wsgi_process_count: 2
+httpd_conf_templates:
+  hpz-web:
+    - ssl_on
+    - xsendfile
+    - wsgi_frs
+    - wsgi_swi
+  reporting-web:
+    - ssl_main_server
+    - wsgi_edware
+  
