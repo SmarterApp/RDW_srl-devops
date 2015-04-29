@@ -1,1 +1,7 @@
-generic-rabbit.yml
+- name: Reporting rabbit extract
+  hosts: reporting-rabbit-extract
+  sudo: yes
+  roles:
+    - { role: common, tags: [ 'common'] }
+    - { role: edware, tags: [ 'edware'] }
+    - { role: rabbitmq, tags: [ 'rabbitmq'] }
