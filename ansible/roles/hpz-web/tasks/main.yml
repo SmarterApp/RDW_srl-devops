@@ -1,11 +1,17 @@
 ---
 - name: Configure hpz-web 
-  template: src=roles/edware/templates/hpz.ini.j2 dest=/opt/edware/conf/hpz.ini
-  notify: restart httpd 
-
+  template:
+    src: roles/edware/templates/hpz.ini.j2
+    dest: /opt/edware/conf/hpz.ini
+  notify: restart_httpd 
+  
 - name: Configure IDP sso
-  copy: src=files/{{ ec2_tag_environment }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
-  notify: restart httpd 
+  copy:
+    # TODO: is this a senstive file?
+    # TODO: is this file the same for reporting-web?
+    src: files/{{ ec2_tag_environment }}/idp_metadata.xml
+    dest: /opt/edware/conf/idp_metadata.xml
+  notify: restart_httpd 
 
 - name: Install mod_ssl
   yum: name=mod_ssl state=latest
@@ -14,13 +20,20 @@
   shell: 'aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-apache-internal-ssl/hpz-web /etc/pki/tls/'
 
 - name: Configure Apache SSL
-  template: src=ssl.conf dest=/etc/httpd/conf.d/ssl.conf
-  notify: restart httpd
+  template:
+    src: ssl.conf
+    dest: /etc/httpd/conf.d/ssl.conf
+  notify: restart_httpd
+
 
 - name: Configure wsgi_frs.conf
-  template: src=wsgi_frs.conf dest=/etc/httpd/conf.d/wsgi_frs.conf
-  notify: restart httpd
+  template:
+    src: wsgi_frs.conf
+    dest: /etc/httpd/conf.d/wsgi_frs.conf
+  notify: restart_httpd
 
 - name: Configure wsgi_swi.conf
-  template: src=wsgi_swi.conf dest=/etc/httpd/conf.d/wsgi_swi.conf
-  notify: restart httpd
+  template:
+    src: wsgi_swi.conf
+    dest: /etc/httpd/conf.d/wsgi_swi.conf
+  notify: restart_httpd
