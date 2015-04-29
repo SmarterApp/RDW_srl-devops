@@ -201,7 +201,7 @@ def iam_list(conn, subject, method = 'list', key='name', args=[], singular=None)
 
 def generate_group_policy(tier, policy_name, cfg, conn):
     # Fetch policy definition from YAML into python dict
-    policy = json.loads(cfg['iam_policies'][policy_name])
+    policy = json.loads(cfg['inline_policies'][policy_name])
     
     # If spinup, generate the pass role perms
     if tier == 'spinup':
