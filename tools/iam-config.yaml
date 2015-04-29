@@ -122,6 +122,21 @@ inline_policies:
         }
       ]
     }
+  tsb_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-tsb-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-tsb-ssl/*"]
+        }
+      ]
+    }
   gluster_ssl_write_pol: >
     {
       "Statement": [
@@ -451,7 +466,7 @@ iam_roles:
     - sensu_ssl_read_pol
   tsb-rabbit_role:
     - yum_read_pol
-    - sensu_ssl_read_pol
+    - tsb_ssl_read_pol
   udl-rabbit_role:
     - yum_read_pol
     - sensu_ssl_read_pol
