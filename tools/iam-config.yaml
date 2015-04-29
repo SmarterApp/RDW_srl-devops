@@ -1,7 +1,7 @@
 ---
 # IAM policies define what can be done by an instance to an S3 bucket
 # These polcies can be included into roles (below)
-iam_policies:
+inline_policies:
   archive_write_pol: >
     {
       "Statement": [
@@ -175,7 +175,41 @@ iam_policies:
         }
       ]
     }
-  srl-ListInventory: >
+  sensu_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl/*"]
+        }
+      ]
+    }
+  sensu_ssl_write_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+           ],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-sensu-ssl/*"]
+        }
+      ]
+    }
+  edware-inventory_pol: >
     {
      "Version": "2012-10-17",
      "Statement": [
@@ -195,9 +229,10 @@ iam_policies:
        }
      ]
     }
-  srl-Spinup: >
+
+  # The following has a dynamic build up of the PassRole statement in update-iam.py
+  edware-spinup_pol: >
     {
-     "Version": "2012-10-17",
      "Statement": [
         {
             "Action": [
@@ -226,91 +261,13 @@ iam_policies:
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:iam::*:role/ansible_role",
-                "arn:aws:iam::*:role/base_role",
-                "arn:aws:iam::*:role/bind_role",
-                "arn:aws:iam::*:role/db-master_role",
-                "arn:aws:iam::*:role/db-pgbouncer_role",
-                "arn:aws:iam::*:role/extracts-db-pgpool_role",
-                "arn:aws:iam::*:role/extracts-db-slave_role",
-                "arn:aws:iam::*:role/file-grabber_role",
-                "arn:aws:iam::*:role/file-trigger_role",
-                "arn:aws:iam::*:role/gluster-server_role",
-                "arn:aws:iam::*:role/hpz-db_role",
-                "arn:aws:iam::*:role/hpz-web_role",
-                "arn:aws:iam::*:role/loghost_role",
-                "arn:aws:iam::*:role/lz_role",
-                "arn:aws:iam::*:role/memcached_role",
-                "arn:aws:iam::*:role/migrate-db_role",
-                "arn:aws:iam::*:role/migrate-rabbit_role",
-                "arn:aws:iam::*:role/nat_role",
-                "arn:aws:iam::*:role/reporting-cache-warmer_role",
-                "arn:aws:iam::*:role/reporting-db-pgpool_role",
-                "arn:aws:iam::*:role/reporting-db-slave_role",
-                "arn:aws:iam::*:role/reporting-generator-pdf_role",
-                "arn:aws:iam::*:role/reporting-rabbit-extract_role",
-                "arn:aws:iam::*:role/reporting-rabbit-services_role",
-                "arn:aws:iam::*:role/reporting-web_role",
-                "arn:aws:iam::*:role/reporting-worker-extract_role",
-                "arn:aws:iam::*:role/reporting-worker-pdf_role",
-                "arn:aws:iam::*:role/sensu_role",
-                "arn:aws:iam::*:role/sensu-rabbit_role",
-                "arn:aws:iam::*:role/stats-db_role",
-                "arn:aws:iam::*:role/tsb-db_role",
-                "arn:aws:iam::*:role/tsb-rabbit_role",
-                "arn:aws:iam::*:role/tsb-trigger_role",
-                "arn:aws:iam::*:role/tsb-web_role",
-                "arn:aws:iam::*:role/tsb-worker_role",
-                "arn:aws:iam::*:role/udl-db_role",
-                "arn:aws:iam::*:role/udl-rabbit_role",
-                "arn:aws:iam::*:role/udl_role",
-
-                "arn:aws:iam::*:role/ansible_role_test186",
-                "arn:aws:iam::*:role/base_role_test186",
-                "arn:aws:iam::*:role/bind_role_test186",
-                "arn:aws:iam::*:role/db-master_role_test186",
-                "arn:aws:iam::*:role/db-pgbouncer_role_test186",
-                "arn:aws:iam::*:role/extracts-db-pgpool_role_test186",
-                "arn:aws:iam::*:role/extracts-db-slave_role_test186",
-                "arn:aws:iam::*:role/file-grabber_role_test186",
-                "arn:aws:iam::*:role/file-trigger_role_test186",
-                "arn:aws:iam::*:role/gluster-server_role_test186",
-                "arn:aws:iam::*:role/hpz-db_role_test186",
-                "arn:aws:iam::*:role/hpz-web_role_test186",
-                "arn:aws:iam::*:role/loghost_role_test186",
-                "arn:aws:iam::*:role/lz_role_test186",
-                "arn:aws:iam::*:role/memcached_role_test186",
-                "arn:aws:iam::*:role/migrate-db_role_test186",
-                "arn:aws:iam::*:role/migrate-rabbit_role_test186",
-                "arn:aws:iam::*:role/nat_role_test186",
-                "arn:aws:iam::*:role/reporting-cache-warmer_role_test186",
-                "arn:aws:iam::*:role/reporting-db-pgpool_role_test186",
-                "arn:aws:iam::*:role/reporting-db-slave_role_test186",
-                "arn:aws:iam::*:role/reporting-generator-pdf_role_test186",
-                "arn:aws:iam::*:role/reporting-rabbit-extract_role_test186",
-                "arn:aws:iam::*:role/reporting-rabbit-services_role_test186",
-                "arn:aws:iam::*:role/reporting-web_role_test186",
-                "arn:aws:iam::*:role/reporting-worker-extract_role_test186",
-                "arn:aws:iam::*:role/reporting-worker-pdf_role_test186",
-                "arn:aws:iam::*:role/sensu_role_test186",
-                "arn:aws:iam::*:role/sensu-rabbit_role_test186",
-                "arn:aws:iam::*:role/stats-db_role_test186",
-                "arn:aws:iam::*:role/tsb-db_role_test186",
-                "arn:aws:iam::*:role/tsb-rabbit_role_test186",
-                "arn:aws:iam::*:role/tsb-trigger_role_test186",
-                "arn:aws:iam::*:role/tsb-web_role_test186",
-                "arn:aws:iam::*:role/tsb-worker_role_test186",
-                "arn:aws:iam::*:role/udl-db_role_test186",
-                "arn:aws:iam::*:role/udl-rabbit_role_test186",
-                "arn:aws:iam::*:role/udl_role_test186"
-
-
             ]
         }                
-     ]
+     ],
+     "Version": "2012-10-17"
     }
 
-  srl-Security: >      
+  edware-security_pol: >      
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -442,87 +399,131 @@ iam_roles:
     - yum_write_pol
     - gluster_ssl_write_pol
     - apache_ssl_write_pol
+    - sensu_ssl_write_pol
   nat_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   bind_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
+  sensu-rabbit_role:
+    - yum_read_pol
+    - sensu_ssl_read_pol
+  sensu_role:
+    - yum_read_pol
+    - gluster_ssl_read_pol
+    - sensu_ssl_write_pol
+    - sensu_ssl_read_pol
   gluster-server_role:
     - yum_read_pol
     - gluster_ssl_write_pol
+    - sensu_ssl_read_pol
   loghost_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   memcached_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   hpz-db_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   tsb-db_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   stats-db_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   udl-db_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   migrate-db_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   migrate-rabbit_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-rabbit-extract_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-rabbit-services_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   tsb-rabbit_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   udl-rabbit_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   db-master_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   lz_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   file-grabber_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - archive_write_pol
+    - sensu_ssl_read_pol
   file-trigger_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   udl_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   db-pgbouncer_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-db-slave_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   extracts-db-slave_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-db-pgpool_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   extracts-db-pgpool_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   tsb-worker_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
     - gluster_ssl_read_pol
   tsb-web_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
     - apache_ssl_read_pol
   tsb-trigger_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
     - gluster_ssl_read_pol
   hpz-web_role:
     - yum_read_pol
     - gluster_ssl_read_pol
     - apache_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-worker-extract_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-worker-pdf_role:
     - yum_read_pol
     - gluster_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-web_role:
     - yum_read_pol
     - apache_ssl_read_pol
+    - sensu_ssl_read_pol
   reporting-cache-warmer_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   reporting-generator-pdf_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
   base_role:
     - yum_read_pol
 

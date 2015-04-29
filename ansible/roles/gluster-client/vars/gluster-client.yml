@@ -8,6 +8,13 @@ gluster_mount:
   udl-db: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
   file-trigger: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
   file-grabber: { subj: zones, mounts: [{ mount_at: /opt/edware/zones , volume: zones, owner: udl2, group: postgres }]}
+  sensu:
+    subj: sensu
+    mounts: 
+      - mount_at: /opt/sensu/redis
+        volume: sensu
+        owner: sensu
+        group: sensu
 
 
 gfs_node1: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[0] }}"

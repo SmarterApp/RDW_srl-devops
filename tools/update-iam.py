@@ -1,57 +1,21 @@
 #!/usr/bin/python
 
-import boto.vpc
 from optparse import OptionParser
 import logging
 import yaml
-import os
-import os.path
-from subprocess import Popen, PIPE
+import json
+from StringIO import StringIO
 from jinja2 import Template
 import time
-
+from srl.aws import *
 
 def main():
     opts = read_options()
     cfg = read_config_file(opts)
     hints = preflight(opts, cfg)
+    create_groups(hints, cfg)
     create_roles(hints, cfg)
     create_instance_profiles(hints, cfg)
-    # create_managed_profiles(hints, cfg)
-    # create_users(hints, cfg)
-
-# TODO: copypasta from spawner.py, DRY up4
-def backtick(cmd):
-    output = Popen(cmd, stdout=PIPE, shell=True).communicate()[0].rstrip()
-    return output
-    
- # TODO: copypasta from spawner.py, DRY up
-def get_aws_creds():
-    if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
-        return (os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY'))
-    else:
-        
-        logging.debug("reading AWS creds from password store")
-        if not os.environ.get('SBAC_ENV').endswith('security'):
-            logging.error("SBAC_ENV environment variable must be set to a credential set that ends in 'security', like 'dev/security'")
-            exit(1)            
-        access_id = backtick('pass $SBAC_ENV/aws/access_id')
-        secret_key = backtick('pass $SBAC_ENV/aws/secret_key')
-        return (access_id, secret_key)
-    
-
-# TODO: copypasta from spawner.py, DRY up
-def connect_to_vpc():
-    (access_id, secret_key) = get_aws_creds()
-    vpc_conn = boto.vpc.VPCConnection(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
-    logging.info("connected to AWS VPC OK")
-    return vpc_conn
-
-def connect_to_iam():
-    (access_id, secret_key) = get_aws_creds()
-    iam_conn = boto.connect_iam(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
-    logging.info("connected to AWS IAM OK")
-    return iam_conn
 
 def read_options():
     parser = OptionParser()
@@ -83,10 +47,10 @@ def preflight(opts, cfg):
     #--------------
     hints['vpc'] = {}
     hints['iam'] = {}
-    vpc_conn = connect_to_vpc()
+    vpc_conn = connect_to_vpc(required_cred_class = 'security')
     hints['vpc']['conn'] = vpc_conn
     hints['vpc']['env'] = opts.env
-    iam_conn = connect_to_iam()
+    iam_conn = connect_to_iam(required_cred_class = 'security')
     hints['iam']['conn'] = iam_conn
     vpcs = [ v for v in vpc_conn.get_all_vpcs() if v.tags.get('Environment') == opts.env ]
     if len(vpcs) > 1:
@@ -130,7 +94,7 @@ def create_roles(hints, cfg):
             
         # Create each of the inline policies in the role        
         for p in cfg['iam_roles'][r]:
-            template = Template(cfg['inline_policies'][p])
+            template = Template(cfg['iam_policies'][p])
 
             # If we are in a test env, just use the dev yum repo
             if p.startswith('yum') and hints['vpc']['env'].startswith('test'):
@@ -178,9 +142,94 @@ def create_instance_profiles(hints, cfg):
             iam_conn.add_role_to_instance_profile(profile_name, role_name)
             logging.info("- NEW - Instance Profile {0} updated to map 1:1 to {1}".format(profile_name, role_name))
 
-def create_managed_profiles(hints, cfg):
-    # iam_conn = hints['iam']['conn']
-    # https://github.com/boto/boto/issues/2956
-    None
+def create_groups(hints, cfg):
+    # List groups and look for the ones that should exist
+    conn = hints['iam']['conn']
+    all_groups = iam_list(conn, 'groups', 'get_all')
+
+    for tier in ['inventory', 'spinup', 'security']:
+        
+        # Ensure group exists
+        group_name = 'edware-' + tier
+        policy_name = group_name + '_pol'
+        group = all_groups.get(group_name)
+        if group:
+            logging.info("- OK  - Group {0} exists".format(group_name))
+        else:
+            group = conn.create_group(group_name)['create_group_response']['create_group_result']['group']
+            logging.info("- NEW - Group {0} created".format(group_name))
+
+        # Check policy members on group - should be exactly one 
+        current_policy_names = set(conn.get_all_group_policies(group.group_name)['list_group_policies_response']['list_group_policies_result']['policy_names']) # @#$%#$ irregular API
+        expected_policy_names = set([ policy_name ])
+        spurious_policy_names = current_policy_names - expected_policy_names
+        missing_policy_names  = expected_policy_names - current_policy_names
+        for gp in spurious_policy_names:
+            conn.delete_group_policy(group_name, gp)
+            current_policy_names = current_policy_names - set([gp])
+            logging.info("- DEL - Group {0} has spurious policy named {1}, deleting".format(group_name, gp))
+
+        desired_definition = generate_group_policy(tier, policy_name, cfg, conn)
+        current_definition = '{}'
+        if len(current_policy_names) == 1:
+            current_definition = conn.get_group_policy(group_name, policy_name)
             
+        if current_definition == desired_definition:  # These are strings of canonicalized JSON
+            logging.info("- OK  - Group {0} has correct policy named {1}".format(group_name, policy_name))
+        else:
+            conn.put_group_policy(group_name, policy_name, desired_definition)
+            if len(current_policy_names) == 1:
+                logging.info("- UPD - Group {0} needed update on policy named {1}".format(group_name, policy_name))
+            else:
+                logging.info("- NEW - Group {0} was missing policy named {1}".format(group_name, policy_name))            
+
+def iam_list(conn, subject, method = 'list', key='name', args=[], singular=None):
+    items_by_key = {}
+    if not singular:
+        singular = subject[:-1]
+    
+    raw_result = getattr(conn, method + '_' + subject)(*args)
+    # Note that the response is always packed with a 'list' prefix
+    raw_result = raw_result['list_' + subject + '_response']
+    raw_result = raw_result['list_' + subject + '_result']
+    raw_result = raw_result[subject]
+    for i in raw_result:
+        item_key = getattr(i, singular + '_' + key)
+        items_by_key[item_key] = i
+    return items_by_key
+
+
+def generate_group_policy(tier, policy_name, cfg, conn):
+    # Fetch policy definition from YAML into python dict
+    policy = json.loads(cfg['inline_policies'][policy_name])
+    
+    # If spinup, generate the pass role perms
+    if tier == 'spinup':
+        add_pass_roles_to_spinup_policy(policy, cfg, conn)
+        
+    # Convert to JSON string, canonicalizing
+    return dict2json(policy)
+
+def dict2json(thing):
+    io = StringIO()
+    json.dump(thing, io, sort_keys=True,indent=2)
+    return io.getvalue()
+    
+def add_pass_roles_to_spinup_policy(policy, cfg, conn):
+
+    # Find PassRole rule
+    rule = [r for r in policy['Statement'] if r['Action'][0] == 'iam:PassRole'][0] # TODO - seems brittle
+    # Reset targets
+    rule['Resource'] = []
+    
+    # Get a list of environments
+    for env in ['', '_test186']: # TODO: make this dynamnic, using conn to get VPC list?                
+        # Get a list of roles
+        for role in cfg['iam_roles'].keys():
+            rule['Resource'].append('arn:aws:iam::*:role/' + role + env)
+
+    rule['Resource'].sort()
+
+    return policy
+
 main()

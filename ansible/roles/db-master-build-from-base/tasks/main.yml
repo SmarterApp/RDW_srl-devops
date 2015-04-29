@@ -42,6 +42,7 @@
   template: src=roles/db-master/templates/repmgr.conf.j2 dest=/var/lib/pgsql/repmgr.conf
 
 - name: create repmgr user
+  # TODO: cwolfe: this fails on a fresh install - may need to reorder w/ pg_hba, or find a way to run as postgres OS user
   postgresql_user: login_host=localhost name=repmgr password={{ edware_db_repmgr_password }} role_attr_flags=SUPERUSER,LOGIN
 
 - name: copy pg_hba.conf
@@ -49,6 +50,7 @@
   notify: restart postgres
 
 - name: delete existing repmgr record
+  # TODO: cwolfe: this fails on a fresh install - need a check to detect schema
   shell: su - postgres -c "psql -d edware -c 'drop schema repmgr_edware_pg_cluster cascade'"
 
 
