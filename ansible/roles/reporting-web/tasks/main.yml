@@ -16,20 +16,22 @@
 
 
 - name: Add Slash Rewrite
-  template: src=rewrite-slash.conf dest=/etc/httpd/conf.d/rewrite-slash.conf
-  notify: restart httpd
+  copy:
+    src: rewrite-slash.conf
+    dest: /etc/httpd/conf.d/rewrite-slash.conf
+  notify: restart_httpd
 
 - name: Rewrite http to https
-  template: src=rewrite-http.conf dest=/etc/httpd/conf.d/rewrite-http.conf
-  notify: restart httpd
+  # TODO: the hostname in the redirect in this file should probably be parameterized
+  template:
+    src: rewrite-http.conf.j2
+    dest: /etc/httpd/conf.d/rewrite-http.conf
+  notify: restart_httpd
 
 - name: Install MPM config
-  copy: src=edware_worker_mpm.conf dest=/etc/httpd/conf.d/edware_worker_mpm.conf
-  notify: restart httpd
-
-  
-# TODO: conside moving the 'smarter' install to edware
-- name: Install the latest smarter application
-  yum: name=smarter state=latest
-  notify: restart httpd
+  # TODO: this file should be parameterized for performance params
+  template:
+    src: edware_worker_mpm.conf.j2
+    dest: /etc/httpd/conf.d/edware_worker_mpm.conf
+  notify: restart_httpd
 
