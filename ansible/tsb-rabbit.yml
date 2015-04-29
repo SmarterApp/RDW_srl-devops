@@ -1,1 +1,10 @@
-generic-rabbit.yml
+- name: tsb-rabbit setup
+  hosts: all
+  sudo: yes
+  vars:
+    rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-tsb-ssl"
+  roles:
+    - { role: common, tags: [ 'common'] }
+    - { role: aws-cli, tags: [ 'aws-cli' ] }
+    - { role: rabbitmq-from-base, tags: [ 'rabbitmq' ] }
+    - { role: tsb-rabbit, tags: [ 'tsb-rabbit' ] }
