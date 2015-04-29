@@ -8,6 +8,7 @@
 
   roles:
     - { role: common, tags:['common']}
+    - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }
     - { role: hpz-web, tags: ['hpz-web', 'app'] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }
