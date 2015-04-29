@@ -2,6 +2,9 @@
 - name: Configure the tsb-web server 
   hosts: tsb-web 
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   vars:
     monitoring_topics:

@@ -1,6 +1,7 @@
 ---
 - name: Configure tsb-trigger server 
   hosts: tsb-trigger 
+  user: ansible
   sudo: yes
   vars:
     monitoring_topics:
@@ -8,6 +9,7 @@
 
   roles:
     - { role: common, tags:['common']}
+    - { role: edware, tags: ['edware', 'app'] }
     - { role: gluster-client, tags: ['gluster-client'] }
     - { role: tsb-trigger, tags: ['tsb-trigger', 'app']}
     - { role: sensu, tags: ['sensu', 'monitoring'] }

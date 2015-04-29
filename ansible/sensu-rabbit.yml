@@ -10,5 +10,5 @@
     - { role: common, tags: [ 'common'] }
     - { role: aws-cli, tags: [ 'aws-cli' ] }
     - { role: rabbitmq-from-base, tags: [ 'rabbitmq' ] }
-    - { role: sensu-rabbit, tags: [ 'sensu-rabbit' ] }
+    - { role: sensu-rabbit, tags: [ 'sensu-rabbit', 'app' ] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }

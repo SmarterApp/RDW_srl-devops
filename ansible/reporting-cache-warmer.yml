@@ -2,6 +2,9 @@
 - name: Configure reporting-cache-warmer servers 
   hosts: reporting-cache-warmer 
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   vars:
     monitoring_topics:

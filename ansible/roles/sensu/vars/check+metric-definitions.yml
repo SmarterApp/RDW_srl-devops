@@ -3,11 +3,38 @@ sensu_checks:
   # ================================================ #
   #                common - metrics
   # ================================================ #
+  cpu-metrics: 
+    type: metric
+    handlers: 
+      - store_in_carbon
+    command: "/etc/sensu/plugins/cpu-metrics.rb --scheme sys.:::name:::.cpu"
+    interval: 300
+    subscribers: # == monitoring_topics
+      - common
+
   disk-capacity-metrics: 
     type: metric
     handlers: 
       - store_in_carbon
     command: "/etc/sensu/plugins/disk-capacity-metrics.rb --scheme sys.:::name:::.disk"
+    interval: 300
+    subscribers: # == monitoring_topics
+      - common
+
+  load-metrics: 
+    type: metric
+    handlers: 
+      - store_in_carbon
+    command: "/etc/sensu/plugins/load-metrics.rb --scheme sys.:::name:::.load"
+    interval: 300
+    subscribers: # == monitoring_topics
+      - common
+
+  memory-metrics: 
+    type: metric
+    handlers: 
+      - store_in_carbon
+    command: "/etc/sensu/plugins/memory-metrics.rb --scheme sys.:::name:::.memory"
     interval: 300
     subscribers: # == monitoring_topics
       - common

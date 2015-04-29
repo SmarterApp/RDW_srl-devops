@@ -2,6 +2,9 @@
 - name: Configure the tsb-worker servers 
   hosts: tsb-worker 
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   vars:
     monitoring_topics:

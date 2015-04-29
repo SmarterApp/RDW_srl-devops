@@ -4,7 +4,7 @@
   sudo: yes
   vars:
     monitoring_topics:
-      - common 
+
   roles:
     - { role: common, tags:['common']}
     - { role: db, tags: ['db', 'app'] }

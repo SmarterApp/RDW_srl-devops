@@ -1,7 +1,6 @@
 - name: Generic rabbitmq setup
   hosts: migrate-rabbit:reporting-rabbit-services:reporting-rabbit-extract:tsb-rabbit:udl-rabbit
   sudo: yes
-
   vars:
     monitoring_topics:
       - common 
@@ -15,4 +14,3 @@
     # See sensu-rabbit for a cleaner way
     - { role: rabbitmq, tags: ['rabbitmq', 'app'] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }
-
