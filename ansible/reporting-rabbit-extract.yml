@@ -4,4 +4,4 @@
   roles:
     - { role: common, tags: [ 'common'] }
     - { role: edware, tags: [ 'edware'] }
-    - { role: rabbitmq, tags: [ 'rabbitmq'] }
+    - { role: rabbitmq-from-base, tags: [ 'rabbitmq'] }
