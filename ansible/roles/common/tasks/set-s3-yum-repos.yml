@@ -12,4 +12,5 @@
   command: yum makecache
   tags:
     - slow
+  ignore_errors: yes
 
