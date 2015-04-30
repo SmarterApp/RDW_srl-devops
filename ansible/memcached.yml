@@ -3,7 +3,11 @@
   hosts: memcached 
   user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - memcached 
+    - { role: common, tags:['common']}
+    - { role: memcached, tags:['memcached', 'app'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

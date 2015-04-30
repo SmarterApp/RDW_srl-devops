@@ -398,6 +398,45 @@
         cidr_ip: "{{ vpc_cidr_block }}"
     purge_rules: true
     purge_rules_egress: true
+
+- name: srl-sensu-api security group
+  ec2_group:
+    name: srl-sensu-api
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow access to the Sensu API port
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 4567
+        to_port: 4567
+        cidr_ip: "{{ vpc_cidr_block }}"
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+
+- name: srl-graphite security group
+  ec2_group:
+    name: srl-graphite
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow access to the carbon-query and Graphite HTTPS
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: "{{ vpc_cidr_block }}"
+      - proto: tcp
+        from_port: 7002  # carbon cache query port
+        to_port: 7002
+        cidr_ip: "{{ vpc_cidr_block }}"        
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+
 - name: srl-logging security group
   ec2_group:
     name: srl-logging

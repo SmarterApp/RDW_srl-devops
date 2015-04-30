@@ -3,10 +3,13 @@
   hosts: file-trigger 
   user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - edware
-    - { role: aws-cli, tags: ['aws-cli'] }
+    - { role: common, tags:['common']}
+    - { role: edware, tags: ['edware', 'app'] }
     - { role: gluster-client, tags: ['gluster-client'] }
-    - file-trigger 
+    - { role: file-trigger, tags: ['file-trigger', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

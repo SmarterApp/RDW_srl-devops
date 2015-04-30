@@ -3,8 +3,12 @@
   hosts: reporting-cache-warmer 
   user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - edware
-    - reporting-cache-warmer
+    - { role: common, tags:['common']}
+    - { role: edware, tags: ['edware', 'app'] }
+    - { role: reporting-cache-warmer, tags:['reporting-cache-warmer', 'app']}
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

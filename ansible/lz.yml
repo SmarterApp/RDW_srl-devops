@@ -3,8 +3,12 @@
   hosts: lz 
   user: ansible
   sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
 
   roles:
-    - common
-    - edware
-    - lz 
+    - { role: common, tags:['common']}
+    - { role: edware, tags: ['edware', 'app'] }
+    - { role: lz, tags: ['lz', 'app'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

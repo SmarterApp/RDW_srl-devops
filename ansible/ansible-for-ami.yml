@@ -7,4 +7,4 @@
       - ansible
   roles:
     # - common   # TODO: uhh why is this commented out?
-    - ansible-bootstrap
+    - ansible
