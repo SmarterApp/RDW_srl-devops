@@ -64,7 +64,7 @@
 
 - name: Require the_password
   fail:
-    msg: "You must provide the 'edware_rabbit_password' variable in the group_vars/$ENV/secrets.yml file"
+    msg: "You must provide the '{{ the_password }}' variable in the group_vars/$ENV/secrets.yml file"
   when: the_password is not defined
 
 - name: Check for user
@@ -74,7 +74,7 @@
   failed_when: false
 
 - name: Create user
-  shell: "rabbitmqctl add_user '{{ the_username }}' '{{ edware_rabbit_password }}'"
+  shell: "rabbitmqctl add_user '{{ the_username }}' '{{ the_password }}'"
   when: the_user_detected | failed
 
 - name: Set user perms
