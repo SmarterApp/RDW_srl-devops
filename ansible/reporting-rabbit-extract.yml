@@ -1,6 +1,9 @@
 - name: Reporting rabbit extract
   hosts: reporting-rabbit-extract
   sudo: yes
+  vars:
+    rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-extract-ssl"
+
   roles:
     - { role: common, tags: [ 'common'] }
     - { role: edware, tags: [ 'edware'] }
