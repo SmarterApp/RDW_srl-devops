@@ -382,7 +382,7 @@ apps:
       prod: 3
 
   - name: tsb-web
-    ami_app_name: tsb-web
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-web
