@@ -137,6 +137,21 @@ inline_policies:
         }
       ]
     }
+  extract_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-extract-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-extract-ssl/*"]
+        }
+      ]
+    }
   gluster_ssl_write_pol: >
     {
       "Statement": [
@@ -461,6 +476,7 @@ iam_roles:
   reporting-rabbit-extract_role:
     - yum_read_pol
     - sensu_ssl_read_pol
+    - extract_ssl_read_pol
   reporting-rabbit-services_role:
     - yum_read_pol
     - sensu_ssl_read_pol
