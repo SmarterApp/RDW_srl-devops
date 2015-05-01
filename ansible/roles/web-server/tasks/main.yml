@@ -50,10 +50,13 @@
   notify:
     - restart_httpd
 
-- name: Remove default welcome.conf
+- name: Remove default config files
   file:
-    path: /etc/httpd/conf.d/welcome.conf
+    path: "/etc/httpd/conf.d/{{ item }}.conf"
     state: absent
+  with_items:
+    - ssl
+    - welcome
     
 - name: Untemplated conf files
   copy:
