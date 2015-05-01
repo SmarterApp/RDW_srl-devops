@@ -3,12 +3,14 @@
   hosts: tsb-web 
   sudo: yes
   vars:
-    edware_rpm_name: smarter_score_batcher      
+    edware_rpm_name: smarter_score_batcher
+    ssl_key_name: localhost
     monitoring_topics:
       - common 
 
   roles:
     - { role: common, tags: ['common'] }
     - { role: edware, tags: ['edware', 'app'] }
+    - { role: web-server, tags: ['web-server', 'app'] }
     - { role: tsb-web, tags: ['tsb-web', 'app'] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }

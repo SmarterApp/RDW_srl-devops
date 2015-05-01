@@ -8,4 +8,9 @@ httpd_conf_templates:
   reporting-web:
     - ssl_main_server
     - wsgi_edware
+  tsb-web:
+    - wsgi_tsb
+    - ssl_main_server
+    - rewrite_tsb  # TODO: parameterize this file with hostname
+    
   
