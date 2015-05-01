@@ -452,7 +452,6 @@ iam_roles:
     - yum_read_pol
     - gluster_ssl_read_pol
     - sensu_ssl_read_pol
-    - udl_ssl_read_pol
   migrate-db_role:
     - yum_read_pol
     - sensu_ssl_read_pol
@@ -471,6 +470,7 @@ iam_roles:
   udl-rabbit_role:
     - yum_read_pol
     - sensu_ssl_read_pol
+    - udl_ssl_read_pol
   db-master_role:
     - yum_read_pol
     - sensu_ssl_read_pol
