@@ -1,6 +1,6 @@
 ---
 - name: Configure tsb-web 
   template:
-    src=roles/edware/templates/smarter_score_batcher.ini.j2
-    dest=/opt/edware/conf/smarter_score_batcher.ini
+    src: roles/edware/templates/smarter_score_batcher.ini.j2 # Why is this in the edware role?
+    dest: /opt/edware/conf/smarter_score_batcher.ini
   notify: restart_httpd 
