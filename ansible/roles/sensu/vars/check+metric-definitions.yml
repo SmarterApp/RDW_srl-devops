@@ -110,7 +110,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 60
-    command: "/bin/ls /opt/edware/zones"
+    command: "/usr/bin/sudo /bin/ls /opt/edware/zones"
     subscribers:
       - zones_glusterfs
 
@@ -119,7 +119,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 60
-    command: "/bin/ls /opt/edware/pdf"
+    command: "/usr/bin/sudo /bin/ls /opt/edware/pdf"
     subscribers:
       - pdf_glusterfs
 
@@ -128,7 +128,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 60
-    command: "/bin/ls /opt/edware/data/item_level"
+    command: "/usr/bin/sudo /bin/ls /opt/edware/data/item_level"
     subscribers:
       - data_item_glusterfs
 
@@ -137,6 +137,6 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 60
-    command: "/bin/ls /opt/edware/data/raw_data"
+    command: "/usr/bin/sudo /bin/ls /opt/edware/data/raw_data"
     subscribers:
       - data_raw_glusterfs
