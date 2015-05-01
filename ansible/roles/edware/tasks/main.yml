@@ -1,8 +1,9 @@
+
 ---
 
-- name: Install the latest smarter application
+- name: Install the application RPM
   yum:
-    name: smarter
+    name: "{{ edware_rpm_name }}"
     state: latest
   tags:
     - slow

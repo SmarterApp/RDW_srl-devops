@@ -3,10 +3,7 @@
   hosts: tsb-web 
   sudo: yes
   vars:
-    monitoring_topics:
-      - common 
-
-  vars:
+    edware_rpm_name: smarter_score_batcher      
     monitoring_topics:
       - common 
 
