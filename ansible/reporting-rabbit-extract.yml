@@ -10,5 +10,4 @@
 
   roles:
     - { role: common, tags: [ 'common'] }
-    - { role: edware, tags: [ 'edware'] }
     - { role: rabbitmq-from-base, tags: [ 'rabbitmq'] }
