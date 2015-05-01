@@ -1,5 +1,5 @@
 ---
-# Note: the smarter.ini retemaplte happens in  edware/tasks/main
+# Note: the smarter.ini retemplate happens in  edware/tasks/main
 # Here, we're just watching to see if it changes, and if so, restart apache.
 # Normally we'd put a handler in edware, but edware role is used by several apps, 
 # most of which don't have httpd.
@@ -13,25 +13,4 @@
 - name: Configure IDP sso
   copy: src=files/{{ ec2_tag_environment }}/idp_metadata.xml dest=/opt/edware/conf/idp_metadata.xml
   notify: restart httpd 
-
-
-- name: Add Slash Rewrite
-  copy:
-    src: rewrite-slash.conf
-    dest: /etc/httpd/conf.d/rewrite-slash.conf
-  notify: restart_httpd
-
-- name: Rewrite http to https
-  # TODO: the hostname in the redirect in this file should probably be parameterized
-  template:
-    src: rewrite-http.conf.j2
-    dest: /etc/httpd/conf.d/rewrite-http.conf
-  notify: restart_httpd
-
-- name: Install MPM config
-  # TODO: this file should be parameterized for performance params
-  template:
-    src: edware_worker_mpm.conf.j2
-    dest: /etc/httpd/conf.d/edware_worker_mpm.conf
-  notify: restart_httpd
 

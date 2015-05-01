@@ -6,8 +6,11 @@ httpd_conf_templates:
     - wsgi_frs
     - wsgi_swi
   reporting-web:
+    - edware_worker_mpm
+    - rewrite_reporting_https # TODO: parameterize this file with hostname
+    - rewrite_reporting_slash
     - ssl_main_server
-    - wsgi_edware
+    - wsgi_edware    
   tsb-web:
     - wsgi_tsb
     - ssl_main_server
