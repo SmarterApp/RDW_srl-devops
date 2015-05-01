@@ -1,6 +1,7 @@
 ---
 - name: Configure the memcached server 
   hosts: memcached 
+  user: ansible
   sudo: yes
   vars:
     monitoring_topics:

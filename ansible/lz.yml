@@ -1,11 +1,8 @@
 ---
 - name: Configure lz server 
   hosts: lz 
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
-
   vars:
     monitoring_topics:
       - common 

@@ -1,11 +1,8 @@
 ---
 - name: Configure reporting-cache-warmer servers 
   hosts: reporting-cache-warmer 
+  user: ansible
   sudo: yes
-  vars:
-    monitoring_topics:
-      - common 
-
   vars:
     monitoring_topics:
       - common 

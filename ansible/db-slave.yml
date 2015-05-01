@@ -1,6 +1,7 @@
 ---
 - name: Configure slave database
   hosts: reporting-db-slave:extracts-db-slave
+  user: ansible
   sudo: yes
   vars:
     reporting_db_master_ip: "{{ groups['db-master'] | intersect(groups [ ec2_tag_environment ]) | first }}"
