@@ -1,6 +1,7 @@
 ---
 - name: Configure reporting-generator-pdf servers 
   hosts: reporting-generator-pdf 
+  user: ansible
   sudo: yes
   vars:
     monitoring_topics:
