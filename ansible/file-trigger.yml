@@ -6,6 +6,7 @@
   vars:
     monitoring_topics:
       - common 
+      - zones_glusterfs
 
   roles:
     - { role: common, tags:['common']}
