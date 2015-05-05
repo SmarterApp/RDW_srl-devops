@@ -482,6 +482,7 @@ iam_roles:
     - sensu_ssl_read_pol
   tsb-rabbit_role:
     - yum_read_pol
+    - sensu_ssl_read_pol
     - tsb_ssl_read_pol
   udl-rabbit_role:
     - yum_read_pol
