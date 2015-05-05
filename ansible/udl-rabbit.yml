@@ -1,10 +1,10 @@
 - name: udl rabbitmq setup
-  hosts: all
+  hosts: udl-rabbit
   sudo: yes
   vars:
     rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-udl-ssl"
-    the_username: "{{ udl_rabbit_username }}"
-    the_password: "{{ udl_rabbit_password }}"
+    rabbitmq_username: "{{ udl_rabbit_username }}"
+    rabbitmq_password: "{{ udl_rabbit_password }}"
     vhost_name: edudl
 
   roles:
