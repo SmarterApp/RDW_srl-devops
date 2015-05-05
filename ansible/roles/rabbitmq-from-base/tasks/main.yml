@@ -77,6 +77,10 @@
   shell: "rabbitmqctl add_user '{{ the_username }}' '{{ the_password }}'"
   when: the_user_detected | failed
 
+- name: Set user perms
+  shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ the_username }} '.*' '.*' '.*' "
+  when: the_user_detected | failed
+
 - name: Check for vhost
   shell: "rabbitmqctl -q list_vhosts | egrep -q '^{{ vhost_name }}$'"
   register: the_vhost_detected
@@ -87,6 +91,3 @@
   shell: "rabbitmqctl add_vhost '{{ vhost_name }}'"
   when: the_vhost_detected | failed
 
-- name: Set user perms
-  shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ the_username }} '.*' '.*' '.*' "
-  when: the_user_detected | failed
