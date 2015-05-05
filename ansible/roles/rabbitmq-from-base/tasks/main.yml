@@ -78,7 +78,7 @@
   when: the_user_detected | failed
 
 - name: Set user perms
-  shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ the_username }} '.*' '.*' '.*' "
+  shell: "rabbitmqctl set_permissions -p services {{ vhost_name }} '.*' '.*' '.*' "
   when: the_user_detected | failed
 
 - name: Check for vhost
