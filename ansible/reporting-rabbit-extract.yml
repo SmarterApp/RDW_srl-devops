@@ -2,12 +2,15 @@
   hosts: reporting-rabbit-extract
   sudo: yes
   vars:
+    monitoring_topics:
+      - common 
     rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-extract-ssl"
-    the_username: "{{ reporting_rabbit_extract_username }}"
-    the_password: "{{ reporting_rabbit_extract_password }}"
+    rabbitmq_username: "{{ reporting_rabbit_extract_username }}"
+    rabbitmq_password: "{{ reporting_rabbit_extract_password }}"
     vhost_name: edextract
 
 
   roles:
     - { role: common, tags: [ 'common'] }
     - { role: rabbitmq-from-base, tags: [ 'rabbitmq'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }
