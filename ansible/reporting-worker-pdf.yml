@@ -6,6 +6,7 @@
   vars:
     monitoring_topics:
       - common 
+      - pdf_glusterfs
 
   roles:
     - { role: common, tags:['common']}
