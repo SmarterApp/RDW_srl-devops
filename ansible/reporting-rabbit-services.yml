@@ -1,1 +1,15 @@
-generic-rabbit.yml
+- name: Reporting rabbit services
+  hosts: reporting-rabbit-services
+  sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
+    rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-services-ssl"
+    rabbitmq_username: "{{ reporting_rabbit_services_username }}"
+    rabbitmq_password: "{{ reporting_rabbit_services_password }}"
+    vhost_name: services
+
+  roles:
+    - { role: common, tags:['common']}
+    - { role: rabbitmq-from-base, tags: ['rabbitmq'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }
