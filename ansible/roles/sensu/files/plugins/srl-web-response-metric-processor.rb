@@ -5,7 +5,7 @@
 # file with statistics about the moving percentiles.
 #   Reports on a window over the last N samples.
 
-STATS_FILE = '/var/log/httpd/response_time_stats.json'
+STATS_FILE = '/var/log/sensu/httpd_response_time_stats.json'
 IGNORE_URLS = [
   Regexp.new('/services/heartbeat'),
 ]
