@@ -1,0 +1,10 @@
+
+
+# Create a custom log format with just the info we need to
+# summarize response times.
+
+# epoch,response_code,duration_usec,url_path
+LogFormat "{{'%{%s}t,%s,%D,%U'}}" response_metrics
+
+# CustomLog "||/some/program " response_time
+CustomLog /var/log/httpd/response_metrics.log response_metrics
