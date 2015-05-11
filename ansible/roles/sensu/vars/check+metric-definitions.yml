@@ -68,7 +68,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -80,7 +80,7 @@ sensu_checks:
     handlers:
       - store_in_carbon
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -89,7 +89,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -101,6 +101,42 @@ sensu_checks:
     handlers:
       - store_in_carbon
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
+
+  zones.glusterfs.mount.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 60
+    command: "/usr/bin/sudo /bin/ls /opt/edware/zones"
+    subscribers:
+      - zones_glusterfs
+
+  pdf.glusterfs.mount.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 60
+    command: "/usr/bin/sudo /bin/ls /opt/edware/pdf"
+    subscribers:
+      - pdf_glusterfs
+
+  data.item.glusterfs.mount.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 60
+    command: "/usr/bin/sudo /bin/ls /opt/edware/data/item_level"
+    subscribers:
+      - data_item_glusterfs
+
+  data.raw.glusterfs.mount.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 60
+    command: "/usr/bin/sudo /bin/ls /opt/edware/data/raw_data"
+    subscribers:
+      - data_raw_glusterfs

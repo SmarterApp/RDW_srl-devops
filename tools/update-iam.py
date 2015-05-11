@@ -94,7 +94,7 @@ def create_roles(hints, cfg):
             
         # Create each of the inline policies in the role        
         for p in cfg['iam_roles'][r]:
-            template = Template(cfg['iam_policies'][p])
+            template = Template(cfg['inline_policies'][p])
 
             # If we are in a test env, just use the dev yum repo
             if p.startswith('yum') and hints['vpc']['env'].startswith('test'):
