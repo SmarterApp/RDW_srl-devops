@@ -5,6 +5,7 @@
   vars:    
     monitoring_topics:
       - common
+      - web-servers
     ssl_key_name: rweb
     wsgi_process_count: 4 # Overrides default of 2 provided by web-server
       
