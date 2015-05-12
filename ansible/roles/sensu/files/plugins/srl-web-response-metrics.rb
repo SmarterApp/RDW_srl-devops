@@ -33,7 +33,7 @@ class MemoryGraphite < Sensu::Plugin::Metric::CLI::Graphite
          description: 'Metric naming scheme, text to prepend to metric',
          short: '-s SCHEME',
          long: '--scheme SCHEME',
-         default: "#{Socket.gethostname}.httpd_response_usec"
+         default: "middleware.httpd.#{Socket.gethostname}.response_usec"
 
   def run
     metrics = read_stats_file
