@@ -7,6 +7,7 @@ httpd_conf_templates:
     - wsgi_swi
   reporting-web:
     - edware_worker_mpm
+    - response_metrics
     - rewrite_reporting_https # TODO: parameterize this file with hostname
     - rewrite_reporting_slash
     - ssl_main_server
