@@ -1,0 +1,77 @@
+---
+
+- name: Require ssl_key_name
+  fail:
+    msg: Variable 'ssl_key_name' must be defined, usually in the playbook.
+  when: ssl_key_name is not defined
+
+- name: Install version-pinned RPMs for webserver
+  yum:
+    name: "{{ item }}"
+    state: present    
+  with_items:
+    - python3-3.3.0
+    - httpd-2.2.15
+    - python3-mod_wsgi-3.4
+    - xmlsec1-1.2.20
+    - xmlsec1-openssl-devel-1.2.20
+  tags:
+    - slow
+
+- name: Install float-version RPMs for webserver
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - mod_ssl
+  notify:
+    - restart_httpd
+  tags:
+    - slow
+
+- name: get appropriate SSL certs
+  shell: '/usr/local/bin/aws s3 sync --sse s3://srl-{{ec2_tag_environment}}-apache-internal-ssl/{{ec2_tag_application}} /etc/pki/tls/'
+  register: rmq_s3_sync
+  changed_when: "rmq_s3_sync.stdout != ''"
+  notify:
+    - restart_httpd
+    
+- name: Set sysconfig to use worker MPM
+  copy:
+    src: etc-sysconfig-httpd
+    dest: /etc/sysconfig/httpd    
+  notify:
+    - restart_httpd
+
+- name: Main httpd.conf
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+  notify:
+    - restart_httpd
+
+- name: Remove default config files
+  file:
+    path: "/etc/httpd/conf.d/{{ item }}.conf"
+    state: absent
+  with_items:
+    - ssl
+    - welcome
+    
+- name: Untemplated conf files
+  copy:
+    src: "{{ item }}.conf"
+    dest: "/etc/httpd/conf.d/{{ item }}.conf"
+  with_items:
+    - security
+  notify:
+    - restart_httpd
+
+- name: Templated conf files
+  template:
+    src: "{{ item }}.conf.j2"
+    dest: "/etc/httpd/conf.d/{{ item }}.conf"
+  with_items: "{{httpd_conf_templates[ec2_tag_application]}}"
+  notify:
+    - restart_httpd
+
