@@ -145,6 +145,15 @@ sensu_checks:
     subscribers:
       - data_raw_glusterfs
 
+  hpz.uploads.glusterfs.mount.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 60
+    command: "/usr/bin/sudo /bin/ls /opt/edware/hpz/uploads"
+    subscribers:
+      - hpz_uploads_glusterfs
+
   # ================================================ #
   #                      web-servers
   # ================================================ #

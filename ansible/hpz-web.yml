@@ -5,6 +5,7 @@
   vars:
     monitoring_topics:
       - common
+      - hpz_uploads_glusterfs
     ssl_key_name: localhost
 
   roles:
