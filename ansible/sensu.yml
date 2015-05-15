@@ -12,6 +12,7 @@
   vars_files:
     - roles/sensu/vars/check+metric-definitions.yml
     - roles/sensu/vars/handler-definitions.yml
+    - roles/aws-creds/vars/main.yml
 
   roles:
     - { role: common, tags: ['common']}

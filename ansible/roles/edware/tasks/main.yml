@@ -1,8 +1,17 @@
+
 ---
+
+- name: Install the application RPM
+  yum:
+    name: "{{ edware_rpm_name }}"
+    state: latest
+  tags:
+    - slow
+  notify: restart_httpd # TODO - verify this is safe to include even if there is no such handler (workers)
+
 - name: Templatize smarter.ini
   template: 
     dest: /opt/edware/conf/smarter.ini
     backup: yes
     src: smarter.ini.j2
-  sudo: true
   register: smarter_ini

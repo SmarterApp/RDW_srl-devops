@@ -68,7 +68,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -80,7 +80,7 @@ sensu_checks:
     handlers:
       - store_in_carbon
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -89,7 +89,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -101,7 +101,7 @@ sensu_checks:
     handlers:
       - store_in_carbon
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response_code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -114,6 +114,10 @@ sensu_checks:
     subscribers:
       - zones_glusterfs
 
+  # ================================================ #
+  #                  glusterfs-related
+  # ================================================ #
+      
   pdf.glusterfs.mount.simple:
     type: check
     handlers:
@@ -140,3 +144,28 @@ sensu_checks:
     command: "/usr/bin/sudo /bin/ls /opt/edware/data/raw_data"
     subscribers:
       - data_raw_glusterfs
+
+  hpz.uploads.glusterfs.mount.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 60
+    command: "/usr/bin/sudo /bin/ls /opt/edware/hpz/uploads"
+    subscribers:
+      - hpz_uploads_glusterfs
+
+  # ================================================ #
+  #                      web-servers
+  # ================================================ #
+
+  web-response:
+    # To enable this for an app, need to include the 'response_metrics'
+    # httpd conf file in the web-server role vars
+    type: metric
+    prefix: middleware
+    handlers:
+      - store_in_carbon
+    interval: 30
+    command: "/etc/sensu/plugins/srl-web-response-metrics.rb"
+    subscribers: 
+      - web-servers # == monitoring_topics

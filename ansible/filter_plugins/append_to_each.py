@@ -22,7 +22,7 @@ def srl_hostvars_lookup(hostvars, ip):
            return info
         else:
            return { 'ec2_tag_Name': 'dummy' }
-    except AnsibleError:
+    except:
         # OK, no host with that IP.
         # Return a dummy hash.
         return { 'ec2_tag_Name': 'dummy' }

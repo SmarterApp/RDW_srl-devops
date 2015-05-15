@@ -1,14 +1,18 @@
 ---
 - name: Configure the reporting webserver hosts
   hosts: reporting-web
-  user: ansible
   sudo: yes
-  vars:
+  vars:    
     monitoring_topics:
-      - common 
-
+      - common
+      - web-servers
+    ssl_key_name: rweb
+    wsgi_process_count: 4 # Overrides default of 2 provided by web-server
+      
   roles:
     - { role: common, tags: ['common' ] }
+    - { role: aws-cli, tags: ['aws-cli'] }    
+    - { role: web-server, tags: ['web-server', 'app'] }    
     - { role: edware, tags: ['edware', 'app'] }
     - { role: reporting-web, tags: ['reporting-web', 'app'] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }

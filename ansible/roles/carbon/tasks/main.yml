@@ -3,6 +3,34 @@
     name: python-carbon
     state: present
 
+- name: Create carbon ebs volume
+  ec2_vol:
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    instance: "{{ ec2_id }}"
+    device_name: "{{ carbon_volume }}"
+    volume_size: "{{ carbon_volume_size }}"
+    state: present
+    region: "{{ ec2_region }}"
+
+- name: Format carbon volume
+  filesystem: 
+    fstype: ext4
+    dev: "{{ carbon_volume }}" 
+
+- name: Create carbon data directory
+  file:
+    path: "{{ carbon_data_dir }}"
+    state: directory
+
+- name: Mount carbon volume
+  mount: 
+    name: "{{ carbon_data_dir }}" 
+    src: "{{ carbon_volume }}" 
+    fstype: ext4
+    state: mounted 
+    opts: "defaults,nofail"
+
 - name: Create storage dir
   file:
     path: "{{ carbon_storage_dir }}"
@@ -16,6 +44,13 @@
     state: directory
     owner: "{{ carbon_user }}"
     mode: 0755
+
+- name: Create carbon symlink
+  file: 
+    src: "{{ carbon_storage_dir }}"
+    dest: "{{ carbon_symlink }}"
+    owner: "{{ carbon_user}}"
+    state: link
 
 - name: setup carbon conf
   template: 

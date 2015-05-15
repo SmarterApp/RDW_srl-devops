@@ -102,6 +102,21 @@ inline_policies:
         }
       ]
     }
+  services_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-services-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-services-ssl/*"]
+        }
+      ]
+    }
   gluster_ssl_read_pol: >
     {
       "Statement": [
@@ -134,6 +149,36 @@ inline_policies:
           "Effect": "Allow",
           "Action": ["s3:GetObject"],
           "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo/*"]
+        }
+      ]
+    }
+  tsb_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-tsb-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-tsb-ssl/*"]
+        }
+      ]
+    }
+  extract_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-extract-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-extract-ssl/*"]
         }
       ]
     }
@@ -461,12 +506,15 @@ iam_roles:
   reporting-rabbit-extract_role:
     - yum_read_pol
     - sensu_ssl_read_pol
+    - extract_ssl_read_pol
   reporting-rabbit-services_role:
     - yum_read_pol
     - sensu_ssl_read_pol
+    - services_ssl_read_pol
   tsb-rabbit_role:
     - yum_read_pol
     - sensu_ssl_read_pol
+    - tsb_ssl_read_pol
   udl-rabbit_role:
     - yum_read_pol
     - sensu_ssl_read_pol

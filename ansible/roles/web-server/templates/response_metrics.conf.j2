@@ -1,0 +1,11 @@
+
+
+# Create a custom log format with just the info we need to
+# summarize response times.
+
+# epoch,response_code,duration_usec,url_path
+LogFormat "{{'%{%s}t,%s,%D,%U'}}" response_metrics
+
+# Send it to a moving-percentile summarizer
+CustomLog "||/etc/sensu/plugins/srl-web-response-metric-processor.rb " response_metrics
+

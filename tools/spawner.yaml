@@ -208,7 +208,7 @@ apps:
       prod: 1
 
   - name: reporting-rabbit-services
-    ami_app_name: rabbit
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-rmq-client # Needed for sensu monitoring
@@ -382,7 +382,7 @@ apps:
       prod: 3
 
   - name: tsb-web
-    ami_app_name: tsb-web
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-web
@@ -406,7 +406,7 @@ apps:
       prod: 1
 
   - name: hpz-web
-    ami_app_name: hpz-web
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-rmq-client # Needed for sensu monitoring
@@ -451,7 +451,7 @@ apps:
       prod: 10
 
   - name: reporting-web
-    ami_app_name: reporting-web
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db-pool-client
