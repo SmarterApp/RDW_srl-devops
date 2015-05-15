@@ -87,6 +87,21 @@ inline_policies:
         }
       ]
     }
+  udl_ssl_read_pol: >
+    {
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-udl-ssl"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::srl-{{ env }}-udl-ssl/*"]
+        }
+      ]
+    }
   services_ssl_read_pol: >
     {
       "Statement": [
@@ -503,6 +518,7 @@ iam_roles:
   udl-rabbit_role:
     - yum_read_pol
     - sensu_ssl_read_pol
+    - udl_ssl_read_pol
   db-master_role:
     - yum_read_pol
     - sensu_ssl_read_pol
