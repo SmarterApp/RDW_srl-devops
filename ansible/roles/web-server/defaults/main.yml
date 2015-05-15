@@ -6,6 +6,7 @@ httpd_conf_templates:
     - wsgi_frs
     - wsgi_swi
   reporting-web:
+    - concurrency_metrics
     - edware_worker_mpm
     - response_metrics
     - rewrite_reporting_https # TODO: parameterize this file with hostname

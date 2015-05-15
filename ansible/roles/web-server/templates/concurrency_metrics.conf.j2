@@ -1,0 +1,12 @@
+
+
+# Create a custom log format with just the info we need to
+# summarize session concurrency
+
+# epoch,session_id
+# TODO: obtain real cookie name
+LogFormat "{{'%{%s}t,%{AUTH_COOKIE_NAME}C'}}" concurrency_metrics
+
+# Send it to a moving-window counter
+CustomLog "||/etc/sensu/plugins/srl-web-concurrency-processor.rb " concurrency_metrics
+
