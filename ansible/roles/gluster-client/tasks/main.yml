@@ -13,10 +13,11 @@
   tags:
     - slow
 
-- name: get appropriate SSL certs
-  shell: '/usr/local/bin/aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
-  register: gluster_client_s3_sync
-  changed_when: "gluster_client_s3_sync.stdout != ''"
+# Commenting out only - in-case want to re-enable SSL in the future
+#- name: get appropriate SSL certs
+#  shell: '/usr/local/bin/aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
+#  register: gluster_client_s3_sync
+#  changed_when: "gluster_client_s3_sync.stdout != ''"
   # TODO: notify to remount
 
 
