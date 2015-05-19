@@ -16,8 +16,8 @@
   gather_facts: no
   vars:
     region: 'us-east-1' # TODO
-    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[2] }}"
-    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[3] }}"
+    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
+    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
   roles:
     - aws-creds
     - gluster-storage
@@ -29,8 +29,8 @@
   sudo: yes
   hosts: gluster-server
   vars:
-    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[2] }}"
-    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[3] }}"
+    node1: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[0] }}"
+    node2: "{{ groups['gluster-server'] | intersect(groups[spawner_env])[1] }}"
     monitoring_topics:
       - common 
   roles:

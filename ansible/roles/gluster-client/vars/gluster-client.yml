@@ -17,5 +17,5 @@ gluster_mount:
         group: sensu
 
 
-gfs_node1: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[2] }}"
-gfs_node2: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[3] }}"
+gfs_node1: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[0] }}"
+gfs_node2: "{{ groups['gluster-server'] | intersect(groups[ec2_tag_environment])[1] }}"
