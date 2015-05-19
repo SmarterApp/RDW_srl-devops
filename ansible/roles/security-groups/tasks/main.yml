@@ -30,11 +30,35 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        cidr_ip: 38.117.159.162/32   # DUMBO office egress IP.  TODO: verify Global protect VPN egress comes through here
-      #- proto: tcp
-      #  from_port: 22
-      #  to_port: 22
-      #  cidr_ip: 38.117.157.251/32       # This is the old 45 Main St egress IP, apparently
+        cidr_ip: 38.117.157.251/32   # EOT DUMBO Office NAT
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 38.117.159.162/32   # EOT DUMBO Office NAT
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 38.117.158.238/32   # EOT fwDumboDev NAT
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 38.125.8.66/32      # EOT rtDumboOpenVPN NAT
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 66.104.227.162/32   # XO DUMBO Office NAT
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 66.104.227.163/32   # XO DUMBO Office NAT
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 66.104.227.180/32   # XO fwDumboDev NAT
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 66.104.227.181/32   # XO rtDumboOpenVPN NAT
     rules_egress:
       - proto: all
         from_port: all
