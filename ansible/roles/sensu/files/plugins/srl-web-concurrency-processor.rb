@@ -16,6 +16,8 @@ def main()
   
   $stdin.each_line do |line|
     datapoint = split_line(line)
+    next if datapoint[:session_id].empty?
+    
     state = add_point_to_state(datapoint, state)
     
     # Only write out update every so often to avoid hammering the filesystem
@@ -37,7 +39,7 @@ def split_line(line)
   parts = line.split(',')
   return {
     epoch: parts[0],
-    session: parts[1]   # TODO - need to identify actual cookie format, see if we need to parse it
+    session_id: parts[1]
   }
 end
 
@@ -47,7 +49,7 @@ def add_point_to_state(datapoint, state)
   state[datapoint[:epoch]] ||= {}
 
   # Record that a particular session ID was seen
-  state[datapoint[:epoch]][datapoint[:session]] = 1
+  state[datapoint[:epoch]][datapoint[:session_id]] = 1
   
   return state
 end
