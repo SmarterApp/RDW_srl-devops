@@ -34,6 +34,6 @@
     monitoring_topics:
       - common 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: gluster-server, tags: ['gluster-server', 'app']}
     - { role: sensu, tags: ['sensu', 'monitoring'] }
