@@ -13,10 +13,11 @@
   tags:
     - slow
 
-- name: get appropriate SSL certs
-  shell: '/usr/local/bin/aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
-  register: gluster_client_s3_sync
-  changed_when: "gluster_client_s3_sync.stdout != ''"
+# Commenting out only - in-case want to re-enable SSL in the future
+#- name: get appropriate SSL certs
+#  shell: '/usr/local/bin/aws s3 sync --sse --exact-timestamp s3://srl-{{ec2_tag_environment}}-gluster-ssl/{{gluster_mount[ec2_tag_application].subj}} /etc/ssl --exclude "certs/" '
+#  register: gluster_client_s3_sync
+#  changed_when: "gluster_client_s3_sync.stdout != ''"
   # TODO: notify to remount
 
 
@@ -32,12 +33,3 @@
   shell: mount
   register: mount_out
   ignore_errors: yes
-
-- name: Add mount command to rc.local
-  lineinfile: state=present dest=/etc/rc.d/rc.local line="/usr/sbin/glusterfs --volfile-server={{gfs_node1}} --secure-mgmt=false --volfile-id=/{{item.volume}} {{ item.mount_at }}"
-  with_items: gluster_mount[ec2_tag_application].mounts
-
-- name: Mount volume via the glusterfs command
-  shell: /usr/sbin/glusterfs --volfile-server="{{gfs_node1}}" --secure-mgmt=false --volfile-id="/{{item.volume}}" "{{ item.mount_at }}"
-  when: item.mount_at not in mount_out.stdout
-  with_items: gluster_mount[ec2_tag_application].mounts

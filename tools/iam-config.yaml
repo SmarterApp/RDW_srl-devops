@@ -117,41 +117,6 @@ inline_policies:
         }
       ]
     }
-  gluster_ssl_read_pol: >
-    {
-      "Statement": [
-        {
-          "Effect": "Allow",
-          "Action": ["s3:ListBucket"],
-          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl"]
-        },
-        {
-          "Effect": "Allow",
-          "Action": ["s3:GetObject"],
-          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl/*"]
-        },
-        {
-          "Effect": "Allow",
-          "Action": ["s3:ListBucket"],
-          "Resource": ["arn:aws:s3:::smarter-{{ env }}-3p-yum-repo*"]
-        },
-        {
-          "Effect": "Allow",
-          "Action": ["s3:GetObject"],
-          "Resource": ["arn:aws:s3:::smarter-{{ env }}-3p-yum-repo/*"]
-        },
-        {
-          "Effect": "Allow",
-          "Action": ["s3:ListBucket"],
-          "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo*"]
-        },
-        {
-          "Effect": "Allow",
-          "Action": ["s3:GetObject"],
-          "Resource": ["arn:aws:s3:::smarter-{{ env }}-yum-repo/*"]
-        }
-      ]
-    }
   tsb_ssl_read_pol: >
     {
       "Statement": [
@@ -179,25 +144,6 @@ inline_policies:
           "Effect": "Allow",
           "Action": ["s3:GetObject"],
           "Resource": ["arn:aws:s3:::srl-{{ env }}-extract-ssl/*"]
-        }
-      ]
-    }
-  gluster_ssl_write_pol: >
-    {
-      "Statement": [
-        {
-          "Effect": "Allow",
-          "Action": ["s3:ListBucket"],
-          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl"]
-        },
-        {
-          "Effect": "Allow",
-          "Action": [
-            "s3:GetObject",
-            "s3:PutObject",
-            "s3:DeleteObject"
-           ],
-          "Resource": ["arn:aws:s3:::srl-{{ env }}-gluster-ssl/*"]
         }
       ]
     }
@@ -457,7 +403,6 @@ inline_policies:
 iam_roles:
   ansible_role:
     - yum_write_pol
-    - gluster_ssl_write_pol
     - apache_ssl_write_pol
     - sensu_ssl_write_pol
   nat_role:
@@ -471,12 +416,10 @@ iam_roles:
     - sensu_ssl_read_pol
   sensu_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - sensu_ssl_write_pol
     - sensu_ssl_read_pol
   gluster-server_role:
     - yum_read_pol
-    - gluster_ssl_write_pol
     - sensu_ssl_read_pol
   loghost_role:
     - yum_read_pol
@@ -495,7 +438,6 @@ iam_roles:
     - sensu_ssl_read_pol
   udl-db_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - sensu_ssl_read_pol
   migrate-db_role:
     - yum_read_pol
@@ -527,16 +469,13 @@ iam_roles:
     - sensu_ssl_read_pol
   file-grabber_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - archive_write_pol
     - sensu_ssl_read_pol
   file-trigger_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - sensu_ssl_read_pol
   udl_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - sensu_ssl_read_pol
   db-pgbouncer_role:
     - yum_read_pol
@@ -556,7 +495,6 @@ iam_roles:
   tsb-worker_role:
     - yum_read_pol
     - sensu_ssl_read_pol
-    - gluster_ssl_read_pol
   tsb-web_role:
     - yum_read_pol
     - sensu_ssl_read_pol
@@ -564,19 +502,15 @@ iam_roles:
   tsb-trigger_role:
     - yum_read_pol
     - sensu_ssl_read_pol
-    - gluster_ssl_read_pol
   hpz-web_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - apache_ssl_read_pol
     - sensu_ssl_read_pol
   reporting-worker-extract_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - sensu_ssl_read_pol
   reporting-worker-pdf_role:
     - yum_read_pol
-    - gluster_ssl_read_pol
     - sensu_ssl_read_pol
   reporting-web_role:
     - yum_read_pol
