@@ -49,6 +49,13 @@ class MemoryGraphite < Sensu::Plugin::Metric::CLI::Graphite
 
   def read_stats_file
 
+    # If apache has never received a request, then the file won't exist.
+    # That's odd, and might indicate a malfunctioning server.
+    unless File.exists?(STATS_FILE) then
+      $stderr.puts "#{STATS_FILE} does not exist - exiting"
+      exit(3) # exit code 3 is nagios/sensu check speak for "indeterminate result"
+    end
+    
     # We need to figure out if the data is stale.  Apache will only
     # send an update when it actually gets a request, so if it doesn't get a
     # request within the time window, the data is stale - and we know the
