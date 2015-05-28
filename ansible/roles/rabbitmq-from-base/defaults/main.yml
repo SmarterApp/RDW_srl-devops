@@ -10,8 +10,4 @@
 
 rabbitmq_rpm_version: 3.4.4-1
 rabbitmq_allow_poodle_attack: 'true' # erlang requires this to be true, not True, which is what you get if you use a YAML true.
-
-rabbitmq_enabled_plugins:
-  - rabbitmq_managment # TODO: revisit this. This was enabled in the rabbit AMI, but almost certainly should not be.
-
 rabbitmq_monitoring_username: rmq_monitor
