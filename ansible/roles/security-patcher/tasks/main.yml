@@ -1,0 +1,9 @@
+- name: List security patches
+  shell: sudo yum list-security --security
+  register: security_results
+
+- name: Ensure /tmp/security-logs exists
+  local_action: file name=/tmp/security-logs state=directory
+
+- name: Write list to local file
+  local_action: copy content="{{ security_results }}" dest="/tmp/security-logs/seclog-{{ansible_hostname}}"
