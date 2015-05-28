@@ -1,5 +1,10 @@
 ---
 
+- name: Require rabbitmq_password
+  fail:
+    msg: "You must provide the 'rabbitmq_monitoring_password' variable in the group_vars/$ENV/secrets.yml file"
+  when: rabbitmq_monitoring_password is not defined
+
 - name: Require rabbitmq_ssl_s3_bucket
   fail:
     msg: "You must provide the 'rabbitmq_ssl_s3_bucket' variable, either via a playbook variable or via the -e option"
@@ -54,7 +59,22 @@
 - name: Enable Mangement Plugin
   shell: rabbitmq-plugins enable rabbitmq_management
   when: rmq_management_plugin_check | failed
-  
+
+- name: Check for monitoring user
+  shell: "rabbitmqctl -q list_users | grep -q {{ rabbitmq_monitoring_username }}"
+  register: rabbitmq_monitoring_user_detected
+  changed_when: false
+  failed_when: false
+
+- name: Create monitoring user
+  shell: "rabbitmqctl add_user '{{ rabbitmq_monitoring_username }}' '{{ rabbitmq_monitoring_password }}'"
+  when: rabbitmq_monitoring_user_detected | failed
+
+- name: Tag monitoring user 
+  shell: "rabbitmqctl set_user_tags {{ rabbitmq_monitoring_username }} monitoring "
+  when: rabbitmq_monitoring_user_detected | failed
+
+# TODO: we may need to grant the monitoring user some read access on vhosts to get per-queue stats
   
 - name: Check for guest user
   shell: "rabbitmqctl -q list_users | grep -q guest"
