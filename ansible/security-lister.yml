@@ -1,4 +1,4 @@
-- name: Security patcher
+- name: Security patch lister
   hosts: all
   roles:
-    - { role: security-patcher, tags: ['security-patcher', 's'] }
+    - { role: security-lister, tags: ['security-lister', 's'] }
