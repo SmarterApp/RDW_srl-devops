@@ -3,13 +3,13 @@
     src: s3iam.repo.j2 
     dest: /etc/yum.repos.d/s3iam.repo
 
-- name: Clean Yum cache
-  command: yum clean all
-  tags:
-    - slow
+#- name: Clean Yum cache
+#  command: yum clean all
+#  tags:
+#    - slow
 
-- name: Update Yum cache
-  command: yum makecache
-  tags:
-    - slow
-  ignore_errors: yes
+#- name: Update Yum cache
+#  command: yum makecache
+#  tags:
+#    - slow
+#  ignore_errors: yes
