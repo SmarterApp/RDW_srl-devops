@@ -169,3 +169,30 @@ sensu_checks:
     command: "/etc/sensu/plugins/srl-web-response-metrics.rb"
     subscribers: 
       - web-servers # == monitoring_topics
+
+  # ================================================ #
+  #                celery-based workers
+  # ================================================ #
+
+  # When celery kids have a bad DB connection, they go zombie for a while.
+  # Alarm if there are nonzero zombies.
+  celery-zombie-processes-count:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-procs.rb -p celeryd -s Z -c 1 -C 0 -W 0" # Need the -W and -C to override the default
+    subscribers: 
+      - celery # == monitoring_topics
+
+  # Should always have a parent and one worker proc, so minimum 2.
+  celery-processes-count:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-procs.rb -p celeryd -C 2"
+    subscribers: 
+      - celery # == monitoring_topics    
+      
+      

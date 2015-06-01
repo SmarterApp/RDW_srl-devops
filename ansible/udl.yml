@@ -8,6 +8,7 @@
     monitoring_topics:
       - common 
       - zones_glusterfs
+      - celery
 
   roles:
     - { role: common, tags: ['common']}
