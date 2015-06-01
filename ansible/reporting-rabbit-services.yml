@@ -10,6 +10,6 @@
     vhost_name: services
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: rabbitmq-from-base, tags: ['rabbitmq'] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }

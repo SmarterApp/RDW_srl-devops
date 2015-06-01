@@ -9,7 +9,7 @@
     ssl_key_name: localhost
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: gluster-client, tags: ['gluster-client'] }
     - { role: web-server, tags: ['web-server', 'app'] }
     - { role: hpz-web, tags: ['hpz-web', 'app'] }

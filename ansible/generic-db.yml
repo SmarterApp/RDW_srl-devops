@@ -8,7 +8,7 @@
       - common 
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     # TODO: We need to update postgres user names and password
     - { role: db, tags: ['db', 'app']}
     - { role: sensu, tags: ['sensu', 'monitoring'] }

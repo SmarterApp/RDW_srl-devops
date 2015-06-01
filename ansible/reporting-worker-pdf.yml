@@ -9,7 +9,7 @@
       - pdf_glusterfs
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: edware, tags: ['edware', 'app'] }
     - { role: gluster-client, tags: ['gluster-client'] }
     - { role: reporting-worker-pdf, tags: ['reporting-worker-pdf', 'app']}
