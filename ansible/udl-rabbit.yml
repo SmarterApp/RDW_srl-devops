@@ -5,7 +5,7 @@
     rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-udl-ssl"
     rabbitmq_username: "{{ udl_rabbit_username }}"
     rabbitmq_password: "{{ udl_rabbit_password }}"
-    vhost_name: edudl
+    vhost_name: udl
 
   roles:
     - { role: common, tags: ['common']}
