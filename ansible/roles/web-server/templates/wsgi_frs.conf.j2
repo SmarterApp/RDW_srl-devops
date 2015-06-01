@@ -1,11 +1,6 @@
 WSGISocketPrefix run/wsgi
 WSGIPythonPath /opt/virtualenv/hpz/lib/python3.3/site-packages
 WSGIDaemonProcess frs user=apache group=apache processes=2 threads=30 python-path=/opt/virtualenv/hpz/lib/python3.3/site-packages
-  XSendFile on
-  <Directory "/opt/edware">
-    XSendFile on
-    XSendFilePath /opt/edware
-  </Directory>
 
 NameVirtualHost *:443
 <VirtualHost *:443>
