@@ -19,7 +19,7 @@
 
 - name: create pool_passwd file
   shell: /usr/bin/pg_md5 -u {{ item.edware_db_username }} -m {{ item.edware_db_password }}
-  with_dict: tenants
+  with_items: tenants
 
 - name: Start PgPool 
   service: name=pgpool-II-92 state=started enabled=yes
