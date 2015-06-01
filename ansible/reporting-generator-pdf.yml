@@ -8,7 +8,7 @@
       - common 
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: edware, tags: ['edware', 'app'] }
     - { role: reporting-generator-pdf, tags: ['reporting-generator-pdf', 'app']}
     - { role: sensu, tags: ['sensu', 'monitoring'] }

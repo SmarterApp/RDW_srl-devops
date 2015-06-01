@@ -8,7 +8,7 @@
       - common 
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: db, tags: ['db', 'app'] }
     - { role: db-master, tags: ['db-master', 'app'] }
     # TODO: We need to update postgres user names and password
