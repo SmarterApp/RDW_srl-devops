@@ -46,5 +46,8 @@ for dir in os.listdir("/data/carbon/whisper/sys"):
         Day = item[0]
         total = item[1]
         print Day, total
-        grand_total[month] += total
+        if Day not in grand_total.keys():
+            grand_total[Day] = 0
 
+        grand_total[Day] += int(total)
+    print 'Grand Totals:', grand_total
