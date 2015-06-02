@@ -418,6 +418,7 @@ iam_roles:
     - yum_read_pol
     - sensu_ssl_write_pol
     - sensu_ssl_read_pol
+    - apache_ssl_read_pol
   gluster-server_role:
     - yum_read_pol
     - sensu_ssl_read_pol

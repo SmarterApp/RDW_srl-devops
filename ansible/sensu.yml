@@ -2,6 +2,7 @@
   hosts: sensu
   sudo: yes
   vars:
+    ssl_key_name: graphite
     monitoring_topics:
       - common 
       - heartbeats
@@ -19,3 +20,4 @@
     - { role: redis, tags: ['redis', 'app'] }
     - { role: carbon, tags: ['carbon', 'app'] }
     - { role: sensu, tags: ['sensu', 'app'] }
+    - { role: web-server, tags: ['web-server', 'app'] }
