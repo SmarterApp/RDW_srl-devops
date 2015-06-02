@@ -16,8 +16,6 @@
 
   roles:
     - { role: common, tags: ['common']}
-    # TODO - mount glusterfs for redis and carbon
-    # - { role: gluster-client, tags: ['gluster'] }
     - { role: redis, tags: ['redis', 'app'] }
     - { role: carbon, tags: ['carbon', 'app'] }
     - { role: sensu, tags: ['sensu', 'app'] }
