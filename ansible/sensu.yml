@@ -3,6 +3,7 @@
   sudo: yes
   vars:
     ssl_key_name: graphite
+    install_python3: false
     monitoring_topics:
       - common 
       - heartbeats
@@ -21,3 +22,4 @@
     - { role: carbon, tags: ['carbon', 'app'] }
     - { role: sensu, tags: ['sensu', 'app'] }
     - { role: web-server, tags: ['web-server', 'app'] }
+    - { role: graphite, tags: ['graphite', 'app'] }

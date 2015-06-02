@@ -1,4 +1,5 @@
 wsgi_process_count: 2
+install_python3: true
 httpd_conf_templates:
   hpz-web:
     - ssl_on

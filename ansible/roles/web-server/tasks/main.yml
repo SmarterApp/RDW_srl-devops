@@ -10,14 +10,24 @@
     name: "{{ item }}"
     state: present    
   with_items:
-    - python3-3.3.0
     - httpd-2.2.15
-    - python3-mod_wsgi-3.4
     - xmlsec1-1.2.20
     - xmlsec1-openssl-devel-1.2.20
   tags:
     - slow
 
+- name: Install version-pinned python3 RPMs for webserver
+  yum:
+    name: "{{ item }}"
+    state: present    
+  with_items:
+    - python3-3.3.0
+    - python3-mod_wsgi-3.4
+  tags:
+    - slow
+  when: install_python3
+
+    
 - name: Install float-version RPMs for webserver
   yum:
     name: "{{ item }}"
