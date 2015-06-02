@@ -1,43 +1,29 @@
 - name: install graphite and deps
-  yum: name="{{ item }}" state=present
-  with_items: packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: graphite_packages
   
-- name: copy initial graphite data
-  copy: src={{ ansible_os_family}}/graphite-dump.json dest={{ graphite_python }}/initial_data.json
-
-- name: start mysqld
-  service: name={{ mysql_service }} state=started enabled=true
-
-- name: create graphite db
-  mysql_db: name=graphite state=present
-
 - name: copy django/graphite settings
-  template: src=local_settings.py.j2 dest={{ graphite_conf }}/local_settings.py
-  notify: restart apache
+  template:
+    src: local_settings.py.j2
+    dest: "{{ graphite_conf }}/local_settings.py"
+#  notify: restart_httpd
 
-- name: setup carbon conf
-  template: src=carbon.conf.j2 dest=/etc/carbon/carbon.conf
-  notify: restart carbon-cache
-
-- name: setup storage schemas
-  copy: src=storage-schemas.conf dest=/etc/carbon/storage-schemas.conf
-  notify: restart carbon-cache
-
+- name: copy initial graphite data
+  copy:
+    src: graphite-dump.json
+    dest: "{{ graphite_python }}/initial_data.json"
+  
 - name: find state of graphite db
   command:  "python {{ graphite_python }}/manage.py inspectdb"
-  register: result
+  register: graphite_db_result
   changed_when: False
 
 - name: prep graphite db
   command: "python {{ graphite_python }}/manage.py syncdb --noinput"
-  when: result.stdout.find('account_mygraph') == -1
+  when: graphite_db_result.stdout.find('account_mygraph') == -1
 
 - name: load initial data
   command: "python {{ graphite_python }}/manage.py loaddata {{ graphite_python }}/initial_data.json"
-  when: result.stdout.find('account_mygraph') == -1
-
-- name: enable httpd, carbon
-  service: name={{ item }} enabled=yes state=started
-  with_items:
-  - "{{ apache_service }}"
-  - carbon-cache
+  when: graphite_db_result.stdout.find('account_mygraph') == -1
