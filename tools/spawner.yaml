@@ -369,7 +369,7 @@ apps:
       prod: 1
 
   - name: tsb-worker
-    ami_app_name: tsb-worker
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-db-client
