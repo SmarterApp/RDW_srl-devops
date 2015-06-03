@@ -5,14 +5,16 @@ WSGIScriptAlias / /usr/share/graphite/graphite-web.wsgi
 
 Alias /content/ /usr/share/graphite/webapp/content/
 <Location "/content/">
-	SetHandler None
+   SetHandler None
 </Location>
+
+WSGISocketPrefix {{ graphite_var }}/graphite-wsgi
 
 ErrorLog /var/log/httpd/graphite-web_error.log
 
 # Possible values include: debug, info, notice, warn, error, crit,
 # alert, emerg.
-LogLevel warn
+LogLevel info
 CustomLog /var/log/httpd/graphite-web_access.log combined
 
 

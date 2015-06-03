@@ -28,7 +28,13 @@
   register: graphite_db_result
   changed_when: False
 
-- name: prep graphite db
+- name: prep graphite db, first pass 
+  command: "python {{ graphite_python }}/manage.py syncdb --noinput"
+  when: graphite_db_result.stdout.find('account_mygraph') == -1
+
+# For terrible unknown reasons, this is needed 
+# see http://stackoverflow.com/questions/28909061/django-graphite-integrityerror-column-username-is-not-unique
+- name: prep graphite db, second pass 
   command: "python {{ graphite_python }}/manage.py syncdb --noinput"
   when: graphite_db_result.stdout.find('account_mygraph') == -1
 
@@ -38,7 +44,7 @@
 
 - name: Make sure graphite user can write to db
   file:
-    path: "{{ graphite_var }}/graphite"
+    path: "{{ graphite_var }}/graphite.db"
     owner: "{{ graphite_user }}"
     group: "{{ graphite_user }}"
   notify: restart_httpd

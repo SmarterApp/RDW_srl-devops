@@ -10,7 +10,7 @@
 # install. This key is used for salting of hashes used in auth tokens,
 # CRSF middleware, cookie storage, etc. This should be set identically among
 # instances if used behind a load balancer.
-SECRET_KEY = 'My baby don't mess around becaouse she love me so'
+SECRET_KEY = 'My baby does not mess around becaouse she love me so'
 
 # In Django 1.5+ set this to the list of hosts your graphite instances is
 # accessible as. See:
@@ -150,7 +150,7 @@ INDEX_FILE = '{{ graphite_index_file }}'  # Search index file
 #
 DATABASES = {
     'default': {
-        'NAME': '{{graphite_var}}/graphite',
+        'NAME': '{{graphite_var}}/graphite.db',
         'ENGINE': 'django.db.backends.sqlite3',
     }
 }
