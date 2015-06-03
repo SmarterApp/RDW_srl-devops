@@ -3,12 +3,20 @@
     name: "{{ item }}"
     state: present
   with_items: graphite_packages
+  tags:
+    - slow
+
+- name: Remove rpm-provided wsgi config for graphite
+  file:
+    path: /etc/httpd/conf.d/graphite-web.conf
+    state: absent
+  notify: restart_httpd
   
 - name: copy django/graphite settings
   template:
     src: local_settings.py.j2
     dest: "{{ graphite_conf }}/local_settings.py"
-#  notify: restart_httpd
+  notify: restart_httpd
 
 - name: copy initial graphite data
   copy:
@@ -27,3 +35,11 @@
 - name: load initial data
   command: "python {{ graphite_python }}/manage.py loaddata {{ graphite_python }}/initial_data.json"
   when: graphite_db_result.stdout.find('account_mygraph') == -1
+
+- name: Make sure graphite user can write to db
+  file:
+    path: "{{ graphite_var }}/graphite"
+    owner: "{{ graphite_user }}"
+    group: "{{ graphite_user }}"
+  notify: restart_httpd
+  
