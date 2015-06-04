@@ -9,20 +9,23 @@ STATS_FILE = '/var/log/sensu/httpd_session_concurrency_stats.json'
 WINDOW_LENGTH = 300
 
 require 'json'
+require 'base64'
 
 def main()
   state = initial_state
   last_write_out = Time.now
   
   $stdin.each_line do |line|
-    datapoint = split_line(line)
-    next if datapoint[:session_id].empty?
+    datapoint = parse_line(line)
+    next unless datapoint
     
     state = add_point_to_state(datapoint, state)
     
     # Only write out update every so often to avoid hammering the filesystem
-    if last_write_out + WINDOW_LENGTH/2 < Time.now then      
+    if true or last_write_out + WINDOW_LENGTH/2 < Time.now then      
       state = cull_stale_state(state) # possible memory issue during heavy traffic
+      # puts "Session:" + datapoint[:session_id]
+      # puts "Concurrency: " + count_concurrrent_sessions(state).to_s
       update_stats_file(state)
       last_write_out = Time.now
     end    
@@ -35,11 +38,28 @@ def initial_state
   return {}
 end
 
-def split_line(line)
-  parts = line.split(',')
+def parse_line(line)
+  parts = line.chomp.split(',')
+
+  # If no cookie, apache, sends a '-'
+  return nil if parts[1] == '-'
+
+  # Otherwise, the value is a b64 encoded binary blob
+  # The value looks like this initially (slashes are literally present)
+  # \"a3ef3d327bf7faf064063ee2f6c080a821fa58aa5a54cf68f0ed2105c505cdcde336986a61e73457b02c33ace83ec84478023aebdaca596d991bca8d5278b01f55662216MDljNzlhNWQtZjE4OS00YWRlLWEwMTktN2U2Y2QyYzg2NzIw!userid_type:b64unicode\"
+
+  match = /\\"(.+)\!userid.+/.match(parts[1])
+  return nil unless match
+  blob = Base64.decode64(match[1])
+  
+  # Within that opaque blob is a GUID as a string - we assume it is the session ID?
+  match = /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/.match(blob)
+  return nil unless match
+  session_id = match[1]
+
   return {
     epoch: parts[0],
-    session_id: parts[1]
+    session_id: session_id
   }
 end
 
