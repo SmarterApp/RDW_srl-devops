@@ -6,7 +6,7 @@
       - common 
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
 
     # TODO - Change password of rabbit user - "edware"'s password
     # May need to rethink this, all rabbit servers are now using edware user

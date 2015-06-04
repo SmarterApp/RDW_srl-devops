@@ -8,5 +8,5 @@
     vhost_name: edudl
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: rabbitmq-from-base, tags: ['rabbitmq'] }
