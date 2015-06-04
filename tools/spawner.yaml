@@ -294,7 +294,7 @@ apps:
       prod: 1
 
   - name: udl
-    ami_app_name: base
+    ami_app_name: udl
     security_groups:
       - srl-ssh-intra-vpc
       - srl-rmq-client # Needed for sensu monitoring
