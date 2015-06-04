@@ -74,7 +74,9 @@
   shell: "rabbitmqctl set_user_tags {{ rabbitmq_monitoring_username }} monitoring "
   when: rabbitmq_monitoring_user_detected | failed
 
-# TODO: we may need to grant the monitoring user some read access on vhosts to get per-queue stats
+- name: Set monitoring user perms
+  shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ rabbitmq_monitoring_username }} '^$' '^$' '.*' "
+  when: rabbitmq_monitoring_user_detected | failed
   
 - name: Check for guest user
   shell: "rabbitmqctl -q list_users | grep -q guest"
