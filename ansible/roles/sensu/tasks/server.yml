@@ -69,3 +69,11 @@
     mode: 0640
   notify:
     - restart sensu server
+
+- name: Copy disk stats file [temp for dev testing]
+  copy:
+    src: scripts/disk_util.py
+    dest: /tmp
+    mode: 0755
+  tags:
+    - d 
