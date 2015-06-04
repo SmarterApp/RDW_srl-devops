@@ -25,11 +25,11 @@
   file: path={{ item.mount_at }} state=directory owner={{ item.owner }} group={{ item.group }} mode=0750
   with_items: gluster_mount[ec2_tag_application].mounts
 
-- name: Add to fstab
-  mount: fstype=glusterfs name="{{ item.mount_at }}" src="{{gfs_node1}}:/{{item.volume}}" opts="noauto" state=present
+- name: Ensure GlusterFS volume is mounted; add to fstab
+  mount:
+    fstype: glusterfs
+    name: "{{ item.mount_at }}"
+    src: "{{gfs_node1}}:/{{item.volume}}"
+    opts: "noauto"
+    state: mounted
   with_items: gluster_mount[ec2_tag_application].mounts
-
-- name: Check current mount status
-  shell: mount
-  register: mount_out
-  ignore_errors: yes
