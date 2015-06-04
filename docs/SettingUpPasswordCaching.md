@@ -82,7 +82,7 @@ For most users, you will just need to symlink your existing tree:
     ln -s inventory ~/.password-store/dev/spinup
     ln -s inventory ~/.password-store/dev/security
 
-If you are a nut like clinton and need to do security tier development, you should make more access IDs and create similar trees instead.
+If you are like Clinton and need to do security tier development, you should make more access IDs and create similar trees instead.
 
 ## Feeding the vault password to ansible
 

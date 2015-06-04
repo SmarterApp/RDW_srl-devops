@@ -10,6 +10,6 @@
       - common 
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: db-pgpool, tags: ['db-pgpool', 'app'] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }

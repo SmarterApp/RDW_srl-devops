@@ -8,6 +8,6 @@
       - common 
 
   roles:
-    - { role: common, tags:['common']}
-    - { role: memcached, tags:['memcached', 'app'] }
+    - { role: common, tags: ['common']}
+    - { role: memcached, tags: ['memcached', 'app'] }
     - { role: sensu, tags: ['sensu', 'monitoring'] }

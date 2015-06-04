@@ -7,6 +7,6 @@
   pre_tasks:
     - include: roles/bind/tasks/pre-common.yml
   roles:
-    - { role: common, tags:['common']}
-    - { role: bind, tags:['bind', 'app']}
+    - { role: common, tags: ['common']}
+    - { role: bind, tags: ['bind', 'app']}
     - { role: sensu, tags: ['sensu', 'monitoring'] }
