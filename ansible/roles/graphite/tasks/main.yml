@@ -48,4 +48,43 @@
     owner: "{{ graphite_user }}"
     group: "{{ graphite_user }}"
   notify: restart_httpd
+
+
+#-------------------------------------
+# Setup basic HTTP authentication
+#-------------------------------------
+- name: Check for htpasswd entry
+  shell: "grep -q {{graphite_htpasswd_username}} {{ graphite_conf }}/htpasswd"
+  register: graphite_htpasswd_check
+  changed_when: false
+  failed_when: false
+
+- name: Create htpasswd file
+  # Note: the -c clobbers the file, forcing it to only have one entry!
+  shell: "/usr/bin/htpasswd -b -c -m {{ graphite_conf }}/htpasswd {{ graphite_htpasswd_username }} '{{graphite_htpasswd_password}}'"
+  when: graphite_htpasswd_check | failed
   
+- name: Set htpasswd file perms
+  file:
+    path: "{{ graphite_conf }}/htpasswd"
+    state: file
+    owner: root
+    group: apache
+    mode: 0640
+
+#-------------------------------------
+#  Setup a simple heartbeat file for ELB healthcheck
+#-------------------------------------
+    
+- name: Make dummy heartbeat docroot
+  file:
+    path: "{{ graphite_var }}/dummy-heartbeat-webroot"
+    state: directory
+    mode: 0755
+    
+- name: Write dummy heartbeat index file
+  copy:
+    src: dummy-heartbeat.html.j2
+    dest: "{{ graphite_var }}/dummy-heartbeat-webroot/index.html"
+    
+# TODO: ELB creation

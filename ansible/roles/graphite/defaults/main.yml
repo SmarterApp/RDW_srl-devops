@@ -21,3 +21,4 @@ graphite_storage_dir: "{{ carbon_local_data_dir }}"
 graphite_user: apache
 graphite_var: /var/lib/graphite-web
 graphite_whisper_dir: "{{ carbon_local_data_dir }}"
+graphite_htpasswd_username: srl-monitoring

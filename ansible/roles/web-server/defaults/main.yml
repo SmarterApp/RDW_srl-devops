@@ -18,6 +18,7 @@ httpd_conf_templates:
     - ssl_main_server
     - rewrite_tsb  # TODO: parameterize this file with hostname
   sensu:
+    - graphite-auth-file
     - ssl_main_server
     - wsgi_graphite
 

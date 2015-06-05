@@ -1,0 +1,18 @@
+LoadModule auth_basic_module modules/mod_auth_basic.so
+LoadModule authn_file_module modules/mod_authn_file.so
+LoadModule authz_user_module modules/mod_authz_user.so
+
+<Location "/">
+    AuthType basic
+    AuthName "Edware Monitoring Credentials"
+    AuthBasicProvider  file
+    AuthUserFile    "{{ graphite_conf }}/htpasswd"
+    Require            valid-user
+</Location>
+
+# Be sure to disable auth for /heartbeat/ - ELB cannot authenticate using HTTP auth
+<Location "/heartbeat/">
+    AuthType None
+    Satisfy Any
+    Allow from all
+</Location>
