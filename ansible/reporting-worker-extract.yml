@@ -10,7 +10,7 @@
       - data_raw_glusterfs
 
   roles:
-    - { role: common, tags:['common']}
+    - { role: common, tags: ['common']}
     - { role: edware, tags: ['edware', 'app'] }
     - { role: aws-cli, tags: ['aws-cli'] }
     - { role: gluster-client, tags: ['gluster-client'] }

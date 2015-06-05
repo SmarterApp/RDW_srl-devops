@@ -8,6 +8,6 @@
       - common 
 
   roles:
-    - { role: common, tags:['common']}
-    - { role: loghost, tags:['loghost', 'app']}
+    - { role: common, tags: ['common']}
+    - { role: loghost, tags: ['loghost', 'app']}
     - { role: sensu, tags: ['sensu', 'monitoring'] }
