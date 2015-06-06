@@ -1,0 +1,4 @@
+- name: Security patch lister
+  hosts: all
+  roles:
+    - { role: security-lister, tags: ['security-lister', 's'] }
