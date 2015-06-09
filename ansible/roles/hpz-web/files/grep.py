@@ -1,6 +1,7 @@
 #!/bin/env python
-""" remember to ansible : chmod 705 (or chmod o+rx) /var/log/httpd/
-    Add ansible to apache group to read /opt/edware/hpz/uploads, is safer than chmod o+rx /opt/edware/hpz/uploads """
+""" This script creates a .csv file stating whether Downloadable Reports were
+    available within 24 hours at least 90% of the time. """
+
 
 import datetime
 import glob
@@ -9,6 +10,12 @@ import re
 import subprocess
 import time
 
+# Ensure sudo/root is being used
+
+user = os.getenv("SUDO_USER")
+if user is None:
+    print "This script requires sudo"
+    raise SystemExit
 
 """ List all files from gluster /opt/edware/hpz/uploads/ """
 
@@ -37,8 +44,6 @@ for file in os.listdir(path):
     unix_timestamp_uploaded_file = int(time.mktime(time.strptime(file_created_time, pattern)))
     all_uploaded_files[file] = { unix_timestamp_uploaded_file: file_created }
 
-
-
 """ Get all files from access_log* """
 
 all_POST_files = {}
@@ -58,7 +63,7 @@ while True:
         unix_timestamp_POST_time = int(time.mktime(time.strptime(pdf_date + " " + pdf_time, pattern)))
 
         # skip anything older than X days
-        days_to_follow = 30 # change this to # of days to check
+        days_to_follow = 60 # change this to # of days to check
         now_timestamp = time.time()
         if unix_timestamp_POST_time < (now_timestamp - (86400 * days_to_follow)):
             continue
@@ -85,8 +90,30 @@ while True:
     else:
         break
 
-
 print "Total Downloadable Reports clicks in the past", days_to_follow, "days:", total_Downloadable_Report_requests_this_month
 print "Total Downloadable Reports succeessful (less than 24 hours):", took_less_than_24_hours
 print "Total Downloadable Reports failed (more than 24 hours):", took_more_than_24_hours
 
+# Final SLA 90% calculation
+percent_successful = (took_less_than_24_hours * 100) / total_Downloadable_Report_requests_this_month
+if percent_successful >= 90:
+    SLA_commitment_met = "Yes"
+else:
+    raise SystemExit
+
+print "Percent successful downloads in the past", days_to_follow, "days:", percent_successful
+print "SLA commitment met:", SLA_commitment_met
+
+csv += '"' + SLA_commitment_met + '", '
+csv += '"' + str(percent_successful) + '", '
+csv += '"' + str(days_to_follow) + '", '
+csv += '"' + str(total_Downloadable_Report_requests_this_month) + '", '
+csv += '"' + str(took_less_than_24_hours) + '", '
+csv += '"' + str(took_more_than_24_hours) + '"'
+csv += '\n'
+
+file = open("/tmp/report.csv", 'w')
+file.write(csv)
+file.close
+
+print '\nWrote /tmp/report.csv\n'
