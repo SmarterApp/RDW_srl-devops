@@ -133,3 +133,5 @@ csv += '\n'
 file = open("/tmp/report.csv", 'w')
 file.write(csv)
 file.close
+
+print '\nWrote /tmp/report.csv\n'
