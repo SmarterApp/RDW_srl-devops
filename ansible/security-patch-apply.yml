@@ -1,12 +1,3 @@
-# This playbook will use yum-secuirty to generate a list of candidate
-# packages that resolve an issue each target instance is vulnerable to,
-# and write the list to log files on the local machine.
-
-# There is no guarentee that the candidate packages will be in your repos.  Once you track
-# them down and add them to your repo mirror, you can use security-patch-apply.yml to
-# install them.
-
-
 - name: Create local log directory
   gather_facts: no
   hosts: localhost
@@ -26,19 +17,23 @@
         path: "/tmp/security-logs-{{user_name}}/{{ env_name }}"
         state: directory
   
-- name: Security patch lister
+- name: Security patch applier
   gather_facts: no
   hosts: all
   vars:
     env_name: "{{ lookup('env', 'SBAC_ENV').split('/')[0] }}"
     user_name: "{{ lookup('env', 'USER')}}"
   tasks:
-    - name: List security patches
-      shell: yum -q updateinfo list available --security > /tmp/security-patch-list
+    - name: Apply security patches
+      sudo: yes
+      shell: "yum -y update --security > /tmp/security-patch-outcome 2>&1"
+      # Ignore failures so we can collect outcome in the file
+      ignore_errors: yes
 
     - name: Write list to local file
       fetch:
-        src: /tmp/security-patch-list        
-        dest: "/tmp/security-logs-{{user_name}}/{{ env_name }}/{{ec2_tag_Name}}.list"
+        src: /tmp/security-patch-outcome
+        dest: "/tmp/security-logs-{{user_name}}/{{ env_name }}/{{ec2_tag_Name}}.out"
         flat: true
 
+  
