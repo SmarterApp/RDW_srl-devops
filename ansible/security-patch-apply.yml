@@ -1,0 +1,39 @@
+- name: Create local log directory
+  gather_facts: no
+  hosts: localhost
+  tags:
+    - local
+  vars:
+    env_name: "{{ lookup('env', 'SBAC_ENV').split('/')[0] }}"
+    user_name: "{{ lookup('env', 'USER')}}"
+  tasks:
+    - name: Ensure local /tmp/security-logs exists
+      file:
+        path: "/tmp/security-logs-{{user_name}}/"
+        state: directory
+
+    - name: Ensure local /tmp/security-logs/ENV exists
+      file:
+        path: "/tmp/security-logs-{{user_name}}/{{ env_name }}"
+        state: directory
+  
+- name: Security patch applier
+  gather_facts: no
+  hosts: all
+  vars:
+    env_name: "{{ lookup('env', 'SBAC_ENV').split('/')[0] }}"
+    user_name: "{{ lookup('env', 'USER')}}"
+  tasks:
+    - name: Apply security patches
+      sudo: yes
+      shell: "yum -y update --security > /tmp/security-patch-outcome 2>&1"
+      # Ignore failures so we can collect outcome in the file
+      ignore_errors: yes
+
+    - name: Write list to local file
+      fetch:
+        src: /tmp/security-patch-outcome
+        dest: "/tmp/security-logs-{{user_name}}/{{ env_name }}/{{ec2_tag_Name}}.out"
+        flat: true
+
+  
