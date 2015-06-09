@@ -23,3 +23,9 @@
     src: files/{{ ec2_tag_environment }}/idp_metadata.xml
     dest: /opt/edware/conf/idp_metadata.xml
   notify: restart_httpd 
+
+- name: Ensure report.py exists
+  copy:
+    src: report.py
+    dest: /tmp/report.py
+    mode: 0755
