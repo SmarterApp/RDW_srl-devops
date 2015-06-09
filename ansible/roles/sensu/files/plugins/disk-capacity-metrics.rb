@@ -58,24 +58,24 @@ class DiskCapacity < Sensu::Plugin::Metric::CLI::Graphite
         fs, _type, _blocks, used, avail, capacity, mnt = line.split
         mnt = mnt.gsub('/', '_')
         timestamp = Time.now.to_i
+        metrics = {
+          by_mount: {
+            "#{mnt}.used_mb" => used,
+            "#{mnt}.avail_mb" => avail,
+            "#{mnt}.capacity_pct" => capacity.gsub('%', '')
+          }
+        }
         if fs.match('/dev')
           fs = fs.gsub('/dev/', '')
-          metrics = {
-            by_device: {
-              "#{fs}.used_mb" => used,
-              "#{fs}.avail_mb" => avail,
-              "#{fs}.capacity_pct" => capacity.gsub('%', '')
-            },
-            by_mount: {
-              "#{mnt}.used_mb" => used,
-              "#{mnt}.avail_mb" => avail,
-              "#{mnt}.capacity_pct" => capacity.gsub('%', '')
-            },            
+          metrics[:by_device] = {
+            "#{fs}.used_mb" => used,
+            "#{fs}.avail_mb" => avail,
+            "#{fs}.capacity_pct" => capacity.gsub('%', '')
           }
-          metrics.each do |parent, children|
-            children.each do |child, value|
-              output [config[:scheme], parent, child].join('.'), value, timestamp
-            end
+        end
+        metrics.each do |parent, children|
+          children.each do |child, value|
+            output [config[:scheme], parent, child].join('.'), value, timestamp
           end
         end
       rescue
@@ -89,25 +89,24 @@ class DiskCapacity < Sensu::Plugin::Metric::CLI::Graphite
         fs, _inodes, used, avail, capacity, mnt = line.split
         mnt = mnt.gsub('/', '_')
         timestamp = Time.now.to_i
+        metrics = {
+          by_mount: {
+            "#{mnt}.inodes_used" => used,
+            "#{mnt}.inodes_avail" => avail,
+            "#{mnt}.inodes_capacity_pct" => capacity.gsub('%', '')
+          }
+        }
         if fs.match('/dev')
           fs = fs.gsub('/dev/', '')
-          metrics = {
-            by_device: {
-              "#{fs}.inodes_used" => used,
-              "#{fs}.inodes_avail" => avail,
-              "#{fs}.inodes_capacity_pct" => capacity.gsub('%', '')
-            },
-            by_mount: {
-              "#{mnt}.inodes_used" => used,
-              "#{mnt}.inodes_avail" => avail,
-              "#{mnt}.inodes_capacity_pct" => capacity.gsub('%', '')
-            },            
-
+          metrics[:by_device] = {
+            "#{fs}.inodes_used" => used,
+            "#{fs}.inodes_avail" => avail,
+            "#{fs}.inodes_capacity_pct" => capacity.gsub('%', '')
           }
-          metrics.each do |parent, children|
-            children.each do |child, value|
-              output [config[:scheme], parent, child].join('.'), value, timestamp
-            end
+        end
+        metrics.each do |parent, children|
+          children.each do |child, value|
+            output [config[:scheme], parent, child].join('.'), value, timestamp
           end
         end
       rescue
