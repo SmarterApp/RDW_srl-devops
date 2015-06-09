@@ -42,6 +42,9 @@ for file in os.listdir(path):
 """ Get all files from access_log* """
 
 all_POST_files = {}
+total_Downloadable_Report_requests_this_month = 0
+took_less_than_24_hours = 0
+took_more_than_24_hours = 0
 data = subprocess.Popen(['grep "POST /files/" /var/log/httpd/access_log*'],
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 while True:
@@ -53,18 +56,37 @@ while True:
         pdf_filename = s.group(3)
         pattern = "%d/%b/%Y %H:%M:%S"
         unix_timestamp_POST_time = int(time.mktime(time.strptime(pdf_date + " " + pdf_time, pattern)))
+
+        # skip anything older than X days
+        days_to_follow = 30 # change this to # of days to check
+        now_timestamp = time.time()
+        if unix_timestamp_POST_time < (now_timestamp - (86400 * days_to_follow)):
+            continue
+
+
         all_POST_files[pdf_filename] = { unix_timestamp_POST_time: pdf_date + " " + pdf_time }
 
 
         # check if file is in uploads
         print 'Checking', pdf_filename, "from", pdf_date, pdf_time
+        total_Downloadable_Report_requests_this_month += 1
         if pdf_filename in all_uploaded_files:
             uploaded_times = all_uploaded_files[pdf_filename]
             for uploaded_unix_timestamp, b in uploaded_times.iteritems():
                 total_time_elapsed = uploaded_unix_timestamp - unix_timestamp_POST_time
                 print '\tTotal time elapsed:', total_time_elapsed, "seconds"
+                if (unix_timestamp_POST_time + 86400) < uploaded_unix_timestamp:
+                    print "Took more than 24 hours!"
+                    took_more_than_24_hours += 1
+                else:
+                    took_less_than_24_hours += 1
         else:
             print 'not found!!'
     else:
         break
+
+
+print "Total Downloadable Reports clicks in the past", days_to_follow, "days:", total_Downloadable_Report_requests_this_month
+print "Total Downloadable Reports succeessful (less than 24 hours):", took_less_than_24_hours
+print "Total Downloadable Reports failed (more than 24 hours):", took_more_than_24_hours
 
