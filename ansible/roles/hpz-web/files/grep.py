@@ -74,12 +74,13 @@ while True:
 
         # check if file is in uploads
         print 'Checking', pdf_filename, "from", pdate, ptime
+        time.sleep(1)
         total_requests += 1
         if pdf_filename in all_uploaded_files:
             uploaded_times = all_uploaded_files[pdf_filename]
             for uploaded_unix_timestamp, b in uploaded_times.iteritems():
                 total_time_elapsed = uploaded_unix_timestamp - POSTtime
-                print '\tTotal time elapsed:', total_time_elapsed, "seconds"
+                print '\tTotal time elapsed, from click to complete:', total_time_elapsed, "seconds"
                 if (POSTtime + 86400) < uploaded_unix_timestamp:
                     print "Took more than 24 hours!"
                     took_more_than_24_hours += 1
@@ -90,6 +91,7 @@ while True:
     else:
         break
 
+print '\n\n\n'
 print "Total Downloadable Reports clicks in the past",
 print days_to_follow, "days:", total_requests
 
@@ -102,14 +104,16 @@ print took_more_than_24_hours
 # Final SLA 90% calculation
 percent_successful = (took_less_than_24_hours * 100) / total_requests
 if percent_successful >= 90:
-    SLA_commitment_met = "Yes"
+    SLA_commitment_met = "Yes!"
 else:
     raise SystemExit
 
+print '\n\n'
 print "Percent successful downloads in the past",
 print days_to_follow, "days:", percent_successful
 
-print "SLA commitment met:", SLA_commitment_met
+print '\n\n'
+print "SLA 90% success rate commitment met:", SLA_commitment_met
 
 csv = '"SLA commitment met", '
 csv += '"Percent successful", '
@@ -129,5 +133,3 @@ csv += '\n'
 file = open("/tmp/report.csv", 'w')
 file.write(csv)
 file.close
-
-print '\nWrote /tmp/report.csv\n'
