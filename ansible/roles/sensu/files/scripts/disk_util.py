@@ -23,8 +23,6 @@ unix_epoch = int(time.mktime(d.timetuple()))
 grand_total = {}
 for app in os.listdir("/data/carbon/whisper/sys"):
 
-    print 'Starting', app
-
     for title, file in files.iteritems():
         total_dirs = 0
         mounts = []
@@ -36,7 +34,8 @@ for app in os.listdir("/data/carbon/whisper/sys"):
 
         for mountpoint in mounts:
 
-            print 'Getting', app, "mountpoint: ", mountpoint
+            mountpointS = mountpoint.replace("_","/")
+            print '\n\nGetting', app, "mountpoint: ", mountpointS
 
             path = '/data/carbon/whisper/sys/%s/disk/by_mount/%s/' % (app, mountpoint)
             cmd = ["whisper-fetch", "--pretty", "--from", "%s" % unix_epoch, "%s%s" % (path, file)]
@@ -69,4 +68,4 @@ for app in os.listdir("/data/carbon/whisper/sys"):
                     grand_total[Day] = 0
             
                 grand_total[Day] += + int(total)
-            print '[%s] Grand Totals:' % title, grand_total
+print '[%s] Grand Totals:' % title, grand_total
