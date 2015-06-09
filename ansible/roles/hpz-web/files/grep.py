@@ -4,7 +4,6 @@
     available within 24 hours at least 90% of the time. """
 
 import datetime
-import glob
 import os
 import re
 import subprocess
