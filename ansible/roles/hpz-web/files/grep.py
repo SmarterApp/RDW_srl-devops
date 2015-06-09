@@ -22,7 +22,6 @@ if user is None:
 all_uploaded_files = {}
 
 path = "/opt/edware/hpz/uploads/"
-uploaded_files = glob.glob(path + "*")
 for file in os.listdir(path):
     filepath = path + file
     if 'heartbeat' in file:
