@@ -2,9 +2,46 @@
 """ remember to ansible : chmod 705 (or chmod o+rx) /var/log/httpd/
     Add ansible to apache group to read /opt/edware/hpz/uploads, is safer than chmod o+rx /opt/edware/hpz/uploads """
 
+import datetime
+import glob
+import os
 import re
 import subprocess
+import time
 
+
+""" List all files from gluster /opt/edware/hpz/uploads/ """
+
+all_uploaded_files = {}
+
+path = "/opt/edware/hpz/uploads/"
+uploaded_files = glob.glob(path + "*")
+for file in os.listdir(path):
+    filepath = path + file
+    if 'heartbeat' in file:
+        continue # skip - don't process the heartbeat file
+    file_created = time.ctime(os.path.getctime(filepath))
+    m = re.match("^(\S+)\s+(\S+)\s+([0-9]+)\s+([0-9]+):([0-9]+):([0-9]+)\s+([0-9]+)", file_created)
+    day_of_week = m.group(1)
+    month = m.group(2)
+    day_of_month = m.group(3)
+    day_of_month = day_of_month.zfill(2)
+    hour = m.group(4)
+    minute = m.group(5)
+    second = m.group(6)
+    year = m.group(7)
+
+    file_created_time = month + " " + day_of_month + " " + year + " " + hour + ":" + minute + ":" + second
+
+    pattern = "%b %d %Y %H:%M:%S"
+    unix_timestamp_uploaded_file = int(time.mktime(time.strptime(file_created_time, pattern)))
+    all_uploaded_files[file] = { unix_timestamp_uploaded_file: file_created }
+
+
+
+""" Get all files from access_log* """
+
+all_POST_files = {}
 data = subprocess.Popen(['grep "POST /files/" /var/log/httpd/access_log*'],
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 while True:
@@ -14,8 +51,20 @@ while True:
         pdf_date = s.group(1)
         pdf_time = s.group(2)
         pdf_filename = s.group(3)
-        print pdf_filename, pdf_date, pdf_time
+        pattern = "%d/%b/%Y %H:%M:%S"
+        unix_timestamp_POST_time = int(time.mktime(time.strptime(pdf_date + " " + pdf_time, pattern)))
+        all_POST_files[pdf_filename] = { unix_timestamp_POST_time: pdf_date + " " + pdf_time }
+
+
+        # check if file is in uploads
+        print 'Checking', pdf_filename, "from", pdf_date, pdf_time
+        if pdf_filename in all_uploaded_files:
+            uploaded_times = all_uploaded_files[pdf_filename]
+            for uploaded_unix_timestamp, b in uploaded_times.iteritems():
+                total_time_elapsed = uploaded_unix_timestamp - unix_timestamp_POST_time
+                print '\tTotal time elapsed:', total_time_elapsed, "seconds"
+        else:
+            print 'not found!!'
     else:
         break
-
 
