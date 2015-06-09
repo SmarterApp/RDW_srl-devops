@@ -1,0 +1,3 @@
+---
+- name: restart edudl2-report
+  service: "name=edudl2-report state=restarted"
