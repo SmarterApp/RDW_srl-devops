@@ -57,6 +57,6 @@ mail.server_port = 465
 mail.smtp_username = {{ ses_SMTP_username }}
 mail.smtp_password = {{ ses_SMTP_password }}
 mail.udl_report.from = DoNotReply@SmarterBalanced.org
-mail.udl_report.to = eseitembanksupport@ets.org
+mail.udl_report.to = {{ udl_report_to | default('foo@amplify.com') }}
 mail.udl_report.subject = UDL Report
 mail.udl_report.enabled = {{ udl_report_enabled | default('False') }}
