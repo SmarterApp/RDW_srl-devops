@@ -191,6 +191,6 @@ sensu_checks:
     handlers:
       - store_in_carbon
     interval: 5
-    command: "/etc/sensu/plugins/check-rabbitmq-queue.rb {{ sensu_monitor_rabbitmq_queues }}"
+    command: "/etc/sensu/plugins/check-rabbitmq-queue.rb"
     subscribers:
       - rabbitmq
