@@ -12,6 +12,8 @@
       - extract
       - extract_archive
       - extract_sync
+    sensu_rubygems:
+      - carrot-top
     vhost_name: edextract
 
 
