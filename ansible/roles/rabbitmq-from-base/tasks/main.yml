@@ -60,24 +60,6 @@
   shell: rabbitmq-plugins enable rabbitmq_management
   when: rmq_management_plugin_check | failed
 
-- name: Check for monitoring user
-  shell: "rabbitmqctl -q list_users | grep -q {{ rabbitmq_monitoring_username }}"
-  register: rabbitmq_monitoring_user_detected
-  changed_when: false
-  failed_when: false
-
-- name: Create monitoring user
-  shell: "rabbitmqctl add_user '{{ rabbitmq_monitoring_username }}' '{{ rabbitmq_monitoring_password }}'"
-  when: rabbitmq_monitoring_user_detected | failed
-
-- name: Tag monitoring user 
-  shell: "rabbitmqctl set_user_tags {{ rabbitmq_monitoring_username }} monitoring "
-  when: rabbitmq_monitoring_user_detected | failed
-
-- name: Set monitoring user perms
-  shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ rabbitmq_monitoring_username }} '^$' '^$' '.*' "
-  when: rabbitmq_monitoring_user_detected | failed
-  
 - name: Check for guest user
   shell: "rabbitmqctl -q list_users | grep -q guest"
   register: rabbitmq_guest_user_detected
@@ -116,3 +98,22 @@
 - name: Set user perms
   shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ rabbitmq_username }} '.*' '.*' '.*' "
   when: rabbitmq_user_detected | failed
+
+- name: Check for monitoring user
+  shell: "rabbitmqctl -q list_users | grep -q {{ rabbitmq_monitoring_username }}"
+  register: rabbitmq_monitoring_user_detected
+  changed_when: false
+  failed_when: false
+
+- name: Create monitoring user
+  shell: "rabbitmqctl add_user '{{ rabbitmq_monitoring_username }}' '{{ rabbitmq_monitoring_password }}'"
+  when: rabbitmq_monitoring_user_detected | failed
+
+- name: Tag monitoring user 
+  shell: "rabbitmqctl set_user_tags {{ rabbitmq_monitoring_username }} monitoring "
+  when: rabbitmq_monitoring_user_detected | failed
+
+- name: Set monitoring user perms
+  shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ rabbitmq_monitoring_username }} '.*' '.*' '.*' "
+  when: rabbitmq_monitoring_user_detected | failed
+  
