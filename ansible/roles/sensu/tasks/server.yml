@@ -70,10 +70,14 @@
   notify:
     - restart sensu server
 
+- name: Ensure /opt/edware/tools directory is created
+  file:
+    path: /opt/edware/tools
+    state: directory
+    recurse: yes
+
 - name: Copy disk stats file [temp for dev testing]
   copy:
     src: scripts/disk_util.py
-    dest: /tmp
+    dest: /opt/edware/tools
     mode: 0755
-  tags:
-    - d 
