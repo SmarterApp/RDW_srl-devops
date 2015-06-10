@@ -181,3 +181,16 @@ sensu_checks:
     command: "/etc/sensu/plugins/srl-web-concurrency-metrics.rb"
     subscribers: 
       - web-servers # == monitoring_topics
+
+  # ================================================ #
+  #                     RabbitMQ                     #
+  # ================================================ #
+
+  check-rabbitmq-queue:
+    type: check
+    handlers:
+      - store_in_carbon
+    interval: 5
+    command: "/etc/sensu/plugins/check-rabbitmq-queue.rb {{ rabbitmq_queues }}"
+    subscribers:
+      - rabbitmq
