@@ -28,13 +28,27 @@ metrics = {}
 metrics["Used MB"] = ['/data/carbon/whisper/sys/', '/disk/by_mount/', 'used_mb.wsp']
 metrics["Web-Response"] = ['/data/carbon/whisper/middleware/httpd/', '/response_usec/', 'percentile_90.wsp']
 
+
 d = datetime.date(2015,5,31)
 
 unix_epoch = int(time.mktime(d.timetuple()))
 
 
 totals = OrderedDict()
+
+def write_csv(csv_filename, csv):
+    print csv
+    file = open("/tmp/" + csv_filename, 'w')
+    file.write(csv)
+    file.close
+    
+    print '\nWrote /tmp/' + csv_filename + '\n'
+
 def fetch_whisper(wsp, app, app_class):
+    # verify .wsp exists or skip
+    if not os.path.isfile(wsp):
+        print 'missing file!!!', wsp
+        return
     cmd = ["whisper-fetch", "--pretty", "--from", "%s" % unix_epoch, wsp]
     proc = subprocess.Popen(cmd,stdout=subprocess.PIPE)
     
@@ -70,7 +84,6 @@ def fetch_whisper(wsp, app, app_class):
             break
 
 def make_csv(totals):
-    csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
     all_days = OrderedDict()
     for month, items in totals.iteritems():
         if month not in all_days:
@@ -92,23 +105,30 @@ def make_csv(totals):
                     all_days[month][day]['extract'] = average
                 if 'gluster' in app:
                     all_days[month][day]['gluster'] = average
+                if 'web' in app:
+                    all_days[month][day]['web'] = average
 
-    for month, days in all_days.iteritems():
-        for day, items in days.iteritems():
-            db = items['db']
-            extract = items['extract']
-            gluster = items['gluster']
-            csv += '"' + month + ' ' + str(day) + '", "' + db + '", "' + extract + '", "' + gluster + '"\n'
-
-
-
-
-    print csv
-    file = open("/tmp/data_export.csv", 'w')
-    file.write(csv)
-    file.close
+        if metric == "Used MB":
+            csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
+        elif metric == "Web-Response":
+            csv = '"Day of month", "Web Servers"\n'
+        for month, days in all_days.iteritems():
+            for day, items in days.iteritems():
+                if metric == "Used MB":
+                    csv_filename = "disk-usage-data.txt"
+                    db = items['db']
+                    extract = items['extract']
+                    gluster = items['gluster']
+                    csv += '"' + month + ' ' + str(day) + '", "' + db + '", "' + extract + '", "' + gluster + '"\n'
+                elif metric == "Web-Response":
+                    csv_filename = "web-response-data.txt"
+                    web = items['web']
+                    csv += '"' + month + ' ' + str(day) + '", "' + web + '"\n'
+    write_csv(csv_filename, csv)
     
-    print '\nWrote /tmp/data_export.csv\n'
+    
+
+
     
 def loop_mounts(app, path, metric_file):
     mounts = []
@@ -126,6 +146,7 @@ def loop_mounts(app, path, metric_file):
     fetch_whisper(wsp, app)
 
 for metric in metrics:
+    print 'Starting', metric
     grand_total = {}
     path_prefix = metrics[metric][0]
     path_suffix = metrics[metric][1]
@@ -134,17 +155,19 @@ for metric in metrics:
 
     for app in os.listdir(path_prefix):
         found = ""
-        for server_class in server_classes:
-            if server_class not in app:
+        if metric == "Used MB":
+            for server_class in server_classes:
+                if server_class not in app:
+                    continue
+                else:
+                    found = True
+                    app_class = server_class
+                    break
+            if not found:
                 continue
-            else:
-                found = True
-                app_class = server_class
-                break
-        if not found:
-            continue
 
-        print 'Processing', app, "..."
+        print '\tProcessing', app, "..."
+        # TEMP do only 008 for testing web-response
         path = path_prefix + app + path_suffix
     
         if metric == "Used MB":
@@ -154,10 +177,10 @@ for metric in metrics:
             # loop_mounts(app, path, metric_file)
             wsp = path + "_/" + metric_file
             fetch_whisper(wsp, app, app_class)
-            #continue  # testing Web-Response only
-        #elif metric == "Web-Response":
-        #    wsp = path + metric_file
-            #fetch_whisper(wsp)
+            #  continue  # testing Web-Response only
+        elif metric == "Web-Response":
+            wsp = path + metric_file
+            fetch_whisper(wsp, app, app_class="web")
         else:
             continue
     make_csv(totals)
