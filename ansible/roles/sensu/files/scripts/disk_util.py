@@ -19,17 +19,17 @@ import time
 #files = {"Used MB": 'used_mb.wsp', "Capacity": "capacity_pct.wsp"}
 #files = {"Used MB": 'used_mb.wsp'}
 
-metrics = {"Used MB": ['/data/carbon/whisper/sys/', '/disk/by_mount/', 'used_mb.wsp']}
-files = {"Web-Response": ['/data/carbon/whisper/middleware/httpd/', '/response_usec/', 'percentile_90.wsp']}
+metrics = {}
+metrics["Used MB"] = ['/data/carbon/whisper/sys/', '/disk/by_mount/', 'used_mb.wsp']
+metrics["Web-Response"] = ['/data/carbon/whisper/middleware/httpd/', '/response_usec/', 'percentile_90.wsp']
 
 d = datetime.date(2015,5,31)
 
 unix_epoch = int(time.mktime(d.timetuple()))
 
-grand_total = {}
-
 def fetch_whisper(wsp):
     cmd = ["whisper-fetch", "--pretty", "--from", "%s" % unix_epoch, wsp]
+    print cmd
     proc = subprocess.Popen(cmd,stdout=subprocess.PIPE)
     totals = OrderedDict({})
     
@@ -75,13 +75,17 @@ def loop_mounts(app, path, metric_file):
     fetch_whisper(wsp)
 
 for metric in metrics:
+    grand_total = {}
     path_prefix = metrics[metric][0]
     path_suffix = metrics[metric][1]
     metric_file = metrics[metric][2]
     for app in os.listdir(path_prefix):
         path = path_prefix + app + path_suffix
     
-        for title, file in files.iteritems():
-            if metric == "Used MB":
-                loop_mounts(app, path, metric_file)
-print '[%s] Grand Totals:' % title, grand_total
+        if metric == "Used MB":
+            loop_mounts(app, path, metric_file)
+            #continue  # testing Web-Response only
+        elif metric == "Web-Response":
+            wsp = path + metric_file
+            #fetch_whisper(wsp)
+    print '[%s] Grand Totals:', grand_total
