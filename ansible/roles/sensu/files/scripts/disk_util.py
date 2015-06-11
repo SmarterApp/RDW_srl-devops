@@ -32,10 +32,11 @@ d = datetime.date(2015,5,31)
 
 unix_epoch = int(time.mktime(d.timetuple()))
 
-def fetch_whisper(wsp, app):
+
+totals = OrderedDict()
+def fetch_whisper(wsp, app, app_class):
     cmd = ["whisper-fetch", "--pretty", "--from", "%s" % unix_epoch, wsp]
     proc = subprocess.Popen(cmd,stdout=subprocess.PIPE)
-    totals = OrderedDict()
     
     while True:
         line = proc.stdout.readline()
@@ -50,33 +51,65 @@ def fetch_whisper(wsp, app):
             if number == "None":
                 continue
             number = int(number)
-            # format at the last step
-            #number = locale.format("%d", number, grouping=True)
     
             if month not in totals:
                 # Initialize the dictionaries & counter
                 totals[month] = OrderedDict()
-                totals[month]['db'] = {}
            
 
-            if 'db' in app:
-                if day not in totals[month]['db']:
-                    totals[month]['db'][day] = {}
-                    totals[month]['db'][day]['counter'] = 0
-                    totals[month]['db'][day]['total'] = 0
-            totals[month]['db'][day]['counter'] += 1
-            totals[month]['db'][day]['total'] += number
+            if app_class in app:
+                if app_class not in totals[month]:
+                    totals[month][app_class] = {}
+                if day not in totals[month][app_class]:
+                    totals[month][app_class][day] = {}
+                    totals[month][app_class][day]['counter'] = 0
+                    totals[month][app_class][day]['total'] = 0
+            totals[month][app_class][day]['counter'] += 1
+            totals[month][app_class][day]['total'] += number
         else:
             break
+
+def make_csv(totals):
+    csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
+    all_days = OrderedDict()
     for month, items in totals.iteritems():
+        if month not in all_days:
+            all_days[month] = OrderedDict()
         for app, items2 in items.iteritems():
             for day, items3 in items2.iteritems():
+                if day not in all_days[month]:
+                    all_days[month][day] = OrderedDict()
                 total = items3['total']
                 counter = items3['counter']
                 average = total / counter
-                csv_text = '"' + month + ' ' + str(day) + '", "' + str(average) + '"'
-                print csv_text
 
+                average = locale.format("%d", average, grouping=True)
+                average += " MB"
+
+                if 'db' in app:
+                    all_days[month][day]['db'] = average
+                if 'extract' in app:
+                    all_days[month][day]['extract'] = average
+                if 'gluster' in app:
+                    all_days[month][day]['gluster'] = average
+
+    for month, days in all_days.iteritems():
+        for day, items in days.iteritems():
+            db = items['db']
+            extract = items['extract']
+            gluster = items['gluster']
+            csv += '"' + month + ' ' + str(day) + '", "' + db + '", "' + extract + '", "' + gluster + '"\n'
+
+
+
+
+    print csv
+    file = open("/tmp/data_export.csv", 'w')
+    file.write(csv)
+    file.close
+    
+    print '\nWrote /tmp/data_export.csv\n'
+    
 def loop_mounts(app, path, metric_file):
     mounts = []
     total_dirs = 0
@@ -97,15 +130,34 @@ for metric in metrics:
     path_prefix = metrics[metric][0]
     path_suffix = metrics[metric][1]
     metric_file = metrics[metric][2]
+    server_classes = ['db', 'extract', 'gluster']
+
     for app in os.listdir(path_prefix):
-        if 'db' not in app:
+        found = ""
+        for server_class in server_classes:
+            if server_class not in app:
+                continue
+            else:
+                found = True
+                app_class = server_class
+                break
+        if not found:
             continue
+
+        print 'Processing', app, "..."
         path = path_prefix + app + path_suffix
     
         if metric == "Used MB":
-            loop_mounts(app, path, metric_file)
+            # Issue: If we use mountpoints for some but / for others - it skews greatly when averaging out e.g. 'all db servers on June 1, avg is 780MB... that's skewed due to some small mountpoints.
+            # temp solution: Use / on all servers, for a more proportional average result
+            # possible solution: have 2 averages: 1 for servers-with-mountpoints, one for all /
+            # loop_mounts(app, path, metric_file)
+            wsp = path + "_/" + metric_file
+            fetch_whisper(wsp, app, app_class)
             #continue  # testing Web-Response only
-        elif metric == "Web-Response":
-            wsp = path + metric_file
+        #elif metric == "Web-Response":
+        #    wsp = path + metric_file
             #fetch_whisper(wsp)
-    print '[%s] Grand Totals:', grand_total
+        else:
+            continue
+    make_csv(totals)
