@@ -78,6 +78,6 @@
 
 - name: Copy disk stats file [temp for dev testing]
   copy:
-    src: scripts/disk_util.py
+    src: scripts/monthly-report-data-export.py
     dest: /opt/edware/tools
     mode: 0755
