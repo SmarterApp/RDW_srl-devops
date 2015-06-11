@@ -105,6 +105,15 @@ sensu_checks:
     subscribers: 
       - heartbeats # == monitoring_topics
 
+  check.hpz.heartbeat.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_base_url_host }}/services/heartbeat --response-code 200"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
   zones.glusterfs.mount.simple:
     type: check
     handlers:
