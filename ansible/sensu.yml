@@ -10,6 +10,7 @@
       - redphone
 
   vars_files:
+    - roles/rabbitmq-from-base/defaults/main.yml
     - roles/sensu/vars/check+metric-definitions.yml
     - roles/sensu/vars/handler-definitions.yml
     - roles/aws-creds/vars/main.yml
