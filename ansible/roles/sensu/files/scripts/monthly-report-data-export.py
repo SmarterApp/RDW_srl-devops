@@ -1,7 +1,7 @@
 #!/bin/env python
 
 ''' This script will display a grand total of
-      - disk usage 
+      - disk usage
       - web-response
       - concurrent sessions
     for all servers monitored on
@@ -18,17 +18,22 @@ import time
 locale.setlocale(locale.LC_ALL, 'en_US')
 
 metrics = {}
-metrics["Used MB"] = ['/data/carbon/whisper/sys/', '/disk/by_mount/', 'used_mb.wsp']
-metrics["Web-Response"] = ['/data/carbon/whisper/middleware/httpd/', '/response_usec/', 'percentile_90.wsp']
-metrics["Concurrency"] = ['/data/carbon/whisper/middleware/httpd/', '/concurrency/', 'concurrent_sessions_300_sec_window.wsp']
+metrics["Used MB"] = ['/data/carbon/whisper/sys/', '/disk/by_mount/',
+                      'used_mb.wsp']
+metrics["Web-Response"] = ['/data/carbon/whisper/middleware/httpd/',
+                           '/response_usec/', 'percentile_90.wsp']
+metrics["Concurrency"] = ['/data/carbon/whisper/middleware/httpd/',
+                          '/concurrency/',
+                          'concurrent_sessions_300_sec_window.wsp']
 
 
-d = datetime.date(2015,5,31)
+d = datetime.date(2015, 5, 31)
 unix_epoch = int(time.mktime(d.timetuple()))
 
 
 all_csvs = {}
 totals = OrderedDict()
+
 
 def write_csv(csv_filename, csv):
     file = open("/tmp/" + csv_filename, 'w')
@@ -37,13 +42,14 @@ def write_csv(csv_filename, csv):
     
     print '\nWrote /tmp/' + csv_filename + '\n'
 
+
 def fetch_whisper(wsp, app, app_class):
     # verify .wsp exists or skip
     if not os.path.isfile(wsp):
         print 'missing file!!!', wsp
         return
     cmd = ["whisper-fetch", "--pretty", "--from", "%s" % unix_epoch, wsp]
-    proc = subprocess.Popen(cmd,stdout=subprocess.PIPE)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     
     while True:
         line = proc.stdout.readline()
@@ -54,10 +60,9 @@ def fetch_whisper(wsp, app, app_class):
             month = s.group(1)
             day = s.group(2)
             day = int(day)
-            #print '\r', month, day,
+            print '\r', month, day,
             number = s.group(3)
             if number == "None":
-                print 'None skip'
                 continue
             number = int(number)
     
@@ -65,7 +70,6 @@ def fetch_whisper(wsp, app, app_class):
                 # Initialize the dictionaries & counter
                 totals[month] = OrderedDict()
            
-
             if app_class in app:
                 if app_class not in totals[month]:
                     totals[month][app_class] = {}
@@ -85,7 +89,9 @@ def fetch_whisper(wsp, app, app_class):
         else:
             break
     
+
 def make_csv(totals, metric):
+    print '\n\n=====\nWriting csv\'s...'
     all_days = OrderedDict()
     for month, items in totals.iteritems():
         if month not in all_days:
@@ -118,7 +124,9 @@ def make_csv(totals, metric):
                     all_days[month][day]['web'] = final_number
 
         if metric == "Used MB":
-            csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
+            csv = '"Day of month", '
+            csv += '"Database Servers", '
+            csv += '"Extract Servers", "Reporting Storage Servers"\n'
         elif metric == "Web-Response":
             csv = '"Day of month", "mean 90_percentile"\n'
         elif metric == "Concurrency":
@@ -131,7 +139,8 @@ def make_csv(totals, metric):
                     db = items['db']
                     extract = items['extract']
                     gluster = items['gluster']
-                    csv += '"' + month + ' ' + str(day) + '", "' + db + '", "' + extract + '", "' + gluster + '"\n'
+                    csv += '"' + month + ' ' + str(day) + '", "' + db + '", "'
+                    csv += extract + '", "' + gluster + '"\n'
                 elif metric == "Web-Response":
                     csv_filename = "web-response-data.txt"
                     web = items['web']
@@ -160,13 +169,14 @@ def loop_mounts(app, path, metric_file):
         mounts.remove("_")
     
     for mountpoint in mounts:
-        mountpointS = mountpoint.replace("_","/")
+        mountpointS = mountpoint.replace("_", "/")
         print '\n\nGetting', app, "mountpoint: ", mountpointS
     wsp = path + mountpoint + "/" + metric_file
     fetch_whisper(wsp, app)
 
+
 for metric in metrics:
-    print 'Starting', metric
+    print '\nStarting', metric
     grand_total = {}
     path_prefix = metrics[metric][0]
     path_suffix = metrics[metric][1]
@@ -186,12 +196,15 @@ for metric in metrics:
             if not found:
                 continue
 
-        print '\tProcessing', app, "..."
+        print '\n\tProcessing', app, "... ",
         path = path_prefix + app + path_suffix
     
         if metric == "Used MB":
-            # Issue: If we use mountpoints for some but / for others - it skews greatly when averaging out e.g. 'all db servers on June 1, avg is 780MB... that's skewed due to some small mountpoints.
-            # temp solution: Use / on all servers, for a more proportional average result
+            # Issue: If we use mountpoints for some but / for others - it
+            # skews greatly when averaging out e.g. 'all db servers on June 1,
+            # avg is 780MB... that's skewed due to some small mountpoints.
+            # temp solution: Use / on all servers, for a more proportional
+            # average result
             # possible solution: have 2 averages: 1 for servers-with-mountpoints, one for all /
             # loop_mounts(app, path, metric_file)
             wsp = path + "_/" + metric_file
