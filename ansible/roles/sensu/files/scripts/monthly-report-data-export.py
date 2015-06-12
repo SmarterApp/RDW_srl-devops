@@ -103,8 +103,11 @@ def make_csv(totals):
 
         if metric == "Used MB":
             csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
-        else:
-            csv = '"Day of month", "Web Servers"\n'
+        elif metric == "Web-Response":
+            csv = '"Day of month", "mean 90_percentile"\n'
+        elif metric == "Web-Response":
+            csv = '"Day of month", "Max Number of Concurrent Sessions"\n'
+            # TODO: switch from average to max for concurrency
         for month, days in all_days.iteritems():
             for day, items in days.iteritems():
                 if metric == "Used MB":
