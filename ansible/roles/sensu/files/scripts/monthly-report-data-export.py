@@ -7,9 +7,6 @@
     for all servers monitored on
     this sensu server '''
 
-
-
-
 from collections import OrderedDict
 import datetime
 import locale
@@ -18,19 +15,15 @@ import re
 import subprocess
 import time
 
-#files = ['avail_mb.wsp', 'capacity_pct.wsp', 'used_mb.wsp']
-#files = {"Used MB": 'used_mb.wsp', "Capacity": "capacity_pct.wsp"}
-#files = {"Used MB": 'used_mb.wsp'}
-
 locale.setlocale(locale.LC_ALL, 'en_US')
 
 metrics = {}
 metrics["Used MB"] = ['/data/carbon/whisper/sys/', '/disk/by_mount/', 'used_mb.wsp']
 metrics["Web-Response"] = ['/data/carbon/whisper/middleware/httpd/', '/response_usec/', 'percentile_90.wsp']
+metrics["Concurrency"] = ['/data/carbon/whisper/middleware/httpd/', '/concurrency/', 'concurrent_sessions_300_sec_window.wsp']
 
 
 d = datetime.date(2015,5,31)
-
 unix_epoch = int(time.mktime(d.timetuple()))
 
 
@@ -110,7 +103,7 @@ def make_csv(totals):
 
         if metric == "Used MB":
             csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
-        elif metric == "Web-Response":
+        else:
             csv = '"Day of month", "Web Servers"\n'
         for month, days in all_days.iteritems():
             for day, items in days.iteritems():
@@ -122,6 +115,10 @@ def make_csv(totals):
                     csv += '"' + month + ' ' + str(day) + '", "' + db + '", "' + extract + '", "' + gluster + '"\n'
                 elif metric == "Web-Response":
                     csv_filename = "web-response-data.txt"
+                    web = items['web']
+                    csv += '"' + month + ' ' + str(day) + '", "' + web + '"\n'
+                elif metric == "Concurrency":
+                    csv_filename = "concurrency-data.txt"
                     web = items['web']
                     csv += '"' + month + ' ' + str(day) + '", "' + web + '"\n'
     write_csv(csv_filename, csv)
@@ -167,7 +164,6 @@ for metric in metrics:
                 continue
 
         print '\tProcessing', app, "..."
-        # TEMP do only 008 for testing web-response
         path = path_prefix + app + path_suffix
     
         if metric == "Used MB":
@@ -177,10 +173,7 @@ for metric in metrics:
             # loop_mounts(app, path, metric_file)
             wsp = path + "_/" + metric_file
             fetch_whisper(wsp, app, app_class)
-            #  continue  # testing Web-Response only
-        elif metric == "Web-Response":
+        else:
             wsp = path + metric_file
             fetch_whisper(wsp, app, app_class="web")
-        else:
-            continue
     make_csv(totals)
