@@ -1,11 +1,10 @@
 #!/bin/env python
 
-''' This script will display a grand total of
-      - disk usage
-      - web-response
-      - concurrent sessions
-    for all servers monitored on
-    this sensu server '''
+''' This script will create csv files with the average/max of
+      - disk usage [average]
+      - web-response [average]
+      - concurrent sessions [max]
+    for servers monitored on this sensu server '''
 
 from collections import OrderedDict
 import datetime
@@ -176,7 +175,7 @@ def loop_mounts(app, path, metric_file):
 
 
 for metric in metrics:
-    print '\nStarting', metric
+    print '\nStarting', metric, 'metric...'
     grand_total = {}
     path_prefix = metrics[metric][0]
     path_suffix = metrics[metric][1]
