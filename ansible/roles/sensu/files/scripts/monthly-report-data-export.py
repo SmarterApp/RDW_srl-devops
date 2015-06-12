@@ -54,8 +54,10 @@ def fetch_whisper(wsp, app, app_class):
             month = s.group(1)
             day = s.group(2)
             day = int(day)
+            #print '\r', month, day,
             number = s.group(3)
             if number == "None":
+                print 'None skip'
                 continue
             number = int(number)
     
@@ -70,12 +72,19 @@ def fetch_whisper(wsp, app, app_class):
                 if day not in totals[month][app_class]:
                     totals[month][app_class][day] = {}
                     totals[month][app_class][day]['counter'] = 0
-                    totals[month][app_class][day]['total'] = 0
-            totals[month][app_class][day]['counter'] += 1
-            totals[month][app_class][day]['total'] += number
+                    totals[month][app_class][day]['total_or_max'] = 0
+
+            if metric == "Concurrency":
+                """ Prepare for Max concurrent sessions per day """
+                if number > totals[month][app_class][day]['total_or_max']:
+                    totals[month][app_class][day]['total_or_max'] = number
+            else:
+                """ Prepare for Average """
+                totals[month][app_class][day]['counter'] += 1
+                totals[month][app_class][day]['total_or_max'] += number
         else:
             break
-
+    
 def make_csv(totals, metric):
     all_days = OrderedDict()
     for month, items in totals.iteritems():
@@ -85,21 +94,28 @@ def make_csv(totals, metric):
             for day, items3 in items2.iteritems():
                 if day not in all_days[month]:
                     all_days[month][day] = OrderedDict()
-                total = items3['total']
                 counter = items3['counter']
-                average = total / counter
+                total_or_max = items3['total_or_max']
 
-                average = locale.format("%d", average, grouping=True)
-                average += " MB"
+                if metric == "Concurrency":
+                    """ Max concurrent sessions per day """
+                    final_number = total_or_max
+                else:
+                    """ Average """
+                    average = total_or_max / counter
+                    final_number = average
+
+                final_number = locale.format("%d", final_number, grouping=True)
+                final_number += " MB"
 
                 if 'db' in app:
-                    all_days[month][day]['db'] = average
+                    all_days[month][day]['db'] = final_number
                 if 'extract' in app:
-                    all_days[month][day]['extract'] = average
+                    all_days[month][day]['extract'] = final_number
                 if 'gluster' in app:
-                    all_days[month][day]['gluster'] = average
+                    all_days[month][day]['gluster'] = final_number
                 if 'web' in app:
-                    all_days[month][day]['web'] = average
+                    all_days[month][day]['web'] = final_number
 
         if metric == "Used MB":
             csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
@@ -107,7 +123,7 @@ def make_csv(totals, metric):
             csv = '"Day of month", "mean 90_percentile"\n'
         elif metric == "Concurrency":
             csv = '"Day of month", "Max Number of Concurrent Sessions"\n'
-            # TODO: switch from average to max for concurrency
+
         for month, days in all_days.iteritems():
             for day, items in days.iteritems():
                 if metric == "Used MB":
