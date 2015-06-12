@@ -54,12 +54,6 @@ class CheckRabbitMQMessages < Sensu::Plugin::Check::CLI
          long: '--password PASSWORD',
          default: 'guest'
 
-  option :queue,
-         description: 'RabbitMQ queue to monitor',
-         long: '--queue queue_names',
-         required: true,
-         proc: proc { |a| a.split(',') }
-
   option :warn,
          short: '-w NUM_MESSAGES',
          long: '--warn NUM_MESSAGES',
