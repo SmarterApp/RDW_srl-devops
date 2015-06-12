@@ -56,7 +56,7 @@ smarter_score_batcher.celery.CELERYD_CONCURRENCY = 20
 smarter_score_batcher.celery.CELERY_DEFAULT_EXCHANGE_TYPE = direct
 smarter_score_batcher.celery.CELERY_DEFAULT_QUEUE = smarter_score_batcher_async
 smarter_score_batcher.celery.CELERY_DEFAULT_ROUTING_KEY = smarter_score_batcher_async
-smarter_score_batcher.celery.CELERY_IMPORTS = ('smarter_score_batcher.tasks.remote_file_writer', 'smarter_score_batcher.tasks.remote_csv_writer', 'smarter_score_batcher.tasks.remote_metadata_writer')
+smarter_score_batcher.celery.CELERY_IMPORTS = ('smarter_score_batcher.tasks.remote_file_writer', 'smarter_score_batcher.tasks.remote_csv_writer', 'smarter_score_batcher.tasks.remote_metadata_writer', 'smarter_score_batcher.tasks.health_check')
 smarter_score_batcher.celery.CELERY_RESULT_BACKEND = amqp
 smarter_score_batcher.celery.CELERY_TASK_RESULT_EXPIRES = 18000
 smarter_score_batcher.celery_timeout = 30
@@ -64,6 +64,7 @@ smarter_score_batcher.db.schema_name = edware_tsb
 smarter_score_batcher.db.url = postgresql+psycopg2://{{ tsb_db_username }}:{{ tsb_db_password }}@{{ tsb_db_host }}:5432/edware
 smarter_score_batcher.gpg.homedir = /opt/edware/gpg
 smarter_score_batcher.gpg.public_key.ca = {{ tsb_gpg_public_key }}
+smarter_score_batcher.health_check.job.queue: health_check
 smarter_score_batcher.metadata.default = /opt/edware/resources/meta/default
 smarter_score_batcher.metadata.performance = /opt/edware/resources/meta/performance
 smarter_score_batcher.metadata.static = /opt/edware/resources/meta/static
