@@ -85,8 +85,12 @@ class CheckRabbitMQMessages < Sensu::Plugin::Check::CLI
     @crit = []
     @warn = []
     rabbitmq = acquire_rabbitmq_info
+
+    qfile = File.open("/etc/rabbitmq/local_queues_to_monitor.txt")
+    qdata = qfile.read
+    queues_only = qdata.split(", ")
     queues = rabbitmq.queues
-    config[:queue].each do |q|
+    queues_only.each do |q|
       unless queues.map  { |hash| hash['name'] }.include? q
         @warn << "Queue #{ q } not available"
         next
