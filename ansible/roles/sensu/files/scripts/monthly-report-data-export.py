@@ -27,10 +27,10 @@ d = datetime.date(2015,5,31)
 unix_epoch = int(time.mktime(d.timetuple()))
 
 
+all_csvs = {}
 totals = OrderedDict()
 
 def write_csv(csv_filename, csv):
-    print csv
     file = open("/tmp/" + csv_filename, 'w')
     file.write(csv)
     file.close
@@ -76,7 +76,7 @@ def fetch_whisper(wsp, app, app_class):
         else:
             break
 
-def make_csv(totals):
+def make_csv(totals, metric):
     all_days = OrderedDict()
     for month, items in totals.iteritems():
         if month not in all_days:
@@ -105,7 +105,7 @@ def make_csv(totals):
             csv = '"Day of month", "Database Servers", "Extract Servers", "Reporting Storage Servers"\n'
         elif metric == "Web-Response":
             csv = '"Day of month", "mean 90_percentile"\n'
-        elif metric == "Web-Response":
+        elif metric == "Concurrency":
             csv = '"Day of month", "Max Number of Concurrent Sessions"\n'
             # TODO: switch from average to max for concurrency
         for month, days in all_days.iteritems():
@@ -125,9 +125,13 @@ def make_csv(totals):
                     web = items['web']
                     csv += '"' + month + ' ' + str(day) + '", "' + web + '"\n'
     write_csv(csv_filename, csv)
-    
-    
 
+
+def amass_csvs(totals, metric):
+    """ This function will gather all csv's into a list, to process at
+        completion all at once. """
+
+    all_csvs[metric] = totals
 
     
 def loop_mounts(app, path, metric_file):
@@ -179,4 +183,7 @@ for metric in metrics:
         else:
             wsp = path + metric_file
             fetch_whisper(wsp, app, app_class="web")
-    make_csv(totals)
+    amass_csvs(totals, metric)
+
+for metric, totals in all_csvs.iteritems():
+    make_csv(totals, metric)
