@@ -43,6 +43,8 @@ def write_csv(csv_filename, csv):
 
 
 def fetch_whisper(wsp, app, app_class):
+    """ This function fetches the data from carbon using whisper-fetch. """
+
     # verify .wsp exists or skip
     if not os.path.isfile(wsp):
         print 'missing file!!!', wsp
@@ -90,6 +92,8 @@ def fetch_whisper(wsp, app, app_class):
     
 
 def make_csv(totals, metric):
+    """ This will create the contents of the .csv file. """
+
     print '\n\n=====\nWriting csv\'s...'
     all_days = OrderedDict()
     for month, items in totals.iteritems():
@@ -159,6 +163,8 @@ def amass_csvs(totals, metric):
 
     
 def loop_mounts(app, path, metric_file):
+    """ This function, if used, loops to fetch-whisper across all mounts. """
+
     mounts = []
     total_dirs = 0
     for mountpoint in os.listdir(path):
