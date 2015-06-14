@@ -1,8 +1,12 @@
 - name: tsb-rabbit setup
-  hosts: all
+  hosts: tsb-rabbit
   sudo: yes
   vars:
     rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-tsb-ssl"
+    rabbitmq_username: "{{ tsb_rabbit_username }}"
+    rabbitmq_password: "{{ tsb_rabbit_password }}"
+    vhost_name: smarter_score_batcher
+
   roles:
     - { role: common, tags: [ 'common'] }
     - { role: aws-cli, tags: [ 'aws-cli' ] }
