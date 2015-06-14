@@ -122,3 +122,5 @@
     content: "{{ sensu_monitor_rabbitmq_queues }}"
     dest: /etc/rabbitmq/local_queues_to_monitor.txt
     mode: 0644
+  notify:
+    - restart rabbit
