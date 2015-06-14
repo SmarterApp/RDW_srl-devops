@@ -58,13 +58,13 @@ class CheckRabbitMQMessages < Sensu::Plugin::Check::CLI
          short: '-w NUM_MESSAGES',
          long: '--warn NUM_MESSAGES',
          description: 'WARNING message count threshold',
-         default: 250
+         default: 30
 
   option :critical,
          short: '-c NUM_MESSAGES',
          long: '--critical NUM_MESSAGES',
          description: 'CRITICAL message count threshold',
-         default: 500
+         default: 50
 
   def acquire_rabbitmq_info
     begin
