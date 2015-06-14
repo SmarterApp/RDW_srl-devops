@@ -117,3 +117,8 @@
   shell: "rabbitmqctl set_permissions -p {{ vhost_name }} {{ rabbitmq_monitoring_username }} '.*' '.*' '.*' "
   when: rabbitmq_monitoring_user_detected | failed
   
+- name: Ensure /etc/rabbitmq/local_queues_to_monitor.txt exists
+  copy:
+    content: "{{ sensu_monitor_rabbitmq_queues }}"
+    dest: /etc/rabbitmq/local_queues_to_monitor.txt
+    mode: 0644

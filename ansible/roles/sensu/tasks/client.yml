@@ -29,11 +29,3 @@
     name: sensu-client 
     enabled: yes
     state: started
-
-- name: Ensure /etc/sensu/local_queues_to_monitor.txt exists
-  copy:
-    content: "{{ sensu_monitor_rabbitmq_queues }}"
-    dest: /etc/sensu/local_queues_to_monitor.txt
-    mode: 0644
-  tags:
-    - s

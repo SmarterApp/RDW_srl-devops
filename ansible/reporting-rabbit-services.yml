@@ -4,9 +4,13 @@
   vars:
     monitoring_topics:
       - common 
+      - rabbitmq 
     rabbitmq_ssl_s3_bucket: "srl-{{ ec2_tag_environment }}-services-ssl"
     rabbitmq_username: "{{ reporting_rabbit_services_username }}"
     rabbitmq_password: "{{ reporting_rabbit_services_password }}"
+    sensu_rubygems:
+      - carrot-top
+    sensu_monitor_rabbitmq_queues: "batch_pdf_gen, health_check, single_pdf_gen"
     vhost_name: services
 
   roles:
