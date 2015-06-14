@@ -190,7 +190,7 @@ sensu_checks:
     type: check
     handlers:
       - store_in_carbon
-    interval: 5
+    interval: 30
     command: "/etc/sensu/plugins/check-rabbitmq-queue.rb --user {{ rabbitmq_monitoring_username }} --password \"{{ rabbitmq_monitoring_password }}\""
     subscribers:
       - rabbitmq
