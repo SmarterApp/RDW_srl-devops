@@ -49,10 +49,6 @@ class CheckRabbitMQMessages < Sensu::Plugin::Check::CLI
          long: '--password PASSWORD',
          default: 'guest'
 
-  option :vhost,
-         description: 'View totals by vhost',
-         long: '--vhost VHOST'
-
   option :ssl,
          description: 'Enable SSL for connection to the API',
          long: '--ssl',
