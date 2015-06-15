@@ -194,3 +194,12 @@ sensu_checks:
     command: "/etc/sensu/plugins/check-rabbitmq-queue.rb --user {{ rabbitmq_monitoring_username }} --password \"{{ rabbitmq_monitoring_password }}\""
     subscribers:
       - rabbitmq
+
+  check-rabbitmq-messages:
+    type: check
+    handlers:
+      - store_in_carbon
+    interval: 30
+    command: "/etc/sensu/plugins/check-rabbitmq-messages.rb --user {{ rabbitmq_monitoring_username }} --password \"{{ rabbitmq_monitoring_password }}\""
+    subscribers:
+      - rabbitmq

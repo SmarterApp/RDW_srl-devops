@@ -124,3 +124,9 @@
     mode: 0644
   notify:
     - restart rabbit
+  
+- name: Ensure /etc/rabbitmq/vhost.txt exists
+  copy:
+    content: "{{ vhost_name }}"
+    dest: /etc/rabbitmq/vhost.txt
+    mode: 0644
