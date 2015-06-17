@@ -14,7 +14,10 @@ class CandidateLister
     # Decide which filter we are using
     # @filter =
     # TODO - command-line args parse to select filter
-    @filter = 'select(.State.Name == "stopped")'
+    @pipecmd = 'grep InstanceProfile'
+    @filter = 'select(.IamInstanceProfile.Arn|endswith("s3yum_access"))'   
+    # @filter = 'select(.State.Name == "stopped")'
+    # @pipecmd = 'cat'
     
   end
   
@@ -44,7 +47,7 @@ class CandidateLister
 
 
   def load_instances    
-    `jq -c '#{@filter}' < #{@data_path}instances.all`.each_line do |line|
+    `#{@pipecmd} #{@data_path}instances.all | jq -c '#{@filter}' `.each_line do |line|
       # puts line
       @instances.push(JSON.parse(line))
     end
