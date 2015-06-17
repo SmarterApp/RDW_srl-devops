@@ -38,7 +38,6 @@ tsb_gpg_public_key: sbac@smarterbalanced.org
 disable_stack_trace: False
 
 # ELB? # TODO: dip
-hpz_base_url_host: "http://srl-hpz-web.{{ domain }}" # this should be the ELB hostname
 hpz_upload_base_url: "http://srl-hpz-web.{{ domain }}:8443"
 hpz_download_base_url: "http://srl-hpz-web.{{ domain }}"
 reporting_base_url_host: "http://srl-web-reporting.{{ domain }}"

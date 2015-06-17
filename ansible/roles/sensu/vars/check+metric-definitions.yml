@@ -110,7 +110,7 @@ sensu_checks:
     handlers:
       - pagerduty
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_base_url_host }}/services/heartbeat --response-code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_download_base_url }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -122,7 +122,7 @@ sensu_checks:
     handlers:
       - store_in_carbon
     interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_base_url_host }}/services/heartbeat --response-code 200"
+    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_download_base_url }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
