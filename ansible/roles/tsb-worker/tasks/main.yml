@@ -6,3 +6,9 @@
 - name: Configure tsb-worker
   template: src=roles/edware/templates/smarter_score_batcher.ini.j2 dest=/opt/edware/conf/smarter_score_batcher.ini
   notify: restart celeryd-smarter_score_batcher 
+
+- name: copy asmt_type mapping file
+  copy:
+    src: files/{{ ec2_tag_environment }}/tsb/mapping/testId_asmt_type.json
+    dest: /opt/edware/resources/mapping/testId_asmt_type.json
+  notify: restart celeryd-smarter_score_batcher 

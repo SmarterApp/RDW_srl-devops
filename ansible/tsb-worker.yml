@@ -4,6 +4,7 @@
   user: ansible
   sudo: yes
   vars:
+    edware_rpm_name: smarter_score_batcher
     monitoring_topics:
       - common 
 
