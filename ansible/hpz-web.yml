@@ -5,7 +5,6 @@
   vars:
     monitoring_topics:
       - common
-      - heartbeats
       - hpz_uploads_glusterfs
     ssl_key_name: localhost
 
