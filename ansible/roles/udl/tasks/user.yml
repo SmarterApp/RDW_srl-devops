@@ -1,0 +1,12 @@
+---
+- name: Ensure udl2 group exists
+  group:
+    name: udl2
+    state: present
+
+- name: Ensure udl2 user exists
+  user:
+    name: udl2
+    state: present
+    group: udl2
+
