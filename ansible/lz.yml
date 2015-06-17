@@ -4,6 +4,7 @@
   user: ansible
   sudo: yes
   vars:
+    edware_rpm_name: edsftp
     monitoring_topics:
       - common 
 
