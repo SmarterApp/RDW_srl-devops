@@ -9,6 +9,9 @@
       - common 
       - zones_glusterfs
 
+  pre_tasks:
+    - include: roles/udl/tasks/user.yml
+
   roles:
     - { role: common, tags: ['common']}
     - { role: edware, tags: ['edware', 'app'] }
