@@ -270,7 +270,7 @@ apps:
       prod: 1
 
   - name: file-grabber
-    ami_app_name: file-grabber
+    ami_app_name: base
     security_groups:
       - srl-ssh-intra-vpc
       - srl-rmq-client # Needed for sensu monitoring
