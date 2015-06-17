@@ -3,3 +3,16 @@
 - name: Configure reporting-cache-warmer 
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart httpd 
+
+- name: Install the latest edudl2
+  yum: name=edudl2 state=latest
+
+- name: Configure udl Reconciliation
+  template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
+  notify: restart edudl2-report
+
+- name: enable edudl2-report
+  service:
+    name: edudl2-report
+    state: started
+    enabled: yes

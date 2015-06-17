@@ -169,3 +169,15 @@ sensu_checks:
     command: "/etc/sensu/plugins/srl-web-response-metrics.rb"
     subscribers: 
       - web-servers # == monitoring_topics
+
+  web-concurrency:
+    # To enable this for an app, need to include the 'concurrency_metrics'
+    # httpd conf file in the web-server role vars
+    type: metric
+    prefix: middleware
+    handlers:
+      - store_in_carbon
+    interval: 30
+    command: "/etc/sensu/plugins/srl-web-concurrency-metrics.rb"
+    subscribers: 
+      - web-servers # == monitoring_topics
