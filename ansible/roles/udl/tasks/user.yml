@@ -3,12 +3,10 @@
   group:
     name: udl2
     state: present
-#    gid: 502
 
 - name: Ensure udl2 user exists
   user:
     name: udl2
     state: present
-#    uid: 501
     group: udl2
 
