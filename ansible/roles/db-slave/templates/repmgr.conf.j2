@@ -1,7 +1,7 @@
 cluster=edware_pg_cluster
 node={{ ec2_id | instance_id_2_node_id }}
 node_name={{ ec2_tag_Name }}
-conninfo='host={{ ec2_tag_Name }}.{{ dns_search_domain }} user=repmgr dbname=edware'
+conninfo='host=127.0.0.1 user=repmgr dbname=edware'
 pg_bindir=/usr/pgsql-9.2/bin
 rsync_options='--archive --checksum --compress --progress --rsh="ssh -o \"StrictHostKeyChecking no\""'
 ssh_options='-o "StrictHostKeyChecking no"'

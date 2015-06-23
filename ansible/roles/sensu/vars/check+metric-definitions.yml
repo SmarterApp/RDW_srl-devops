@@ -105,6 +105,27 @@ sensu_checks:
     subscribers: 
       - heartbeats # == monitoring_topics
 
+  check.hpzweb.heartbeat.simple:
+    type: check
+    handlers:
+      - pagerduty
+    interval: 30
+    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_download_base_url }}/services/heartbeat --response-code 200"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
+  hpzweb.heartbeat.simple:
+    type: metric
+    output_type: nagios_check
+    prefix: app
+    auto_tag_host: 'no'
+    handlers:
+      - store_in_carbon
+    interval: 30
+    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_download_base_url }}/services/heartbeat --response-code 200"
+    subscribers: 
+      - heartbeats # == monitoring_topics
+
   zones.glusterfs.mount.simple:
     type: check
     handlers:

@@ -40,6 +40,8 @@ pyramid.debug_routematch = False
 pyramid.default_locale_name = en
 pyramid.includes = pyramid_tm pyramid_exclog pyramid_beaker
 pyramid.reload_templates = True
+smarter_score_batcher.mapping.subject_asmt_type.file = /opt/edware/resources/mapping/testId_asmt_type.json
+smarter_score_batcher.class.meta = smarter_score_batcher.custom.air.utils.air_meta.AIRMeta
 smarter_score_batcher.async_queue = smarter_score_batcher_async
 smarter_score_batcher.base_dir.csv = /opt/edware/data/item_level
 smarter_score_batcher.base_dir.staging = /opt/edware/tsb/staging
@@ -66,7 +68,7 @@ smarter_score_batcher.gpg.homedir = /opt/edware/gpg
 smarter_score_batcher.gpg.public_key.ca = {{ tsb_gpg_public_key }}
 smarter_score_batcher.health_check.job.queue: health_check
 smarter_score_batcher.metadata.default = /opt/edware/resources/meta/default
-smarter_score_batcher.metadata.performance = /opt/edware/resources/meta/performance
+smarter_score_batcher.metadata.performance = /opt/edware/data/meta/performance
 smarter_score_batcher.metadata.static = /opt/edware/resources/meta/static
 smarter_score_batcher.metadata_queue = smarter_score_batcher_metadata
 smarter_score_batcher.sync_queue = smarter_score_batcher_sync

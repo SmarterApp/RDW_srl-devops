@@ -69,3 +69,27 @@
     mode: 0640
   notify:
     - restart sensu server
+
+- name: Open up perms on /opt/sensu for reporting
+  file:
+    path: /opt/sensu
+    state: directory
+    mode: 0755
+    
+- name: Ensure /opt/edware/tools directory is created
+  file:
+    path: /opt/edware/tools
+    state: directory
+    recurse: yes
+
+- name: Copy monthly reporting scripts
+  copy:
+    src: "scripts/{{ item }}"
+    dest: "/opt/edware/tools/{{item}}"
+    mode: 0755
+  with_items:
+    - monthly-report.rb
+    - monthly-report-disk-usage.rb
+    - monthly-report-concurrent-sessions.rb
+    - monthly-report-web-response.rb
+    
