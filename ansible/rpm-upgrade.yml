@@ -1,0 +1,20 @@
+- name: Upgrade RPMs for reporting-web
+  hosts: reporting-web
+  sudo: yes
+  gather_facts: false
+  tags:
+    - reporting-web
+    - web
+  tasks:
+    - name: upgrade reporting-web RPM
+      yum:
+        name: smarter
+        state: latest
+      notify: restart reporting-web
+  handlers:
+    - name: restart reporting-web
+      service:
+        name: httpd
+        state: restarted
+
+        
