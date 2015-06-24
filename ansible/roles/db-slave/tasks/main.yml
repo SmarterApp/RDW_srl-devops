@@ -32,3 +32,9 @@
 - name: register slave
   shell: "su - postgres -c 'PATH=$PATH:/usr/pgsql-9.2/bin repmgr -f /var/lib/pgsql/repmgr.conf --force standby register'"
   ignore_errors: yes
+
+- name: install wal_rsync.sh
+  template: src=roles/db-slave/templates/wal_rsync.sh.j2 dest=/usr/local/bin/wal_rsync.sh mode=0755 owner=postgres group=postgres
+
+- name: install cron job
+  copy: src=roles/db-slave/files/wal_rsync_cron dest=/etc/cron.d/wal_rsync_cron
