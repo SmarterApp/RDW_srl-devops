@@ -9,7 +9,7 @@
 #             must be configured here by hand
 #-------------------------------------------------------------#
 
-aws_upstream_dns: 10.167.32.2
+aws_upstream_dns: 10.167.48.2
 
 pickup_host: lzsftpudl0.qa.dum.edwdc.net
 sso_host: sso.sbac2.net # TODO: This does not resolve in Dev VPC bind or public DNS
