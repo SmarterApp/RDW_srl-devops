@@ -1,20 +1,42 @@
 - name: Upgrade RPMs for reporting-web
   hosts: reporting-web
-  sudo: yes
-  gather_facts: false
   tags:
     - reporting-web
     - web
+  vars:
+    rpm_name: smarter
+    service_name: httpd
+  sudo: yes
+  gather_facts: false
+    
   tasks:
-    - name: upgrade reporting-web RPM
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
       yum:
-        name: smarter
+        name: "{{ rpm_name }}"
         state: latest
-      notify: restart reporting-web
+      notify: "restart {{ service_name }}"
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from {{ rpm_pre_check.stdout }} to {{ rpm_post_check.stdout }}"
+      when: upgrade_result.changed
+      
   handlers:
-    - name: restart reporting-web
+    - name: "restart {{ service_name }}"
       service:
-        name: httpd
+        name: "{{ service_name }}"
         state: restarted
 
         
