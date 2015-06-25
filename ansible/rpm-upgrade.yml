@@ -1,6 +1,6 @@
 
 #=====================================================#
-#                    reporting-web
+#                    reporting-web play
 #=====================================================#
 - name: Upgrade RPMs for reporting-web
   hosts: reporting-web
@@ -46,7 +46,7 @@
         state: restarted
 
 #=====================================================#
-#                    file-grabber
+#                    file-grabber play
 #=====================================================#
 - name: Upgrade RPMs for file-grabber
   hosts: file-grabber
@@ -54,10 +54,10 @@
     - file-grabber
   vars:        
     rpm_name: edudl2
-    service_name: # TODO
+    service_name: edudl2-file-grabber # TODO verify restart capability
 
 #=====================================================#
-#                    file-trigger
+#                    file-trigger play
 #=====================================================#
 - name: Upgrade RPMs for file-trigger
   hosts: file-trigger
@@ -65,10 +65,10 @@
     - file-trigger
   vars:
     rpm_name: edudl2
-    service_name: #TODO
+    service_name: edudl2-trigger # TODO verify restart capability
 
 #=====================================================#
-#                    hpz-web
+#                    hpz-web play
 #=====================================================#
 - name: Upgrade RPMs for hpz-web
   hosts: hpz-web
@@ -77,11 +77,11 @@
     - web
   vars:
     hosts: hpz-web
-    rpm_name: # TODO: need RPM name
-    service_name: # TODO
+    rpm_name: hpz
+    service_name: httpd
 
 #=====================================================#
-#                    lz
+#                    lz play
 #=====================================================#
 - name: Upgrade RPMs for lz
   hosts: lz
@@ -90,22 +90,26 @@
     - lz
   vars:
     rpm_name: edsftp
-    service_name: edsftp-watcher
+    service_name: edsftp-watcher  # TODO verify restart capability
 
 #=====================================================#
-#                    reporting-cache-warmer
+#                    reporting-cache-warmer play
 #=====================================================#
-- name: Upgrade RPMs for reporting-cache-warmer
-  hosts: reporting-cache-warmer
-  tags:
-    - reporting-cache-warmer
-    - web
-  vars:
-    rpm_name: smarter
-    service_name: # TODO
+
+# TODO: the playbook and role for this app are unmaintained,
+# and do not work, installing conflicting RPMs.
+
+# - name: Upgrade RPMs for reporting-cache-warmer
+#   hosts: reporting-cache-warmer
+#   tags:
+#     - reporting-cache-warmer
+#     - web
+#   vars:
+#     rpm_name: edudl2
+#     service_name: edudl2-report # TODO: role says to also restart httpd
 
 #=====================================================#
-#                    reporting-generator-pdf
+#                    reporting-generator-pdf play
 #=====================================================#
 - name: Upgrade RPMs for reporting-generator-pdf
   hosts: reporting-generator-pdf
@@ -113,13 +117,11 @@
     - reporting-generator-pdf
     - web
   vars:
-
-  hosts: reporting-generator-pdf
-  rpm_name: smarter
-    service_name: TODO
+    rpm_name: smarter
+    service_name: httpd
 
 #=====================================================#
-#                    reporting-worker-extract
+#                    reporting-worker-extract play
 #=====================================================#
 - name: Upgrade RPMs for reporting-worker-extract
   hosts: reporting-worker-extract
@@ -128,10 +130,10 @@
     - workers
   vars:
     rpm_name: smarter
-    service_name: # TODO
+    service_name: celeryd-edextract # TODO verify restart capability
 
 #=====================================================#
-#                    reporting-worker-pdf
+#                    reporting-worker-pdf play
 #=====================================================#
 - name: Upgrade RPMs for reporting-worker-pdf
   hosts: reporting-worker-pdf
@@ -140,10 +142,10 @@
     - workers
   vars:  
     rpm_name: smarter
-    service_name: # TODO
+    service_name: celeryd-services # TODO verify restart capability
 
 #=====================================================#
-#                    tsb-trigger
+#                    tsb-trigger play
 #=====================================================#
 - name: Upgrade RPMs for tsb-trigger
   hosts: tsb-trigger
@@ -151,10 +153,10 @@
     - tsb-trigger
   vars:
     rpm_name: smarter_score_batcher
-    service_name: file-monitor-smarter_score_batcher
+    service_name: file-monitor-smarter_score_batcher # TODO verify restart capability
 
 #=====================================================#
-#                    tsb-web
+#                    tsb-web play
 #=====================================================#
 - name: Upgrade RPMs for tsb-web
   hosts: tsb-web
@@ -163,10 +165,10 @@
     - web            
   vars:
     rpm_name: smarter_score_batcher
-    service_name: # TODO
+    service_name: httpd
 
 #=====================================================#
-#                    tsb-worker
+#                    tsb-worker play
 #=====================================================#
 - name: Upgrade RPMs for tsb-worker
   hosts: tsb-worker
@@ -175,10 +177,10 @@
     - workers
   vars:
     rpm_name: smarter_score_batcher
-    service_name: # TODO
+    service_name: celeryd-smarter_score_batcher # TODO verify restart capability
 
 #=====================================================#
-#                    udl
+#                    udl play
 #=====================================================#
 - name: Upgrade RPMs for udl
   hosts: udl
@@ -186,4 +188,4 @@
     - udl
   vars:      
     rpm_name: edudl2
-    service_name: # TODO
+    service_name: celeryd-udl2 # TODO verify restart capability
