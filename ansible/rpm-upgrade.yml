@@ -1,3 +1,7 @@
+
+#=====================================================#
+#                    reporting-web
+#=====================================================#
 - name: Upgrade RPMs for reporting-web
   hosts: reporting-web
   tags:
@@ -6,6 +10,8 @@
   vars:
     rpm_name: smarter
     service_name: httpd
+
+  #----   No unique code in this play below this point -----#
   sudo: yes
   gather_facts: false
     
@@ -20,7 +26,7 @@
       yum:
         name: "{{ rpm_name }}"
         state: latest
-      notify: "restart {{ service_name }}"
+      notify: restart services
       register: upgrade_result
       
     - name: check final version
@@ -34,9 +40,150 @@
       when: upgrade_result.changed
       
   handlers:
-    - name: "restart {{ service_name }}"
+    - name: restart services
       service:
         name: "{{ service_name }}"
         state: restarted
 
-        
+#=====================================================#
+#                    file-grabber
+#=====================================================#
+- name: Upgrade RPMs for file-grabber
+  hosts: file-grabber
+  tags:
+    - file-grabber
+  vars:        
+    rpm_name: edudl2
+    service_name: # TODO
+
+#=====================================================#
+#                    file-trigger
+#=====================================================#
+- name: Upgrade RPMs for file-trigger
+  hosts: file-trigger
+  tags:
+    - file-trigger
+  vars:
+    rpm_name: edudl2
+    service_name: #TODO
+
+#=====================================================#
+#                    hpz-web
+#=====================================================#
+- name: Upgrade RPMs for hpz-web
+  hosts: hpz-web
+  tags:
+    - hpz-web
+    - web
+  vars:
+    hosts: hpz-web
+    rpm_name: # TODO: need RPM name
+    service_name: # TODO
+
+#=====================================================#
+#                    lz
+#=====================================================#
+- name: Upgrade RPMs for lz
+  hosts: lz
+  # TODO: add delagate clause via EIP from service-locator
+  tags:
+    - lz
+  vars:
+    rpm_name: edsftp
+    service_name: edsftp-watcher
+
+#=====================================================#
+#                    reporting-cache-warmer
+#=====================================================#
+- name: Upgrade RPMs for reporting-cache-warmer
+  hosts: reporting-cache-warmer
+  tags:
+    - reporting-cache-warmer
+    - web
+  vars:
+    rpm_name: smarter
+    service_name: # TODO
+
+#=====================================================#
+#                    reporting-generator-pdf
+#=====================================================#
+- name: Upgrade RPMs for reporting-generator-pdf
+  hosts: reporting-generator-pdf
+  tags:
+    - reporting-generator-pdf
+    - web
+  vars:
+
+  hosts: reporting-generator-pdf
+  rpm_name: smarter
+    service_name: TODO
+
+#=====================================================#
+#                    reporting-worker-extract
+#=====================================================#
+- name: Upgrade RPMs for reporting-worker-extract
+  hosts: reporting-worker-extract
+  tags:
+    - reporting-worker-extract
+    - workers
+  vars:
+    rpm_name: smarter
+    service_name: # TODO
+
+#=====================================================#
+#                    reporting-worker-pdf
+#=====================================================#
+- name: Upgrade RPMs for reporting-worker-pdf
+  hosts: reporting-worker-pdf
+  tags:
+    - reporting-worker-pdf
+    - workers
+  vars:  
+    rpm_name: smarter
+    service_name: # TODO
+
+#=====================================================#
+#                    tsb-trigger
+#=====================================================#
+- name: Upgrade RPMs for tsb-trigger
+  hosts: tsb-trigger
+  tags:
+    - tsb-trigger
+  vars:
+    rpm_name: smarter_score_batcher
+    service_name: file-monitor-smarter_score_batcher
+
+#=====================================================#
+#                    tsb-web
+#=====================================================#
+- name: Upgrade RPMs for tsb-web
+  hosts: tsb-web
+  tags:
+    - tsb-web
+    - web            
+  vars:
+    rpm_name: smarter_score_batcher
+    service_name: # TODO
+
+#=====================================================#
+#                    tsb-worker
+#=====================================================#
+- name: Upgrade RPMs for tsb-worker
+  hosts: tsb-worker
+  tags:
+    - tsb-worker
+    - workers
+  vars:
+    rpm_name: smarter_score_batcher
+    service_name: # TODO
+
+#=====================================================#
+#                    udl
+#=====================================================#
+- name: Upgrade RPMs for udl
+  hosts: udl
+  tags:
+    - udl
+  vars:      
+    rpm_name: edudl2
+    service_name: # TODO
