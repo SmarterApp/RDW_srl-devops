@@ -96,15 +96,6 @@
     - sb2_dev_adminkeys
   when: "{{ not ec2_tag_environment == 'prod' }}"
 
-#================================================================#
-#                   Nessus Service Account
-#================================================================#
-
-- name: install nessus key
-  authorized_key:
-    state: present
-    key: "{{ lookup('file', '../credentials/nessus.pub') }}"
-    user: nessus
 
 
 
