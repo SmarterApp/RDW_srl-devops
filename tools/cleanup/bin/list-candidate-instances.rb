@@ -15,9 +15,9 @@ class CandidateLister
     # @filter =
     # TODO - command-line args parse to select filter
     @pipecmd = 'grep InstanceProfile'
-    @filter = 'select(.IamInstanceProfile.Arn|endswith("s3yum_access"))'   
-    # @filter = 'select(.State.Name == "stopped")'
-    # @pipecmd = 'cat'
+    #@filter = 'select(.IamInstanceProfile.Arn|endswith("s3yum_access"))'   
+    @filter = 'select(.State.Name == "stopped")'
+    @pipecmd = 'cat'
     
   end
   
