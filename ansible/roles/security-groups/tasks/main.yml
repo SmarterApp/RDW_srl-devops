@@ -591,11 +591,7 @@
       - proto: udp
         from_port: 123
         to_port: 123
-        cidr_ip: 129.6.15.28/24 #time-a.nist.gov IP
-      - proto: udp
-        from_port: 123
-        to_port: 123
-        cidr_ip: 24.56.178.140/24 #www.nist.gov IP
+        cidr_ip: 0.0.0.0/0 # TODO: AWS throws an error when multiple rules use the same port.  # 129.6.15.28/24 # time-a.nist.gov IP 24.56.178.140/24 #www.nist.gov IP
       - proto: tcp
         from_port: 465
         to_port: 465
