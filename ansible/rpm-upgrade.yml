@@ -17,7 +17,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -30,7 +30,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -63,7 +63,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -76,7 +76,7 @@
       notify: stop-start services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -107,7 +107,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -120,7 +120,7 @@
       notify: stop-start services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -154,7 +154,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -167,7 +167,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -202,7 +202,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -215,7 +215,7 @@
       notify: stop-start services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -263,7 +263,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -276,7 +276,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -310,7 +310,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -323,7 +323,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -357,7 +357,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -370,7 +370,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -403,7 +403,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -416,7 +416,7 @@
       notify: stop-start services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -448,7 +448,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -461,7 +461,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -495,7 +495,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -508,7 +508,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
@@ -541,7 +541,7 @@
   gather_facts: false
     
   tasks:
-    - name: check existing version
+    - name: determine existing version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_pre_check
       failed_when: false
@@ -554,7 +554,7 @@
       notify: restart services
       register: upgrade_result
       
-    - name: check final version
+    - name: determine final version
       shell: "rpm -q {{ rpm_name }}"
       register: rpm_post_check
       changed_when: false
