@@ -22,3 +22,9 @@ ConsoleLogin
 DeleteVolume
 ReleaseAddress
 DescribeVolumes
+ListUserPolicies
+ListMFADevices
+ListSigningCertificates
+ListGroupPolicies
+GetLoginProfile
+DescribeLoadBalancerAttributes
