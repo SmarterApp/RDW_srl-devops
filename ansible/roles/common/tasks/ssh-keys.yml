@@ -78,27 +78,6 @@
     state: absent
     path: /root/.ssh/authorized_keys
 
-- name: Install root ITOps SSH keys
-  authorized_key:
-    state: present
-    user: root
-    key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
-  with_items:
-    - sb2_prd_adminkeys
-    - Amplify_Insight_ITOps_Default
-
-- name: Install dev keys for root on non-prod
-  authorized_key:
-    state: present
-    user: root
-    key: "{{ lookup('file', '../credentials/' + item + '.pub') }}"
-  with_items:
-    - sb2_dev_adminkeys
-  when: "{{ not ec2_tag_environment == 'prod' }}"
-
-
-
-
 
 
 
