@@ -99,8 +99,42 @@
     - file-trigger
   vars:
     rpm_name: edudl2
-    service_name: edudl2-trigger # TODO requires start / stop
+    service_name: edudl2-trigger # requires start / stop
 
+  #----        install-stop-start boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: stop-start services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: stop-start services
+      shell: "service {{ service_name }} stop && service {{ service_name }} start"
+
+    
 #=====================================================#
 #                    hpz-web play
 #=====================================================#
@@ -114,18 +148,87 @@
     rpm_name: hpz
     service_name: httpd
 
+  #----           install-restart boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: restart services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: restart services
+      service:
+        name: "{{ service_name }}"
+        state: restarted
+
 #=====================================================#
 #                    lz play
 #=====================================================#
 - name: Upgrade RPMs for lz
   hosts: lz
-  # TODO: add delagate clause via EIP from service-locator
+  # TODO: Determine if we need a delegate clause for Stage due to split VPC.
+  # In dev and prod, the ansible machine can hit SSH on the LZ machine via the private IP.
   tags:
     - lz
   vars:
     rpm_name: edsftp
-    service_name: edsftp-watcher  # TODO verify restart capability
+    service_name: edsftp-watcher  # requires start / stop
 
+  #----        install-stop-start boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: stop-start services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: stop-start services
+      shell: "service {{ service_name }} stop && service {{ service_name }} start"
+    
 #=====================================================#
 #                    reporting-cache-warmer play
 #=====================================================#
@@ -154,6 +257,41 @@
     rpm_name: smarter
     service_name: httpd
 
+  #----           install-restart boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: restart services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: restart services
+      service:
+        name: "{{ service_name }}"
+        state: restarted
+    
 #=====================================================#
 #                    reporting-worker-extract play
 #=====================================================#
@@ -165,6 +303,41 @@
   vars:
     rpm_name: smarter
     service_name: celeryd-edextract
+
+  #----           install-restart boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: restart services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: restart services
+      service:
+        name: "{{ service_name }}"
+        state: restarted
 
 #=====================================================#
 #                    reporting-worker-pdf play
@@ -178,6 +351,41 @@
     rpm_name: smarter
     service_name: celeryd-services
 
+  #----           install-restart boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: restart services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: restart services
+      service:
+        name: "{{ service_name }}"
+        state: restarted
+
 #=====================================================#
 #                    tsb-trigger play
 #=====================================================#
@@ -187,7 +395,40 @@
     - tsb-trigger
   vars:
     rpm_name: smarter_score_batcher
-    service_name: file-monitor-smarter_score_batcher # TODO requires start / stop
+    service_name: file-monitor-smarter_score_batcher # requires start / stop
+
+  #----        install-stop-start boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: stop-start services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: stop-start services
+      shell: "service {{ service_name }} stop && service {{ service_name }} start"
 
 #=====================================================#
 #                    tsb-web play
@@ -201,6 +442,41 @@
     rpm_name: smarter_score_batcher
     service_name: httpd
 
+  #----           install-restart boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: restart services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: restart services
+      service:
+        name: "{{ service_name }}"
+        state: restarted
+    
 #=====================================================#
 #                    tsb-worker play
 #=====================================================#
@@ -213,6 +489,41 @@
     rpm_name: smarter_score_batcher
     service_name: celeryd-smarter_score_batcher
 
+  #----           install-restart boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: restart services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: restart services
+      service:
+        name: "{{ service_name }}"
+        state: restarted
+
 #=====================================================#
 #                    udl play
 #=====================================================#
@@ -223,3 +534,38 @@
   vars:      
     rpm_name: edudl2
     service_name: celeryd-udl2 
+
+  #----           install-restart boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: restart services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: restart services
+      service:
+        name: "{{ service_name }}"
+        state: restarted
