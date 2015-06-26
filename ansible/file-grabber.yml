@@ -4,9 +4,13 @@
   user: ansible
   sudo: yes
   vars:
+    edware_rpm_name: edudl2
     monitoring_topics:
       - common 
       - zones_glusterfs
+
+  pre_tasks:
+    - include: roles/udl/tasks/user.yml
 
   roles:
     - { role: common, tags: ['common']}

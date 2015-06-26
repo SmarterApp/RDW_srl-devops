@@ -3,6 +3,35 @@
   yum: name=smarter_score_batcher state=latest
   notify: Restart smarter_score_batcher
 
+- name: Move static ELA meta file
+  copy: src=files/{{ env }}/tsb/static/ELA.static_asmt_metadata.json dest=/opt/edware/resources/meta/static/ELA.static_asmt_metadata.json owner=celery group=celery mode=0644
+
+- name: Move static Math meta file
+  copy: src=files/{{ env }}/tsb/static/MATH.static_asmt_metadata.json dest=/opt/edware/resources/meta/static/MATH.static_asmt_metadata.json owner=celery group=celery mode=0644
+
+- name: Move default ELA meta file
+  copy: src=files/{{ env }}/tsb/default/ELA.default_asmt_metadata.json dest=/opt/edware/resources/meta/default/{{ item }}/ELA.default_asmt_metadata.json owner=celery group=celery mode=0644
+  with_items:
+    - "summative"
+    - "interim comprehensive"
+    - "interim assessment blocks"
+
+- name: Move default Math meta file
+  copy: src=files/{{ env }}/tsb/default/MATH.default_asmt_metadata.json dest=/opt/edware/resources/meta/default/{{ item }}/MATH.default_asmt_metadata.json owner=celery group=celery mode=0644
+  with_items:
+    - "summative"
+    - "interim comprehensive"
+    - "interim assessment blocks"
+
+- name: Move performance meta folder
+  copy: src=files/{{ env }}/tsb/performance/ dest=/opt/edware/data/meta/performance/ owner=celery group=celery mode=0644
+
 - name: Configure tsb-worker
   template: src=roles/edware/templates/smarter_score_batcher.ini.j2 dest=/opt/edware/conf/smarter_score_batcher.ini
+  notify: restart celeryd-smarter_score_batcher 
+
+- name: copy asmt_type mapping file
+  copy:
+    src: files/{{ ec2_tag_environment }}/tsb/mapping/testId_asmt_type.json
+    dest: /opt/edware/resources/mapping/testId_asmt_type.json
   notify: restart celeryd-smarter_score_batcher 
