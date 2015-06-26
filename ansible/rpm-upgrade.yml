@@ -11,6 +11,7 @@
     rpm_name: smarter
     service_name: httpd
 
+  #----           install-restart boilerplate          -----#
   #----   No unique code in this play below this point -----#
   sudo: yes
   gather_facts: false
@@ -36,7 +37,7 @@
       
     - name: Log version change if any
       debug:
-        msg: "RPM upgraded from {{ rpm_pre_check.stdout }} to {{ rpm_post_check.stdout }}"
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
       when: upgrade_result.changed
       
   handlers:
@@ -54,8 +55,41 @@
     - file-grabber
   vars:        
     rpm_name: edudl2
-    service_name: edudl2-file-grabber # TODO verify restart capability
+    service_name: edudl2-file-grabber # requires start / stop
 
+  #----        install-stop-start boilerplate          -----#
+  #----   No unique code in this play below this point -----#
+  sudo: yes
+  gather_facts: false
+    
+  tasks:
+    - name: check existing version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_pre_check
+      failed_when: false
+      changed_when: false
+      
+    - name: "upgrade RPM"
+      yum:
+        name: "{{ rpm_name }}"
+        state: latest
+      notify: stop-start services
+      register: upgrade_result
+      
+    - name: check final version
+      shell: "rpm -q {{ rpm_name }}"
+      register: rpm_post_check
+      changed_when: false
+      
+    - name: Log version change if any
+      debug:
+        msg: "RPM upgraded from '{{ rpm_pre_check.stdout }}' to '{{ rpm_post_check.stdout }}'"
+      when: upgrade_result.changed
+      
+  handlers:
+    - name: stop-start services
+      shell: "service {{ service_name }} stop && service {{ service_name }} start"
+    
 #=====================================================#
 #                    file-trigger play
 #=====================================================#
@@ -65,7 +99,7 @@
     - file-trigger
   vars:
     rpm_name: edudl2
-    service_name: edudl2-trigger # TODO verify restart capability
+    service_name: edudl2-trigger # TODO requires start / stop
 
 #=====================================================#
 #                    hpz-web play
@@ -130,7 +164,7 @@
     - workers
   vars:
     rpm_name: smarter
-    service_name: celeryd-edextract # TODO verify restart capability
+    service_name: celeryd-edextract
 
 #=====================================================#
 #                    reporting-worker-pdf play
@@ -142,7 +176,7 @@
     - workers
   vars:  
     rpm_name: smarter
-    service_name: celeryd-services # TODO verify restart capability
+    service_name: celeryd-services
 
 #=====================================================#
 #                    tsb-trigger play
@@ -153,7 +187,7 @@
     - tsb-trigger
   vars:
     rpm_name: smarter_score_batcher
-    service_name: file-monitor-smarter_score_batcher # TODO verify restart capability
+    service_name: file-monitor-smarter_score_batcher # TODO requires start / stop
 
 #=====================================================#
 #                    tsb-web play
@@ -177,7 +211,7 @@
     - workers
   vars:
     rpm_name: smarter_score_batcher
-    service_name: celeryd-smarter_score_batcher # TODO verify restart capability
+    service_name: celeryd-smarter_score_batcher
 
 #=====================================================#
 #                    udl play
@@ -188,4 +222,4 @@
     - udl
   vars:      
     rpm_name: edudl2
-    service_name: celeryd-udl2 # TODO verify restart capability
+    service_name: celeryd-udl2 
