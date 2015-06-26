@@ -98,7 +98,32 @@
     rules_egress:
     purge_rules: true
     purge_rules_egress: true
-
+    
+- name: srl-ssh-from-ucla
+  ec2_group:
+    name: srl-ssh-from-ucla
+    aws_access_key: "{{ aws_access_id }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: Allow SSH access from UCLA trusted networks.
+    vpc_id: "{{ vpc.vpc_id }}"
+    region: "{{ vpc_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 164.67.133.0/24
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 164.67.203.64/26
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 149.142.38.64/26
+    rules_egress:
+    purge_rules: true
+    purge_rules_egress: true
+    
 - name: srl-bind security group
   ec2_group:
     name: srl-bind
