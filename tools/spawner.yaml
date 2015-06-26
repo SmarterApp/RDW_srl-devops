@@ -26,6 +26,7 @@ apps:
     security_groups:
       - srl-ssh-intra-vpc
       - srl-ssh-from-vestibule
+      - srl-ssh-from-ucla
       - srl-logging
       - srl-rmq-client # Needed for sensu monitoring
     instance_type: m3.medium
@@ -47,7 +48,7 @@ apps:
       prod: 0
 
   - name: bind
-    ami_app_name: bind # TODO: remove this when the real AMI is available
+    ami_app_name: bind
     security_groups:
       - srl-ssh-intra-vpc
       - srl-logging
