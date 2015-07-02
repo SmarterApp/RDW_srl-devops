@@ -1,0 +1,8 @@
+---
+- name: Just install SSH keys
+  hosts: all
+  sudo: yes
+
+  tasks:
+    - include: roles/common/tasks/ssh-keys.yml
+    
