@@ -1,5 +1,6 @@
 ; this file is controlled by ansible
 ; if you make changes, they will probably get overwritten later
+
 [smarter-3p]
 name=smarter 3rd party rpm repo
 baseurl=http://smarter-{{yum_env}}-3p-yum-repo.s3.amazonaws.com/
@@ -9,41 +10,9 @@ s3_enabled=1
 gpgcheck=0
 priority=1
 
-[CentOS6.5]
-name=CentOS6 Base repo
-baseurl=http://smarter-{{yum_env}}-yum-repo.s3.amazonaws.com/CentOS/6.5/os/
-failovermethod=priority
-enabled=1
-s3_enabled=1
-gpgcheck=0
-
-[CentOS6.5-cr]
-name=CentOS6 Base repo
-baseurl=http://smarter-{{yum_env}}-yum-repo.s3.amazonaws.com/CentOS/6.5/cr/
-failovermethod=priority
-enabled=1
-s3_enabled=1
-gpgcheck=0
-
-[CentOS6.5-updates]
-name=CentOS6 Base repo
-baseurl=http://smarter-{{yum_env}}-yum-repo.s3.amazonaws.com/CentOS/6.5/updates/
-failovermethod=priority
-enabled=1
-s3_enabled=1
-gpgcheck=0
-
 [smarter]
 name=smarter RPM repo
 baseurl=http://smarter-{{yum_env}}-yum-repo.s3.amazonaws.com/edware/
-failovermethod=priority
-enabled=1
-s3_enabled=1
-gpgcheck=0
-
-[CentOS6-epel]
-name=CentOS6 EPEL
-baseurl=http://smarter-{{yum_env}}-yum-repo.s3.amazonaws.com/epel/
 failovermethod=priority
 enabled=1
 s3_enabled=1
