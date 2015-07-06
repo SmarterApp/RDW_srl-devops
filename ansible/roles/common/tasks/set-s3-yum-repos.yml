@@ -1,4 +1,14 @@
-- name: Configure Yum repos
+
+- name: Enable public CentOS 6 repos
+  shell: "yum-config-manager --enable {{ item }}"
+  # TODO: idempotence
+  with_items:
+    - base
+    - updates
+    - epel
+    - extras
+
+- name: Configure S3-based Yum repos
   template: 
     src: s3iam.repo.j2 
     dest: /etc/yum.repos.d/s3iam.repo
@@ -7,9 +17,11 @@
   command: yum clean all
   tags:
     - slow
+    - yum_cache
 
 - name: Update Yum cache
   command: yum makecache
   tags:
     - slow
+    - yum_cache
   ignore_errors: yes
