@@ -1,0 +1,1 @@
+0 7 * * * postgres /usr/local/bin/pgpool_monitor.sh

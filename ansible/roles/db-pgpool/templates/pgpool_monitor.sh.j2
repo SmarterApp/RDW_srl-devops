@@ -1,0 +1,31 @@
+#!/bin/sh
+IFS="
+"
+re='^[0-9]+$'
+
+RESULT=$(PGPASSWORD={{ edware_db_ca_password }} /usr/bin/psql -h 127.0.0.1 -U {{ edware_extract_db_ca_username }} -p 9999 -c "show pool_nodes")
+
+for LINE in ${RESULT}; do
+    NODE=$(echo ${LINE} | cut -d'|' -f 1|tr -d '[[:space:]]')
+    if [[ ${NODE} =~ $re ]]; then
+        STATUS=$(echo ${LINE} | cut -d'|' -f 4|tr -d '[[:space:]]')
+        if [[ ${STATUS} == 3 ]]; then
+            RET=1
+            while [ ${RET} != 0 ]; do
+                /usr/bin/pcp_detach_node 10 localhost 9898 {{ pgpool_manager_username }} {{ pgpool_manager_username_password }} ${NODE}
+                RET=$?
+                if [ ${RET} != 0 ]; then
+                    sleep 1
+                fi  
+            done
+            RET=1
+            while [ ${RET} != 0 ]; do
+                /usr/bin/pcp_attach_node 10 localhost 9898 {{ pgpool_manager_username }} {{ pgpool_manager_username_password }} ${NODE}
+                RET=$?
+                if [ ${RET} != 0 ]; then
+                    sleep 1
+                fi  
+            done
+        fi  
+    fi  
+done
