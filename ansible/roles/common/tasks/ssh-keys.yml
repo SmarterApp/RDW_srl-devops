@@ -1,4 +1,16 @@
 
+#================================================================#
+#                   UCLA Regulator Service Account
+#================================================================#
+
+# TODO: create account, install key, grant sudo
+
+- name: Read UCLA Regulator key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ucla-regulator-????-??-??.pem.pub | tail -1)
+  register: ssh_key_regulator
+  changed_when: False
 
 #================================================================#
 #                   Ansible Service Account
@@ -7,8 +19,8 @@
 # This is a massive PITA, because we don't have 'exclusive' parameter 
 # for authorized_key yet in v1.8
 
-# When in dev, force ansible user to have exactly three keys - prod, dev, and ucla
-# When in prod, force ansible user to have exactly two keys - prod and ucla
+# When in dev, force ansible user to have exactly three keys - prod, dev, and regulator
+# When in prod, force ansible user to have exactly two keys - prod and regulator
 
 - name: Setup ansible user ssh dir
   file:
@@ -32,14 +44,7 @@
   changed_when: False
   when: "{{ not ec2_tag_environment == 'prod' }}"
 
-- name: Read UCLA key from disk
-  sudo: no
-  delegate_to: localhost
-  shell: cat $(ls ../credentials/ucla-prod-????-??-??.pem.pub | tail -1)
-  register: ssh_key_ansible_ucla
-  changed_when: False
-
-- name: Everywhere but prod, write dev, prod, and ucla ansible keys
+- name: Everywhere but prod, write dev, prod, and regulator ansible keys
   template:
     mode: 0644
     owner: ansible
@@ -47,7 +52,7 @@
     dest: /home/ansible/.ssh/authorized_keys
   when: "{{ not ec2_tag_environment == 'prod' }}"
 
-- name: In prod, write only prod and ucla ansible keys
+- name: In prod, write only prod and regulator ansible keys
   template:
     mode: 0644
     owner: ansible
