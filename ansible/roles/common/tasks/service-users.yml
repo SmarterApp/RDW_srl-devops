@@ -60,6 +60,43 @@
     dest: /home/ansible/.ssh/authorized_keys
   when: "{{ ec2_tag_environment == 'prod' }}"
 
+- name: Grant sudo to ansible
+  lineinfile:
+    dest: /etc/sudoers.d/user_ansible
+    line: 'ansible ALL=NOPASSWD: ALL'
+    state: present
+    create: yes
+    mode: 0440
+
+- name: No TTY for ansible
+  lineinfile:
+    dest: /etc/sudoers.d/user_ansible
+    line: 'Defaults:ansible !requiretty'
+    state: present
+    create: yes
+    mode: 0440
+
+
+#================================================================#
+#                   Sensu Service Account
+#================================================================#
+
+- name: Grant sudo to sensu
+  lineinfile:
+    dest: /etc/sudoers.d/user_sensu
+    line: 'sensu ALL=NOPASSWD: ALL'
+    state: present
+    create: yes
+    mode: 0440
+
+- name: No TTY for sensu
+  lineinfile:
+    dest: /etc/sudoers.d/user_sensu
+    line: 'Defaults:sensu !requiretty'
+    state: present
+    create: yes
+    mode: 0440
+
 #================================================================#
 #                   Root Account
 #================================================================#
