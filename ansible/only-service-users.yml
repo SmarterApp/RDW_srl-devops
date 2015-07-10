@@ -1,0 +1,8 @@
+---
+- name: Just manage the service users
+  hosts: all
+  sudo: yes
+
+  tasks:
+    - include: roles/common/tasks/service-users.yml
+    
