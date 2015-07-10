@@ -1,25 +1,4 @@
 
-#================================================================#
-#                    Developer Accounts
-#================================================================#
-
-- name: List all non-root authorized_keys files
-  shell: find /home -name authorized_keys | cut -f 3 -d'/'
-  register: ak_files
-  ignore_errors: yes
-  changed_when: false
-
-- name: Purge authorized_keys for all users except those allowed, when in dev
-  file:
-    state: absent
-    path: /home/{{ item }}/.ssh/authorized_keys
-  with_items: "{{ak_files.stdout_lines | difference(users_allowed_to_have_authorized_keys) }}"
-  when: "{{ not ec2_tag_environment == 'prod' }}"
-
-- name: Purge authorized_keys for all users except ansible when in prod
-  # Important not to delete ansible, or we will fail to reconnect immediately!
-  shell: find /home -name authorized_keys | grep -v ansible | xargs --no-run-if-empty rm
-  when: "{{ ec2_tag_environment == 'prod' }}"
 
 #================================================================#
 #                   Ansible Service Account
