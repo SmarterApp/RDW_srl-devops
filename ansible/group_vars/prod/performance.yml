@@ -2,3 +2,5 @@
 
 memcache_connections: 4096
 memcache_size_mb: 28672
+
+carbon_volume_size: 1000
