@@ -1,5 +1,25 @@
 
 #================================================================#
+#                   UCLA Zenoss Service Account
+#================================================================#
+
+- name: Create zenoss-monitoring user
+  user:
+    name: zenoss-monitoring
+  
+- name: Read UCLA Zenoss key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ucla-zenoss-????-??-??.pem.pub | tail -1)
+  register: ssh_key_zenoss
+  changed_when: False
+
+- name: Install zenoss authorized key
+  authorized_key:
+    key: "{{ ssh_key_zenoss.stdout }}"
+    user: zenoss-monitoring
+
+#================================================================#
 #                   UCLA Regulator Service Account
 #================================================================#
 
