@@ -25,7 +25,17 @@
   service: name=pgpool-II-92 state=started enabled=yes
 
 - name: install pgpool_monitor.sh
-  template: src=roles/db-pgpool/templates/pgpool_monitor.sh.j2 dest=/usr/local/bin/pgpool_monitor.sh mode=0755
+  template: 
+    src: roles/db-pgpool/templates/pgpool_monitor.sh.j2 
+    dest: /usr/local/bin/pgpool_monitor.sh 
+    mode: 0755
+  tags:
+    - pgpool-monitor
 
 - name: install cron job
-  copy: src=roles/db-pgpool/files/pgpool_cron dest=/etc/cron.d/pgpool_cron
+  copy: 
+    src: roles/db-pgpool/files/pgpool_cron 
+    dest: /etc/cron.d/pgpool_cron
+  tags:
+    - pgpool-monitor
+

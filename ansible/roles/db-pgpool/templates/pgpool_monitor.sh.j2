@@ -3,7 +3,7 @@ IFS="
 "
 re='^[0-9]+$'
 
-RESULT=$(PGPASSWORD={{ edware_db_ca_password }} /usr/bin/psql -h 127.0.0.1 -U {{ edware_extract_db_ca_username }} -p 9999 -c "show pool_nodes")
+RESULT=$(PGPASSWORD={{ edware_db_password }} /usr/bin/psql -h 127.0.0.1 -U {{ edware_db_username }} -p 9999 -c "show pool_nodes")
 
 for LINE in ${RESULT}; do
     NODE=$(echo ${LINE} | cut -d'|' -f 1|tr -d '[[:space:]]')
