@@ -1,10 +1,15 @@
 
+- name: List enabled repos
+  shell: "yum -C repolist enabled | tail -n +3 | grep -v 'repolist:' | cut -d' ' -f1"
+  changed_when: false
+  register: enabled_yum_repos
+
 - name: Enable public CentOS 6 repos
   shell: "yum-config-manager --enable {{ item }}"
-  # TODO: idempotence
+  when: "{{ not item in enabled_yum_repos.stdout }}"
   with_items:
-    - base
     - updates
+    - base
     - epel
     - extras
 

@@ -1,60 +1,41 @@
 ---
-- name: Update specific yum packages for security
-  hosts: all
+- name: Upgrade All
+  hosts: all:!ansible
   sudo: yes
   tasks:
-    - name: Verify /etc/grub.conf file
-      file: src=/boot/grub/grub.conf dest=/etc/grub.conf state=link
-#    - name: yum full upgrade
-#      yum: name=* state=latest
+
     - name: yum kernel upgrade
-      yum: name=kernel* state=latest
-    - name: fix grub.conf
-      lineinfile: dest=/boot/grub/grub.conf regexp="^default=" line="default=0"
-    - name: yum bind upgrade
-      yum: name=bind* state=latest
-    - name: yum cups upgrade
-      yum: name=cups* state=latest
-    - name: yum file upgrade
-      yum: name=file* state=latest
-    - name: yum glibc upgrade
-      yum: name=glibc* state=latest
-    - name: yum jasper upgrade
-      yum: name=jasper* state=latest
-    - name: yum krb5 upgrade
-      yum: name=krb5* state=latest
-    - name: yum libX upgrade
-      yum: name=libX* state=latest
-    - name: yum libxml2 upgrade
-      yum: name=libxml2* state=latest
-    - name: yum libyaml upgrade
-      yum: name=libyaml* state=latest
-    - name: yum lzo upgrade
-      yum: name=lzo* state=latest
-    - name: yum mailx upgrade
-      yum: name=mailx* state=latest
-    - name: yum nss upgrade
-      yum: name=nss* state=latest
-    - name: yum ntp upgrade
-      yum: name=ntp* state=latest
-    - name: yum openssh upgrade
-      yum: name=openssh* state=latest
-    - name: yum openssl upgrade
-      yum: name=openssl* state=latest
-    - name: yum procmail upgrade
-      yum: name=procmail* state=latest
-    - name: yum rpm upgrade
-      yum: name=rpm* state=latest
-      yum: name=rsyslog* state=latest
-    - name: yum samba4 upgrade
-      yum: name=samba4* state=latest
-    - name: yum wget upgrade
-      yum: name=wget* state=latest
+      yum:
+        name: "kernel*"
+        state: latest
+      register: kernel_changed
+    
+    - name: yum full upgrade
+      yum:
+        name: "*"
+        state: latest
+        
+    - name: Verify /etc/grub.conf file is a link
+      file:
+        src: /boot/grub/grub.conf
+        dest: /etc/grub.conf
+        state: link
+        
+    - name: fix grub.conf to use latest kernel
+      lineinfile:
+        dest: /boot/grub/grub.conf
+        regexp: "^default="
+        line: "default=0"
+      when: "{{ kernel_changed | changed }}"
+        
     - name: reboot
       command: shutdown -r now "Ansible reboot"
       async: 0
       poll: 0
       ignore_errors: true
+      when: "{{ kernel_changed | changed }}"
+      
     - name: wait for server to come back
       local_action: wait_for host={{ inventory_hostname }} state=started
       sudo: false
+      when: "{{ kernel_changed | changed }}"

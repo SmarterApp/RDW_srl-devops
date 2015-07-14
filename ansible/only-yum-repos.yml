@@ -1,7 +1,7 @@
 ---
 - name: Just change CentOS yum repos to be public
   gather_facts: no
-  hosts: 10.186.53.155
+  hosts: all
   sudo: yes
 
   tasks:
