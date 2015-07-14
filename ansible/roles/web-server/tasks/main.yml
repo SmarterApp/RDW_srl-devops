@@ -75,3 +75,11 @@
   notify:
     - restart_httpd
 
+
+# {{ httpd_restart_stagger_minute }}
+# {{ httpd_restart_stagger_hour }}
+    
+- name: Restart apache every so often
+  template:
+    src: restart-apache.cron.j2
+    dest: "/etc/cron.d/restart-apache.cron
