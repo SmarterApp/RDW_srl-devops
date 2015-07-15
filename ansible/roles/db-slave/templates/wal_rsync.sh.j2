@@ -1,0 +1,14 @@
+#!/bin/bash
+
+IFS="
+"
+
+RESULT=$(/usr/bin/psql -c "select case when now()-pg_last_xact_replay_timestamp() >'00:10:00' then 'true' else 'false' end as behind")
+
+for LINE in ${RESULT}; do
+	STATUS=$(echo ${LINE} | tr -d '[[:space:]]')
+    if [[ ${STATUS} == "true" ]]; then
+        /usr/bin/rsync -a {{ reporting_db_master_ip }}:/var/lib/pgsql/9.2/archive/ /var/lib/pgsql/9.2/archive/
+        break
+    fi
+done

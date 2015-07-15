@@ -1,1 +1,16 @@
-db-slave.yml
+---
+- name: Configure slave database
+  hosts: reporting-db-slave
+  user: ansible
+  sudo: yes
+  vars:
+    reporting_db_master_ip: "{{ groups['db-master'] | intersect(groups [ ec2_tag_environment ]) | first }}"
+    monitoring_topics:
+      - common 
+
+  roles:
+    - { role: common, tags: ['common']}
+    # TODO: We need to update postgres user names and password
+    - { role: db-slave, tags: ['db-slave', 'app'] }
+    - { role: migrate-player, tags: ['migrate-player', 'app'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }

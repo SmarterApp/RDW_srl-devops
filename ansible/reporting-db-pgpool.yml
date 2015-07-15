@@ -1,6 +1,6 @@
 ---
 - name: Configure PgPool for PostreSQL connection pooling, load balancing, parallel queries 
-  hosts: reporting-db-pgpool:extracts-db-pgpool
+  hosts: reporting-db-pgpool
   user: ansible
   sudo: yes
 

@@ -1,0 +1,165 @@
+
+#================================================================#
+#                   UCLA Zenoss Service Account
+#================================================================#
+
+# This task is ad-hoc and may be deleted after all old accounts are removed
+- name: Delete mistaken zenoss-monitoring user
+  user:
+    name: zenoss-monitoring
+    state: absent
+    remove: true
+
+- name: Create zenoss-monitor user
+  user:
+    name: zenoss-monitor
+    state: present
+  
+- name: Read UCLA Zenoss key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ucla-zenoss-????-??-??.pem.pub | tail -1)
+  register: ssh_key_zenoss
+  changed_when: False
+
+- name: Install zenoss authorized key
+  authorized_key:
+    key: "{{ ssh_key_zenoss.stdout }}"
+    user: zenoss-monitor
+
+#================================================================#
+#                   UCLA Regulator Service Account
+#================================================================#
+
+- name: Create regulator user
+  user:
+    name: regulator
+  
+- name: Read UCLA Regulator key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ucla-regulator-????-??-??.pem.pub | tail -1)
+  register: ssh_key_regulator
+  changed_when: False
+
+- name: Install regulator authorized key
+  authorized_key:
+    key: "{{ ssh_key_regulator.stdout }}"
+    user: regulator
+      
+- name: Grant sudo to regulator
+  lineinfile:
+    dest: /etc/sudoers.d/user_regulator
+    line: 'regulator ALL=NOPASSWD: ALL'
+    state: present
+    create: yes
+    mode: 0440
+
+- name: No TTY for regulator
+  lineinfile:
+    dest: /etc/sudoers.d/user_regulator
+    line: 'Defaults:regulator !requiretty'
+    state: present
+    create: yes
+    mode: 0440
+
+  
+#================================================================#
+#                   Ansible Service Account
+#================================================================#
+
+# This is a massive PITA, because we don't have 'exclusive' parameter 
+# for authorized_key yet in v1.8
+
+# When in dev, force ansible user to have exactly three keys - prod, dev, and regulator
+# When in prod, force ansible user to have exactly two keys - prod and regulator
+
+- name: Setup ansible user ssh dir
+  file:
+    state: directory
+    owner: ansible
+    mode: '0700'
+    path: /home/ansible/.ssh
+
+- name: Read prod ansible key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ansible-prod-????-??-??.pem.pub | tail -1)
+  register: ssh_key_ansible_prod
+  changed_when: False
+
+- name: Read dev ansible key from disk
+  sudo: no
+  delegate_to: localhost
+  shell: cat $(ls ../credentials/ansible-dev-????-??-??.pem.pub | tail -1)
+  register: ssh_key_ansible_dev
+  changed_when: False
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+- name: Everywhere but prod, write dev, prod, and regulator ansible keys
+  template:
+    mode: 0644
+    owner: ansible
+    src: ansible-ssh-keys-dev.j2
+    dest: /home/ansible/.ssh/authorized_keys
+  when: "{{ not ec2_tag_environment == 'prod' }}"
+
+- name: In prod, write only prod and regulator ansible keys
+  template:
+    mode: 0644
+    owner: ansible
+    src: ansible-ssh-keys-prod.j2
+    dest: /home/ansible/.ssh/authorized_keys
+  when: "{{ ec2_tag_environment == 'prod' }}"
+
+- name: Grant sudo to ansible
+  lineinfile:
+    dest: /etc/sudoers.d/user_ansible
+    line: 'ansible ALL=NOPASSWD: ALL'
+    state: present
+    create: yes
+    mode: 0440
+
+- name: No TTY for ansible
+  lineinfile:
+    dest: /etc/sudoers.d/user_ansible
+    line: 'Defaults:ansible !requiretty'
+    state: present
+    create: yes
+    mode: 0440
+
+
+#================================================================#
+#                   Sensu Service Account
+#================================================================#
+
+- name: Grant sudo to sensu
+  lineinfile:
+    dest: /etc/sudoers.d/user_sensu
+    line: 'sensu ALL=NOPASSWD: ALL'
+    state: present
+    create: yes
+    mode: 0440
+
+- name: No TTY for sensu
+  lineinfile:
+    dest: /etc/sudoers.d/user_sensu
+    line: 'Defaults:sensu !requiretty'
+    state: present
+    create: yes
+    mode: 0440
+
+#================================================================#
+#                   Root Account
+#================================================================#
+
+- name: Purge authorized_keys for root
+  file:
+    state: absent
+    path: /root/.ssh/authorized_keys
+
+
+
+
+
+
