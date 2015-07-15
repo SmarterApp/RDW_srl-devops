@@ -1,4 +1,13 @@
 
+- name: Ensure standard public repo files are present
+  # Some Amplify AMIs have these absent :(
+  copy:
+    src: "{{ item }}.repo"
+    dest: "/etc/yum.repos.d/{{ item }}.repo"
+  with_items:
+    - CentOS-Base
+    - epel
+
 - name: List enabled repos
   shell: "yum -C repolist enabled | tail -n +3 | grep -v 'repolist:' | cut -d' ' -f1"
   changed_when: false
