@@ -1,5 +1,12 @@
 ---
 - include_vars: reporting-cache-warmer.yml
+- name: Set comparing_populations_precache_filters.json
+  copy:
+    src: comparing_populations_precache_filters.json
+    dest: "{{ cache_json_filter }}"
+  notify:
+    - restart httpd
+
 - name: Configure reporting-cache-warmer 
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart httpd 
@@ -14,5 +21,5 @@
 - name: enable edudl2-report
   service:
     name: edudl2-report
-    state: started
+    state: restarted
     enabled: yes
