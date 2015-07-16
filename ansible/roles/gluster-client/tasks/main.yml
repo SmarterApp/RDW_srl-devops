@@ -30,6 +30,6 @@
     fstype: glusterfs
     name: "{{ item.mount_at }}"
     src: "{{gfs_node1}}:/{{item.volume}}"
-    opts: "noauto"
+    opts: "auto,_netdev"
     state: mounted
   with_items: gluster_mount[ec2_tag_application].mounts
