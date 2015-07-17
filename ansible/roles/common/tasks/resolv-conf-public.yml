@@ -1,0 +1,8 @@
+---
+# Setup resolv.conf on machine
+
+# This task handles running instances.
+- name: Setup resolv.conf to point at local bind server
+  copy:
+    src: resolv-public.conf
+    dest: /etc/resolv.conf
