@@ -12,6 +12,12 @@ def first(arg):
     else:
         return None
 
+# Return a host-unique number that doesn't change often
+# Used for staggering cronjobs
+def stagger_from_mac(mac_addr, limit):
+     last_octet = int('0x' + mac_addr.split(':')[-1], 16)
+     return int((last_octet / 255.0) * limit)
+    
 def srl_hostvars_lookup(hostvars, ip):
     # ip might be None, or missing
     # hostvars is a dict-like object that lies - keys() and get() operate on a different keyset than [ ]
@@ -35,4 +41,5 @@ class FilterModule(object):
             'first': first,
             'instance_id_2_node_id': instance_id_2_node_id,
             'srl_hostvars_lookup': srl_hostvars_lookup,
+            'stagger_from_mac': stagger_from_mac,
         }
