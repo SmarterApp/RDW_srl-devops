@@ -1,4 +1,8 @@
 ---
+- include: resolv-conf.yml
+  when: "{{ 'bind' not in group_names 'nat' not in group_names and 'lz' not in group_names }}"
+- include: resolv-conf-public.yml
+  when: "{{ 'nat' in group_names or 'lz' in group_names }}"
 - include: dns-client.yml
   when: "{{ 'bind' not in group_names }}"
 - include: set-s3-yum-repos.yml
