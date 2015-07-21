@@ -1,1 +1,2 @@
 env: dev
+cache_json_filter: /opt/edware/conf/comparing_populations_precache_filters.json

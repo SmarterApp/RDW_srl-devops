@@ -3,9 +3,17 @@
 #                   UCLA Zenoss Service Account
 #================================================================#
 
-- name: Create zenoss-monitoring user
+# This task is ad-hoc and may be deleted after all old accounts are removed
+- name: Delete mistaken zenoss-monitoring user
   user:
     name: zenoss-monitoring
+    state: absent
+    remove: true
+
+- name: Create zenoss-monitor user
+  user:
+    name: zenoss-monitor
+    state: present
   
 - name: Read UCLA Zenoss key from disk
   sudo: no
@@ -17,7 +25,7 @@
 - name: Install zenoss authorized key
   authorized_key:
     key: "{{ ssh_key_zenoss.stdout }}"
-    user: zenoss-monitoring
+    user: zenoss-monitor
 
 #================================================================#
 #                   UCLA Regulator Service Account
