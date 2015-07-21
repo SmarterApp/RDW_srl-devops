@@ -32,11 +32,12 @@ hpz_download_base_url: https://reportdownload.smarterbalanced.org
 hpz_ignore_certificate: False
 disable_stack_trace: True
 tsb_gpg_public_key: sbac@smarterbalanced.org
+lz_host: "reportingloader.smarterbalanced.org"
 
 # The following are probably not used and need to be cleaned up from smarter.ini
 extract_keyserver_host: NotUsed
 pickup_host: NotUsed
-sftp_remote_lz_host: NotUsed
+sftp_remote_lz_host: "reportingloader.smarterbalanced.org"
 
 #===============================================================#
 #                    COMMON TO ALL ENVS
@@ -83,7 +84,6 @@ migrate_pg_pool_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-
 migrate_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 reporting_rabbit_services_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-services', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 reporting_rabbit_extract_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-rabbit-extract', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-lz_host: "{{ hostvars | srl_hostvars_lookup((groups.get('lz', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 tsb_trigger_host: "{{ hostvars | srl_hostvars_lookup((groups.get('tsb-trigger', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 udl_rabbit_host: "{{ hostvars | srl_hostvars_lookup((groups.get('udl-rabbit', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
