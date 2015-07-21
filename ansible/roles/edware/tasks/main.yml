@@ -15,3 +15,5 @@
     backup: yes
     src: smarter.ini.j2
   register: smarter_ini
+  tags:
+    - ini-files
