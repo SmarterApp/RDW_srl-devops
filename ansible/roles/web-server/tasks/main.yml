@@ -75,11 +75,16 @@
   notify:
     - restart_httpd
 
-
-# {{ httpd_restart_stagger_minute }}
-# {{ httpd_restart_stagger_hour }}
-    
+- name: Determine stagger values for apache restart
+  set_fact:
+    httpd_restart_stagger_minute: "{{ ansible_eth0.macaddress | stagger_from_mac(60) }}"
+    httpd_restart_stagger_hour: "{{ ansible_eth0.macaddress | stagger_from_mac(24) }}"
+  tags:
+    - apache-restarter
+  
 - name: Restart apache every so often
   template:
     src: restart-apache.cron.j2
-    dest: "/etc/cron.d/restart-apache.cron
+    dest: "/etc/cron.d/restart-apache.cron"
+  tags:
+    - apache-restarter
