@@ -1,14 +1,13 @@
 ---
 - name: Upgrade All
-  hosts: all:!ansible
+  hosts: all:!ansible:!nat
   sudo: yes
   tasks:
 
-    - name: yum kernel upgrade
-      yum:
-        name: "kernel*"
-        state: latest
-      register: kernel_changed
+    # ======================#
+    # OS Packages upgrade
+    # ======================#
+    # TODO: address broken ordereddict package
     
     - name: Allow cleanup of a broken egg-info for upgrade
       command: /usr/bin/chattr -i /usr/lib/python2.6/site-packages/ordereddict-1.1-py2.6.egg-info
@@ -17,7 +16,16 @@
       yum:
         name: "*"
         state: latest
-        
+
+    # ======================#
+    # Kernel upgrade
+    # ======================#
+    
+    - name: yum kernel upgrade
+      yum:
+        name: "kernel*"
+        state: latest
+    
     - name: Verify /etc/grub.conf file is a link
       file:
         src: /boot/grub/grub.conf
@@ -29,16 +37,16 @@
         dest: /boot/grub/grub.conf
         regexp: "^default="
         line: "default=0"
-      when: "{{ kernel_changed | changed }}"
+      register: grub_check # This will change if the kernel was upgraded
         
-    - name: reboot
-      command: shutdown -r now "Ansible reboot"
-      async: 0
-      poll: 0
-      ignore_errors: true
-      when: "{{ kernel_changed | changed }}"
+     - name: reboot
+       command: shutdown -r now "Ansible reboot"
+       async: 0
+       poll: 0
+       ignore_errors: true
+       when: "{{ grub_check | changed }}"
       
-    - name: wait for server to come back
-      local_action: wait_for host={{ inventory_hostname }} state=started
-      sudo: false
-      when: "{{ kernel_changed | changed }}"
+     - name: wait for server to come back
+       local_action: wait_for host={{ inventory_hostname }} state=started
+       sudo: false
+       when: "{{ grub_check | changed }}"
