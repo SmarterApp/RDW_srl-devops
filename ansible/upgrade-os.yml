@@ -7,8 +7,6 @@
     # ======================#
     # OS Packages upgrade
     # ======================#
-    # TODO: address broken ordereddict package
-    
     - name: Allow cleanup of a broken egg-info for upgrade
       command: /usr/bin/chattr -i /usr/lib/python2.6/site-packages/ordereddict-1.1-py2.6.egg-info
         
