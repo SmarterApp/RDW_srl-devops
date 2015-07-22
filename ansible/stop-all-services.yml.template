@@ -7,5 +7,6 @@
   vars_files:
     - roles/orchestration/defaults/main.yml
   tasks:
-    - service: "{{ service_by_app['APPNAME'] }}"
-      state: stopped
+    - service:
+        name: "{{ service_by_app['APPNAME'] }}"
+        state: stopped
