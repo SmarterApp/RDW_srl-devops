@@ -1,0 +1,14 @@
+
+shutdown-sequence:
+  - file-grabber
+  - file-trigger
+  - reporting-web
+  - hpz-web
+  - tsb-web
+  # TODO
+  
+service_by_app:
+  reporting-web: httpd
+  tsb-web: httpd
+  hpz-web: httpd
+  # TODO

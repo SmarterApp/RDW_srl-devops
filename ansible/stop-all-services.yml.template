@@ -1,0 +1,11 @@
+
+
+- name: Stop all services on APPNAME
+  hosts: APPNAME
+  gather_facts: false
+  sudo: true
+  vars_files:
+    - roles/orchestration/defaults/main.yml
+  tasks:
+    - service: "{{ service_by_app['APPNAME'] }}"
+      state: stopped
