@@ -37,14 +37,14 @@
         line: "default=0"
       register: grub_check # This will change if the kernel was upgraded
         
-     - name: reboot
-       command: shutdown -r now "Ansible reboot"
-       async: 0
-       poll: 0
-       ignore_errors: true
-       when: "{{ grub_check | changed }}"
+    - name: reboot
+      command: shutdown -r now "Ansible reboot"
+      async: 0
+      poll: 0
+      ignore_errors: true
+      when: "{{ grub_check | changed }}"
       
-     - name: wait for server to come back
-       local_action: wait_for host={{ inventory_hostname }} state=started
-       sudo: false
-       when: "{{ grub_check | changed }}"
+    - name: wait for server to come back
+      local_action: wait_for host={{ inventory_hostname }} state=started
+      sudo: false
+      when: "{{ grub_check | changed }}"
