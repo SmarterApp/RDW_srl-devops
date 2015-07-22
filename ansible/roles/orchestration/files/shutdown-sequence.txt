@@ -10,14 +10,14 @@ reporting-worker-pdf
 reporting-worker-extract
 tsb-worker
 tsb-trigger
-udl-worker
+udl
 migrate-rabbit
 udl-rabbit
 tsb-rabbit
 reporting-rabbit-services
 reporting-rabbit-extract
-reporting-db-pool
-extract-db-pool 
+reporting-db-pgpool
+extract-db-pgpool 
 reporting-db-slave
 extracts-db-slave
 db-master
@@ -26,5 +26,5 @@ hpz-db
 tsb-db
 migrate-db
 stats-db
-memcache
-gluster
+memcached
+gluster-server
