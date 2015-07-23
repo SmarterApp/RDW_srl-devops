@@ -13,11 +13,12 @@
     - slow
 
 - include: logging.yml
+# Make sure service-users is before sudoers, or it can potentially remove ansible's sudo!
+- include: service-users.yml  
 - include: sudoers.yml
 - include: nessus.yml
 - include: sssd.yml 
 - include: resize-root.yml
-- include: service-users.yml
 - include: disable-ad-auth.yml
   when: "{{ec2_tag_environment == 'prod'}}"
 - include: ntp.yml
