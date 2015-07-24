@@ -1,0 +1,13 @@
+
+
+- name: Start all services on APPNAME
+  hosts: APPNAME
+  gather_facts: false
+  sudo: true
+  vars_files:
+    - roles/orchestration/defaults/main.yml
+  tasks:
+    - service:
+        name: "{{ service_by_app['APPNAME'] }}"
+        state: started
+    # TODO: add sleep?

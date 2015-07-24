@@ -1,0 +1,9 @@
+bind
+gluster-server:memcached
+stats-db:migrate-db:tsb-db:hpz-db:udl-db:db-master
+extracts-db-slave:reporting-db-slave
+reporting-db-pgpool:extract-db-pgpool
+udl-rabbit:tsb-rabbit:reporting-rabbit-services:reporting-rabbit-extract
+udl:tsb-trigger:tsb-worker:reporting-worker-extract:reporting-worker-pdf
+reporting-generator-pdf:reporting-cache-warmer:tsb-web:hpz-web:reporting-web:lz
+file-trigger:file-grabber

@@ -1,14 +1,6 @@
 ---
 # Setup DNS client on machine
 
-# This task, in theory, should handle machines that 
-# have restarted, but have not had ansible run since the restart.
-- name: Setup dhclient start hook to write our custom resolve.conf
-  template:
-    src: dhclient-enter-hooks.j2
-    dest: /etc/dhcp/dhclient-enter-hooks
-    mode: 0755
-
 - name: Set local hostname to AWS name tag
   hostname: 
     name: "{{ ec2_tag_Name }}"

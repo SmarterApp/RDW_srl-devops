@@ -1,4 +1,28 @@
-- name: Configure Yum repos
+
+- name: Ensure standard public repo files are present
+  # Some Amplify AMIs have these absent :(
+  copy:
+    src: "{{ item }}.repo"
+    dest: "/etc/yum.repos.d/{{ item }}.repo"
+  with_items:
+    - CentOS-Base
+    - epel
+
+- name: List enabled repos
+  shell: "yum -C repolist enabled | tail -n +3 | grep -v 'repolist:' | cut -d' ' -f1"
+  changed_when: false
+  register: enabled_yum_repos
+
+- name: Enable public CentOS 6 repos
+  shell: "yum-config-manager --enable {{ item }}"
+  when: "{{ not item in enabled_yum_repos.stdout }}"
+  with_items:
+    - updates
+    - base
+    - epel
+    - extras
+
+- name: Configure S3-based Yum repos
   template: 
     src: s3iam.repo.j2 
     dest: /etc/yum.repos.d/s3iam.repo
@@ -7,9 +31,11 @@
   command: yum clean all
   tags:
     - slow
+    - yum_cache
 
 - name: Update Yum cache
   command: yum makecache
   tags:
     - slow
+    - yum_cache
   ignore_errors: yes

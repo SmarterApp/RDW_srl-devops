@@ -1,0 +1,32 @@
+service_by_app:
+  file-grabber: edudl2-file-grabber
+  file-trigger: edudl2-trigger
+  lz: edsftp-watcher
+  reporting-web: httpd
+  hpz-web: httpd
+  tsb-web: httpd
+  reporting-cache-warmer: edudl2-report
+  reporting-generator-pdf: httpd
+  reporting-worker-pdf: celeryd-services
+  reporting-worker-extract: celeryd-edextract
+  tsb-worker: celeryd-smarter_score_batcher
+  tsb-trigger: file-monitor-smarter_score_batcher
+  udl: celeryd-udl2
+  migrate-rabbit: rabbitmq-server
+  udl-rabbit: rabbitmq-server
+  tsb-rabbit: rabbitmq-server
+  reporting-rabbit-services: rabbitmq-server
+  reporting-rabbit-extract: rabbitmq-server
+  reporting-db-pgpool: pgpool-II-92
+  extract-db-pgpool: pgpool-II-92
+  reporting-db-slave: postgresql-9.2
+  extracts-db-slave: postgresql-9.2
+  db-master: postgresql-9.2
+  udl-db: postgresql-9.2
+  hpz-db: postgresql-9.2
+  tsb-db: postgresql-9.2
+  migrate-db: postgresql-9.2
+  stats-db: postgresql-9.2
+  memcached: memcached
+  gluster-server: glusterd # rpcbind as well?
+  

@@ -1,0 +1,9 @@
+---
+- name: Just change CentOS yum repos to be public
+  gather_facts: no
+  hosts: all
+  sudo: yes
+
+  tasks:
+    - include: roles/common/tasks/set-s3-yum-repos.yml
+    
