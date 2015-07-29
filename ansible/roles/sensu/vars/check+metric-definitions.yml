@@ -42,15 +42,6 @@ sensu_checks:
   # ================================================ #
   #                  heartbeats
   # ================================================ #
-  check.lz.heartbeat.sshbanner:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 30
-    command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
-    subscribers: 
-      - heartbeats # == monitoring_topics
-
   lz.heartbeat.sshbanner:
     type: metric
     output_type: nagios_check
@@ -60,15 +51,6 @@ sensu_checks:
       - store_in_carbon
     interval: 30
     command: "/etc/sensu/plugins/check-banner.rb -h {{ lz_host }}"
-    subscribers: 
-      - heartbeats # == monitoring_topics
-
-  check.reportingweb.heartbeat.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ reporting_base_url_host }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -84,15 +66,6 @@ sensu_checks:
     subscribers: 
       - heartbeats # == monitoring_topics
 
-  check.tsbweb.heartbeat.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response-code 200"
-    subscribers: 
-      - heartbeats # == monitoring_topics
-
   tsbweb.heartbeat.simple:
     type: metric
     output_type: nagios_check
@@ -102,15 +75,6 @@ sensu_checks:
       - store_in_carbon
     interval: 30
     command: "/etc/sensu/plugins/check-http.rb -u {{ tsb_base_url_host }}/services/heartbeat --response-code 200"
-    subscribers: 
-      - heartbeats # == monitoring_topics
-
-  check.hpzweb.heartbeat.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 30
-    command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_download_base_url }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
 
@@ -125,55 +89,6 @@ sensu_checks:
     command: "/etc/sensu/plugins/check-http.rb -u {{ hpz_download_base_url }}/services/heartbeat --response-code 200"
     subscribers: 
       - heartbeats # == monitoring_topics
-
-  zones.glusterfs.mount.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 60
-    command: "/usr/bin/sudo /bin/ls /opt/edware/zones"
-    subscribers:
-      - zones_glusterfs
-
-  # ================================================ #
-  #                  glusterfs-related
-  # ================================================ #
-      
-  pdf.glusterfs.mount.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 60
-    command: "/usr/bin/sudo /bin/ls /opt/edware/pdf"
-    subscribers:
-      - pdf_glusterfs
-
-  data.item.glusterfs.mount.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 60
-    command: "/usr/bin/sudo /bin/ls /opt/edware/data/item_level"
-    subscribers:
-      - data_item_glusterfs
-
-  data.raw.glusterfs.mount.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 60
-    command: "/usr/bin/sudo /bin/ls /opt/edware/data/raw_data"
-    subscribers:
-      - data_raw_glusterfs
-
-  hpz.uploads.glusterfs.mount.simple:
-    type: check
-    handlers:
-      - pagerduty
-    interval: 60
-    command: "/usr/bin/sudo /bin/ls /opt/edware/hpz/uploads"
-    subscribers:
-      - hpz_uploads_glusterfs
 
   # ================================================ #
   #                      web-servers
