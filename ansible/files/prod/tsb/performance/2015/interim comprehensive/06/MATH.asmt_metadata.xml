@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testspecification purpose="reporting" publisher="SBAC" publishdate="Dec 17 2014 10:11AM" version="1.0">
+  <identifier uniqueid="(SBAC)SBAC-ICA-FIXED-G6M-COMBINED-Winter-2014-2015" name="SBAC-ICA-FIXED-G6M-COMBINED" label="Grades 3 - 12 MATH" version="6474" />
+  <property name="subject" value="MATH" label="MATH" />
+  <property name="grade" value="10" label="grade 10" />
+  <property name="grade" value="11" label="grade 11" />
+  <property name="grade" value="12" label="grade 12" />
+  <property name="grade" value="3" label="grade 3" />
+  <property name="grade" value="4" label="grade 4" />
+  <property name="grade" value="5" label="grade 5" />
+  <property name="grade" value="6" label="grade 6" />
+  <property name="grade" value="7" label="grade 7" />
+  <property name="grade" value="8" label="grade 8" />
+  <property name="grade" value="9" label="grade 9" />
+  <property name="type" value="interim" label="interim" />
+  <reporting>
+    <testblueprint>
+      <bpelement elementtype="test" minopitems="36" maxopitems="36" minftitems="0" maxftitems="0" opitemcount="36" ftitemcount="0">
+        <identifier uniqueid="(SBAC)SBAC-ICA-FIXED-G6M-COMBINED-Winter-2014-2015" name="SBAC-ICA-FIXED-G6M-COMBINED" version="6474" />
+      </bpelement>
+      <bpelement elementtype="segment" minopitems="9" maxopitems="9" minftitems="0" maxftitems="0" opitemcount="9" ftitemcount="0">
+        <identifier uniqueid="(SBAC)SBAC-ICA-FIXED-G6M-NoCalc-COMBINED-MATH-6-Winter-2014-2015" name="SBAC-ICA-FIXED-G6M-NoCalc-COMBINED-MATH-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="segment" minopitems="21" maxopitems="21" minftitems="0" maxftitems="0" opitemcount="21" ftitemcount="0">
+        <identifier uniqueid="(SBAC)SBAC-ICA-FIXED-G6M-Calc-COMBINED-MATH-6-Winter-2014-2015" name="SBAC-ICA-FIXED-G6M-Calc-COMBINED-MATH-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="segment" minopitems="6" maxopitems="6" minftitems="0" maxftitems="0" opitemcount="6" ftitemcount="0">
+        <identifier uniqueid="(SBAC)SBAC-ICA-FIXED-G6M-Perf-CellPhonePlan-COMBINED-MATH-6-Winter-2014-2015" name="SBAC-ICA-FIXED-G6M-Perf-CellPhonePlan-COMBINED-MATH-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="0" maxopitems="30" opitemcount="19" ftitemcount="0">
+        <identifier uniqueid="SBAC-1" name="1" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1" minopitems="0" maxopitems="60" opitemcount="14" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|P" name="1|P" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|P" minopitems="0" maxopitems="60" opitemcount="6" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|P|TS01" name="1|P|TS01" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|P|TS01" minopitems="0" maxopitems="60" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|P|TS01|E-6" name="1|P|TS01|E-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|P" minopitems="0" maxopitems="60" opitemcount="4" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|P|TS02" name="1|P|TS02" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|P|TS02" minopitems="0" maxopitems="60" opitemcount="4" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|P|TS02|A-6" name="1|P|TS02|A-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|P" minopitems="0" maxopitems="60" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|P|TS03" name="1|P|TS03" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|P|TS03" minopitems="0" maxopitems="60" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|P|TS03|G-6" name="1|P|TS03|G-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1" minopitems="0" maxopitems="60" opitemcount="5" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|S" name="1|S" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|S" minopitems="0" maxopitems="60" opitemcount="5" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|S|TS05" name="1|S|TS05" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|S|TS05" minopitems="0" maxopitems="60" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|S|TS05|H-6" name="1|S|TS05|H-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-1|S|TS05" minopitems="0" maxopitems="60" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-1|S|TS05|J-6" name="1|S|TS05|J-6" version="6474" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="0" maxopitems="34" opitemcount="6" ftitemcount="0">
+        <identifier uniqueid="SBAC-2" name="2" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2" minopitems="0" maxopitems="68" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|EE" name="2|EE" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2|EE" minopitems="0" maxopitems="68" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|EE|NA" name="2|EE|NA" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2|EE|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|EE|NA|A" name="2|EE|NA|A" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2|EE|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|EE|NA|D" name="2|EE|NA|D" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|G" name="2|G" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2|G" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|G|NA" name="2|G|NA" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2|G|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|G|NA|A" name="2|G|NA|A" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2" minopitems="0" maxopitems="68" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|RP" name="2|RP" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2|RP" minopitems="0" maxopitems="68" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|RP|NA" name="2|RP|NA" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-2|RP|NA" minopitems="0" maxopitems="68" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC-2|RP|NA|A" name="2|RP|NA|A" version="6474" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="0" maxopitems="34" opitemcount="8" ftitemcount="0">
+        <identifier uniqueid="SBAC-3" name="3" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3" minopitems="0" maxopitems="68" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|NS" name="3|NS" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|NS" minopitems="0" maxopitems="68" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|NS|NA" name="3|NS|NA" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|NS|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|NS|NA|D" name="3|NS|NA|D" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|NS|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|NS|NA|E" name="3|NS|NA|E" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|NS|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|NS|NA|G" name="3|NS|NA|G" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3" minopitems="0" maxopitems="68" opitemcount="5" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|RP" name="3|RP" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|RP" minopitems="0" maxopitems="68" opitemcount="5" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|RP|NA" name="3|RP|NA" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|RP|NA" minopitems="0" maxopitems="68" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|RP|NA|A" name="3|RP|NA|A" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|RP|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|RP|NA|E" name="3|RP|NA|E" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-3|RP|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-3|RP|NA|G" name="3|RP|NA|G" version="6474" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="0" maxopitems="34" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC-4" name="4" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-4" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-4|NS" name="4|NS" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-4|NS" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-4|NS|NA" name="4|NS|NA" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-4|NS|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-4|NS|NA|C" name="4|NS|NA|C" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-4" minopitems="0" maxopitems="68" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-4|O" name="4|O" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-4|O" minopitems="0" maxopitems="68" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC-4|O|NA" name="4|O|NA" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-4|O|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-4|O|NA|A" name="4|O|NA|A" version="6474" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC-4|O|NA" minopitems="0" maxopitems="68" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC-4|O|NA|F" name="4|O|NA|F" version="6474" />
+      </bpelement>
+    </testblueprint>
+    <performancelevels>
+      <performancelevel bpelementid="(SBAC)SBAC-ICA-FIXED-G6M-COMBINED-Winter-2014-2015" plevel="1" scaledlo="2235" scaledhi="2473" />
+      <performancelevel bpelementid="(SBAC)SBAC-ICA-FIXED-G6M-COMBINED-Winter-2014-2015" plevel="2" scaledlo="2473" scaledhi="2552" />
+      <performancelevel bpelementid="(SBAC)SBAC-ICA-FIXED-G6M-COMBINED-Winter-2014-2015" plevel="3" scaledlo="2552" scaledhi="2610" />
+      <performancelevel bpelementid="(SBAC)SBAC-ICA-FIXED-G6M-COMBINED-Winter-2014-2015" plevel="4" scaledlo="2610" scaledhi="2748" />
+    </performancelevels>
+    <reportingmeasures>
+      <reportingmeasure bpelementid="">
+        <scoretype scorename="StandardizedLogLikelihood" scorelabel="lz" />
+      </reportingmeasure>
+      <reportingmeasure bpelementid="SBAC-1">
+        <scoretype scorename="SBACTheta" scorelabel="ThetaScore" />
+        <scoretype scorename="ItemCountScored" scorelabel="ItemCountScored" />
+        <scoretype scorename="SEBasedPerformanceIndicator" scorelabel="PerformanceLevel" />
+        <scoretype scorename="ItemCount" scorelabel="ItemCount" />
+        <scoretype scorename="ScaleScore" scorelabel="ScaleScore" />
+        <scoretype scorename="RawScore" scorelabel="RawScore" />
+      </reportingmeasure>
+      <reportingmeasure bpelementid="SBAC-3">
+        <scoretype scorename="ScaleScore" scorelabel="ScaleScore" />
+        <scoretype scorename="ItemCount" scorelabel="ItemCount" />
+        <scoretype scorename="ItemCountScored" scorelabel="ItemCountScored" />
+        <scoretype scorename="SEBasedPerformanceIndicator" scorelabel="PerformanceLevel" />
+        <scoretype scorename="SBACTheta" scorelabel="ThetaScore" />
+        <scoretype scorename="RawScore" scorelabel="RawScore" />
+      </reportingmeasure>
+      <reportingmeasure bpelementid="(SBAC)SBAC-ICA-FIXED-G6M-COMBINED-Winter-2014-2015">
+        <scoretype scorename="SBACAttemptedness" scorelabel="Attempted" />
+        <scoretype scorename="SBACTheta" scorelabel="ThetaScore" />
+        <scoretype scorename="ItemCountScored" scorelabel="ItemCountScored" />
+        <scoretype scorename="RawScore" scorelabel="RawScore" />
+        <scoretype scorename="ScaleScore" scorelabel="ScaleScore" />
+        <scoretype scorename="TestPerformanceLevel" scorelabel="PerformanceLevel" />
+        <scoretype scorename="ItemCount" scorelabel="ItemCount" />
+      </reportingmeasure>
+      <reportingmeasure bpelementid="SOCK_2">
+        <scoretype scorename="MultipleStrandItemCountScored" scorelabel="ItemCountScored" />
+        <scoretype scorename="SEBasedPerformanceIndicator" scorelabel="PerformanceLevel" />
+        <scoretype scorename="MultiStrandRawScore" scorelabel="RawScore" />
+        <scoretype scorename="MultipleStrandItemCount" scorelabel="ItemCount" />
+        <scoretype scorename="SBACMultiStrandTheta" scorelabel="ThetaScore" />
+        <scoretype scorename="ScaleScore" scorelabel="ScaleScore" />
+      </reportingmeasure>
+    </reportingmeasures>
+  </reporting>
+</testspecification>
