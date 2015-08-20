@@ -27,6 +27,14 @@
     owner: celery
     group: celery
     mode: 0700
+    
+- name: create run directory for smarter_score_batcher
+  file: 
+    path: /var/run/smarter_score_batcher 
+    state: directory 
+    owner: celery
+    group: celery
+    mode: 0755
 
 - name: move private key to celery directory
   copy: src=files/{{ env }}/tsb_smarterbalanced_org.key dest=/dev/shm/celery/tsb_smarterbalanced_org.key owner=celery group=celery mode=0600
