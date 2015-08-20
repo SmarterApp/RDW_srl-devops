@@ -7,6 +7,14 @@
   notify:
     - restart httpd
 
+- name: create run directory for edudl2-report
+  file: 
+    path: /var/run/edudl2-report 
+    state: directory 
+    owner: udl2
+    group: udl2
+    mode: 0755
+
 - name: Configure reporting-cache-warmer 
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
   notify: restart httpd 
