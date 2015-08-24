@@ -269,7 +269,7 @@
         cidr_ip: "{{ vpc_cidr_block }}"
       - proto: tcp
         from_port: 49152
-        to_port: 49164
+        to_port: 49166
         cidr_ip: "{{ vpc_cidr_block }}"
     rules_egress:
       - proto: tcp
@@ -282,7 +282,7 @@
         cidr_ip: "{{ vpc_cidr_block }}"
       - proto: tcp
         from_port: 49152
-        to_port: 49164
+        to_port: 49166
         cidr_ip: "{{ vpc_cidr_block }}"
       
     purge_rules: true
