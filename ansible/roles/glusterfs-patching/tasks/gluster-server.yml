@@ -7,3 +7,4 @@
     - glusterfs-server
     - glusterfs-fuse
     - nfs-utils
+    - attr
