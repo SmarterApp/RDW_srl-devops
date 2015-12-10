@@ -256,6 +256,18 @@ apps:
       dev: 1
       prod: 1
 
+  - name: db-public
+    ami_app_name: db-master-hvm
+    security_groups:
+      - srl-ssh-intra-vpc
+      - srl-rmq-client # Needed for sensu monitoring
+      - srl-db
+      - srl-logging
+    instance_type: r3.2xlarge
+    spawn_count:
+      dev: 1
+      prod: 1
+
   # TODO: Temp Reorder to get UDL and LZ out first
   - name: lz
     ami_app_name: lz

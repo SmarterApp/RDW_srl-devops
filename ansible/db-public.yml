@@ -1,0 +1,14 @@
+---
+- name: Configure the standalone database postgres server 
+  hosts: db-public
+  user: ansible
+  sudo: yes
+  vars:
+    monitoring_topics:
+      - common 
+
+  roles:
+    - { role: common, tags: ['common']}
+    - { role: db, tags: ['db', 'app'] }
+    - { role: db-public, tags: ['db-public', 'app'] }
+    - { role: sensu, tags: ['sensu', 'monitoring'] }
