@@ -115,11 +115,15 @@ staging_tenants:
 
 public_tenants:
   - name: tx
-    schema_name: public_tx
     state_code: TX
-    edware_db_username: "{{ edware_db_test_air_username }}"
-    edware_db_password: "{{ edware_db_test_air_password }}"
-    edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-public', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    public_schema_name: public_tx
+    public_edware_db_username: "{{ edware_db_test_air_username }}"
+    public_edware_db_password: "{{ edware_db_test_air_password }}"
+    public_edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-public', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    private_schema_name: tx
+    private_edware_db_username: "{{ edware_db_test_air_username }}"
+    private_edware_db_password: "{{ edware_db_test_air_password }}"
+    private_edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
     edware_db_port: 5432
 
 extract_tenants:

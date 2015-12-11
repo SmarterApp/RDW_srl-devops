@@ -40,17 +40,25 @@ edware.db.{{ tenant.name }}.state_code = {{ tenant.state_code }}
 edware.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.edware_db_username }}:{{ tenant.edware_db_password }}@{{ tenant.edware_db_host }}:{{ tenant.edware_db_port | default(9999) }}/edware
 {% endfor %}
 edware.db.echo = False
-# public db
+# public db for reporting-web
 {% for tenant in public_tenants %}
 edware.public.db.{{ tenant.name }}.state_code = {{ tenant.state_code }}
-edware.public.db.{{ tenant.name }}.schema_name = {{ tenant.schema_name }}
-edware.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.edware_db_username }}:{{ tenant.edware_db_password }}@{{ tenant.edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+edware.public.db.{{ tenant.name }}.schema_name = {{ tenant.public_schema_name }}
+edware.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.public_edware_db_username }}:{{ tenant.public_edware_db_password }}@{{ tenant.public_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
 {% endfor %}
 edware.public.secret = {{ public_report_secret }}
 edware.public.db.echo = False
 edware.public.db.max_overflow = 10
 edware.public.db.pool_size = 20
-# end public db
+# end public db for reporting-web
+# public data migration
+{% for tenant in public_tenants %}
+migrate_private.db.{{ tenant.name }}.schema_name = {{ tenant.private_schema_name }}
+migrate_private.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.private_edware_db_username }}:{{ tenant.private_edware_db_password }}@{{ tenant.private_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+migrate_public.db.{{ tenant.name }}.schema_name = {{ tenant.schema_name }}
+migrate_public.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.edware_db_username }}:{{ tenant.edware_db_password }}@{{ tenant.edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+{% endfor %}
+# end public data migration
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
 edware_rep.db.url = postgresql+psycopg2://repmgr@127.0.0.1:5432/edware
 edware_stats.db.schema_name = edware_stats
