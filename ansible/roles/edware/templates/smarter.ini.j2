@@ -55,8 +55,8 @@ edware.public.db.pool_size = 20
 {% for tenant in public_tenants %}
 migrate_private.db.{{ tenant.name }}.schema_name = {{ tenant.private_schema_name }}
 migrate_private.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.private_edware_db_username }}:{{ tenant.private_edware_db_password }}@{{ tenant.private_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
-migrate_public.db.{{ tenant.name }}.schema_name = {{ tenant.schema_name }}
-migrate_public.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.edware_db_username }}:{{ tenant.edware_db_password }}@{{ tenant.edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+migrate_public.db.{{ tenant.name }}.schema_name = {{ tenant.public_schema_name }}
+migrate_public.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.public_edware_db_username }}:{{ tenant.public_edware_db_password }}@{{ tenant.public_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
 {% endfor %}
 # end public data migration
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
