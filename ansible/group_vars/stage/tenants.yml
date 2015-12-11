@@ -113,6 +113,15 @@ staging_tenants:
     staging_db_password: "{{ staging_db_test_air_password }}"
     staging_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 
+public_tenants:
+  - name: tx
+    schema_name: public_tx
+    state_code: TX
+    edware_db_username: "{{ edware_db_test_air_username }}"
+    edware_db_password: "{{ edware_db_test_air_password }}"
+    edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-public', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    edware_db_port: 5432
+
 extract_tenants:
   - name: mt
     schema_name: mt
