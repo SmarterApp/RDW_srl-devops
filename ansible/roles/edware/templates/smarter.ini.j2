@@ -44,7 +44,7 @@ edware.db.echo = False
 {% for tenant in public_tenants %}
 edware.public.db.{{ tenant.name }}.state_code = {{ tenant.state_code }}
 edware.public.db.{{ tenant.name }}.schema_name = {{ tenant.public_schema_name }}
-edware.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.public_edware_db_username }}:{{ tenant.public_edware_db_password }}@{{ tenant.public_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+edware.public.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.public_edware_db_username }}:{{ tenant.public_edware_db_password }}@{{ tenant.public_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
 {% endfor %}
 edware.public.secret = {{ public_report_secret }}
 edware.public.db.echo = False
