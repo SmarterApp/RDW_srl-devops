@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<EntityDescriptor entityID="https://sso.smarterbalanced.org:443/auth" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+<EntityDescriptor entityID="https://sso-amptest.smarterbalanced.org:443/auth" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
         <KeyDescriptor use="signing">
             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -25,21 +25,21 @@ w2C/eI66CPQ9XZL0tGG2YAh8KmI4gkCGqeh3l1TLrEQoacBheIFoQg2wDiMFbp49DlNw1Q==
                 </ds:X509Data>
             </ds:KeyInfo>
         </KeyDescriptor>
-        <ArtifactResolutionService index="0" isDefault="true" Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso.smarterbalanced.org:443/auth/ArtifactResolver/metaAlias/sbac/idp"/>
-        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sso.smarterbalanced.org:443/auth/IDPSloRedirect/metaAlias/sbac/idp" ResponseLocation="https://sso.smarterbalanced.org:443/auth/IDPSloRedirect/metaAlias/sbac/idp"/>
-        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sso.smarterbalanced.org:443/auth/IDPSloPOST/metaAlias/sbac/idp" ResponseLocation="https://sso.smarterbalanced.org:443/auth/IDPSloPOST/metaAlias/sbac/idp"/>
-        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso.smarterbalanced.org:443/auth/IDPSloSoap/metaAlias/sbac/idp"/>
-        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sso.smarterbalanced.org:443/auth/IDPMniRedirect/metaAlias/sbac/idp" ResponseLocation="https://sso.smarterbalanced.org:443/auth/IDPMniRedirect/metaAlias/sbac/idp"/>
-        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sso.smarterbalanced.org:443/auth/IDPMniPOST/metaAlias/sbac/idp" ResponseLocation="https://sso.smarterbalanced.org:443/auth/IDPMniPOST/metaAlias/sbac/idp"/>
-        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso.smarterbalanced.org:443/auth/IDPMniSoap/metaAlias/sbac/idp"/>
+        <ArtifactResolutionService index="0" isDefault="true" Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso-amptest.smarterbalanced.org:443/auth/ArtifactResolver/metaAlias/sbac/idp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sso-amptest.smarterbalanced.org:443/auth/IDPSloRedirect/metaAlias/sbac/idp" ResponseLocation="https://sso-amptest.smarterbalanced.org:443/auth/IDPSloRedirect/metaAlias/sbac/idp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sso-amptest.smarterbalanced.org:443/auth/IDPSloPOST/metaAlias/sbac/idp" ResponseLocation="https://sso-amptest.smarterbalanced.org:443/auth/IDPSloPOST/metaAlias/sbac/idp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso-amptest.smarterbalanced.org:443/auth/IDPSloSoap/metaAlias/sbac/idp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sso-amptest.smarterbalanced.org:443/auth/IDPMniRedirect/metaAlias/sbac/idp" ResponseLocation="https://sso-amptest.smarterbalanced.org:443/auth/IDPMniRedirect/metaAlias/sbac/idp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sso-amptest.smarterbalanced.org:443/auth/IDPMniPOST/metaAlias/sbac/idp" ResponseLocation="https://sso-amptest.smarterbalanced.org:443/auth/IDPMniPOST/metaAlias/sbac/idp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso-amptest.smarterbalanced.org:443/auth/IDPMniSoap/metaAlias/sbac/idp"/>
         <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
         <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
         <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
-        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sso.smarterbalanced.org:443/auth/SSORedirect/metaAlias/sbac/idp"/>
-        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sso.smarterbalanced.org:443/auth/SSOPOST/metaAlias/sbac/idp"/>
-        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso.smarterbalanced.org:443/auth/SSOSoap/metaAlias/sbac/idp"/>
-        <NameIDMappingService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso.smarterbalanced.org:443/auth/NIMSoap/metaAlias/sbac/idp"/>
-        <AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso.smarterbalanced.org:443/auth/AIDReqSoap/IDPRole/metaAlias/sbac/idp"/>
-        <AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://sso.smarterbalanced.org:443/auth/AIDReqUri/IDPRole/metaAlias/sbac/idp"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sso-amptest.smarterbalanced.org:443/auth/SSORedirect/metaAlias/sbac/idp"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sso-amptest.smarterbalanced.org:443/auth/SSOPOST/metaAlias/sbac/idp"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso-amptest.smarterbalanced.org:443/auth/SSOSoap/metaAlias/sbac/idp"/>
+        <NameIDMappingService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso-amptest.smarterbalanced.org:443/auth/NIMSoap/metaAlias/sbac/idp"/>
+        <AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sso-amptest.smarterbalanced.org:443/auth/AIDReqSoap/IDPRole/metaAlias/sbac/idp"/>
+        <AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://sso-amptest.smarterbalanced.org:443/auth/AIDReqUri/IDPRole/metaAlias/sbac/idp"/>
     </IDPSSODescriptor>
 </EntityDescriptor>

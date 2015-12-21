@@ -29,11 +29,11 @@ auth_oauth2_identity_parser: "smarter_common.security.sbac_live_identity_parser.
 sso_oauth_verify_url: "https://sso-amptest.smarterbalanced.org/auth/oauth2/access_token?realm=/sbac"
 auth_saml_identity_parser: "smarter_common.security.sbac_live_identity_parser.SbacIdentityParser"
 auth_policy_secure: False
-sso_saml_login_url: "https://sso-amptest.smarterbalanced.org:443/auth/SSORedirect/metaAlias/sbac/idp"
-sso_saml_logout_url: "https://sso-amptest.smarterbalanced.org:443/auth/IDPSloRedirect/metaAlias/sbac/idp"
+sso_saml_login_url: "https://sso-amptest.smarterbalanced.org/auth/SSORedirect/metaAlias/sbac/idp"
+sso_saml_logout_url: "https://sso-amptest.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/sbac/idp"
 sso_saml_issuer_name: https://reporting-demoreporting.smarterbalanced.org
 hpz_sso_saml_issuer_name: https://reportdownload.demoreporting.smarterbalanced.org
-sso_saml_name_qualifier: "https://sso-amptest.smarterbalanced.org:443/auth"
+sso_saml_name_qualifier: "https://sso-amptest.smarterbalanced.org/auth"
 tsb_gpg_public_key: sbac@smarterbalanced.org
 disable_stack_trace: False
 
