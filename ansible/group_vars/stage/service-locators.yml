@@ -33,7 +33,7 @@ sso_saml_login_url: "https://sso-amptest.smarterbalanced.org/auth/SSORedirect/me
 sso_saml_logout_url: "https://sso-amptest.smarterbalanced.org/auth/IDPSloRedirect/metaAlias/sbac/idp"
 sso_saml_issuer_name: https://reporting-demoreporting.smarterbalanced.org
 hpz_sso_saml_issuer_name: https://reportdownload.demoreporting.smarterbalanced.org
-sso_saml_name_qualifier: "https://sso-amptest.smarterbalanced.org/auth"
+sso_saml_name_qualifier: "https://sso-amptest.smarterbalanced.org:443/auth"
 tsb_gpg_public_key: sbac@smarterbalanced.org
 disable_stack_trace: False
 
