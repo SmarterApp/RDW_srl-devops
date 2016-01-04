@@ -464,6 +464,9 @@ iam_roles:
   db-master_role:
     - yum_read_pol
     - sensu_ssl_read_pol
+  db-public_role:
+    - yum_read_pol
+    - sensu_ssl_read_pol
   lz_role:
     - yum_read_pol
     - sensu_ssl_read_pol

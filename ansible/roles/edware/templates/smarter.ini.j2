@@ -28,7 +28,9 @@ cache.public.filtered_data.expire = 15552000
 cache.public.filtered_data.url = {{ cache_hosts }}
 cache.public.shortlived.expire = 7776000
 cache.public.shortlived.url = {{ cache_hosts }}
-cache.regions = public.data, public.filtered_data, public.shortlived, session
+cache.public.very_shortlived.expire = 1800
+cache.public.very_shortlived.url = {{ cache_hosts }}
+cache.regions = public.data, public.filtered_data, public.shortlived, session, public.very_shortlived
 cache.session.expire = {{ cache_session_expire | default("1200") }}
 cache.session.url = {{ cache_hosts }}
 cache.type = ext:memcached
@@ -40,6 +42,27 @@ edware.db.{{ tenant.name }}.state_code = {{ tenant.state_code }}
 edware.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.edware_db_username }}:{{ tenant.edware_db_password }}@{{ tenant.edware_db_host }}:{{ tenant.edware_db_port | default(9999) }}/edware
 {% endfor %}
 edware.db.echo = False
+# public db for reporting-web
+{% for tenant in public_tenants %}
+edware.public.db.{{ tenant.name }}.state_code = {{ tenant.state_code }}
+edware.public.db.{{ tenant.name }}.schema_name = {{ tenant.public_schema_name }}
+edware.public.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.public_edware_db_username }}:{{ tenant.public_edware_db_password }}@{{ tenant.public_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+{% endfor %}
+edware.public.secret = {{ public_report_secret }}
+edware.public.db.echo = False
+edware.public.db.max_overflow = 10
+edware.public.db.pool_size = 20
+# end public db for reporting-web
+# public data migration
+{% for tenant in public_tenants %}
+migrate_private.db.{{ tenant.name }}.schema_name = {{ tenant.private_schema_name }}
+migrate_private.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.private_edware_db_username }}:{{ tenant.private_edware_db_password }}@{{ tenant.private_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+migrate_public.db.{{ tenant.name }}.schema_name = {{ tenant.public_schema_name }}
+migrate_public.db.{{ tenant.name }}.url = postgresql+psycopg2://{{ tenant.public_edware_db_username }}:{{ tenant.public_edware_db_password }}@{{ tenant.public_edware_db_host }}:{{ tenant.edware_db_port | default(5432) }}/edware
+{% endfor %}
+migrate_public.schedule.cron.day_of_week = 6
+migrate_public.recache.filter.file = /opt/edware/conf/comparing_populations_precache_filters.json
+# end public data migration
 edware_rep.db.schema_name = repmgr_edware_pg_cluster
 edware_rep.db.url = postgresql+psycopg2://repmgr@127.0.0.1:5432/edware
 edware_stats.db.schema_name = edware_stats
