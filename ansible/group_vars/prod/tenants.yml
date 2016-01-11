@@ -42,6 +42,17 @@ public_tenants:
     private_edware_db_password: "{{ edware_db_ca_username }}"
     private_edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
     edware_db_port: 5432
+  - name: ot
+    state_code: OT
+    public_schema_name: public_ot
+    public_edware_db_username: "{{ edware_db_ca_username }}"
+    public_edware_db_password: "{{ edware_db_ca_username }}"
+    public_edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-public', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    private_schema_name: ot
+    private_edware_db_username: "{{ edware_db_ca_username }}"
+    private_edware_db_password: "{{ edware_db_ca_username }}"
+    private_edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    edware_db_port: 5432
 
 extract_tenants:
   - name: ca
