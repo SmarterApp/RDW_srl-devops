@@ -17,8 +17,8 @@ service_by_app:
   tsb-rabbit: rabbitmq-server
   reporting-rabbit-services: rabbitmq-server
   reporting-rabbit-extract: rabbitmq-server
-  reporting-db-pgpool: pgpool-II-92
-  extract-db-pgpool: pgpool-II-92
+  reporting-db-pgpool: pgpool
+  extract-db-pgpool: pgpool
   reporting-db-slave: postgresql-9.2
   extracts-db-slave: postgresql-9.2
   db-master: postgresql-9.2
