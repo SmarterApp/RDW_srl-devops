@@ -1,5 +1,5 @@
 ---
-- name: Stop PgPool 
+- name: Stop PgPool
   service: name=pgpool state=stopped enabled=yes
 
 - name: Template pgpool.conf
@@ -19,9 +19,9 @@
 
 - name: create pool_passwd file
   shell: /usr/bin/pg_md5 -u {{ item.edware_db_username }} -m {{ item.edware_db_password }}
-  with_dict: tenants
+  with_items: tenants
 
-- name: Start PgPool 
+- name: Start PgPool
   service: name=pgpool state=started enabled=yes
 
 - name: install pgpool_monitor.sh
