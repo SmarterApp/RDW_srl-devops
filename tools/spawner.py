@@ -1,17 +1,17 @@
 #!/usr/bin/python
 
-import boto.ec2
-import boto.vpc
-from optparse import OptionParser
+import time
 import logging
 import yaml
 import os
-import os.path
-from subprocess import Popen, PIPE
-import time
-from distutils.version import LooseVersion
 
-#import pdb; pdb.set_trace()
+from subprocess import Popen, PIPE
+from distutils.version import LooseVersion
+from optparse import OptionParser
+
+import boto.ec2
+import boto.vpc
+
 
 def main():
     opts = read_cli_opts()
@@ -27,13 +27,15 @@ def main():
 #                     Functions
 #=========================================================#
 
+
 def backtick(cmd):
     output = Popen(cmd, stdout=PIPE, shell=True).communicate()[0].rstrip()
     return output
 
+
 def get_aws_creds():
     if os.environ.get('AWS_ACCESS_KEY_ID') and os.environ.get('AWS_SECRET_ACCESS_KEY'):
-        return (os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY'))
+        return os.environ.get('AWS_ACCESS_KEY_ID'), os.environ.get('AWS_SECRET_ACCESS_KEY')
     else:        
         logging.debug("reading AWS creds from password store")
         if not os.environ.get('SBAC_ENV').endswith('spinup'):
@@ -42,22 +44,24 @@ def get_aws_creds():
 
         access_id = backtick('pass $SBAC_ENV/aws/access_id')
         secret_key = backtick('pass $SBAC_ENV/aws/secret_key')
-        return (access_id, secret_key)
+        return access_id, secret_key
+
 
 def connect_to_ec2(opts, cfg):
     (access_id, secret_key) = get_aws_creds()
     conn = boto.ec2.connect_to_region(cfg['region'],
-        aws_access_key_id=access_id,
-        aws_secret_access_key=secret_key
-    )
+                                      aws_access_key_id=access_id,
+                                      aws_secret_access_key=secret_key)
     logging.info("connected to AWS EC2 OK")
     return conn
+
 
 def connect_to_vpc(opts, cfg):
     (access_id, secret_key) = get_aws_creds()
     vpc_conn = boto.vpc.VPCConnection(aws_access_key_id=access_id, aws_secret_access_key=secret_key)
     logging.info("connected to AWS VPC OK")
     return vpc_conn
+
 
 def read_cli_opts():
     parser = OptionParser()
@@ -90,15 +94,17 @@ def read_cli_opts():
     else:
         logging.basicConfig(level=logging.INFO)
         
-    if options.app == None:
+    if options.app is None:
         logging.error("Must specify an app to spawn with -a.  See -h for more help.")
         exit(1)
     return options
+
 
 def read_config_file(opts):
     logging.info("Reading config file from ./spawner.yaml")
     cfg = yaml.load(open("./spawner.yaml", 'r'))
     return cfg
+
 
 def run_ansible(opts, hints):
     if not opts.run_ansible:
@@ -122,8 +128,10 @@ def run_ansible(opts, hints):
     playbook_name = opts.playbook if opts.playbook else opts.app
     cmd = []
     cmd.append("ansible-playbook")
-    cmd.append('-e'); cmd.append('spawner_env=' + opts.env)
-    cmd.append('-l'); cmd.append(':'.join(hints['ips'].values())) # Limit to newly-created instances
+    cmd.append('-e')
+    cmd.append('spawner_env=' + opts.env)
+    cmd.append('-l')
+    cmd.append(':'.join(hints['ips'].values())) # Limit to newly-created instances
     cmd.append(playbook_name + '.yml')
 
     logging.info("Running ansible as: {0}".format(' '.join(cmd)))
@@ -148,30 +156,32 @@ def spawn(hints, ec2):
                                                                             groups=hints['security_group_ids'],
                                                                             associate_public_ip_address=True)
         interfaces = boto.ec2.networkinterface.NetworkInterfaceCollection(interface)
-        reservation = ec2.run_instances(hints['ami_id'],
-                                instance_type = hints['instance_type'],
-                                network_interfaces=interfaces,
-                                instance_profile_name = instance_profile,
-                                )
+        reservation = ec2.run_instances(
+            hints['ami_id'],
+            instance_type = hints['instance_type'],
+            network_interfaces=interfaces,
+            instance_profile_name = instance_profile
+        )
     else:                
-        reservation = ec2.run_instances(hints['ami_id'],
-                                        min_count = hints['count'],
-                                        max_count = hints['count'],
-                                        instance_type = hints['instance_type'],
-                                        subnet_id = hints['subnet_id'],
-                                        security_group_ids = hints['security_group_ids'],
-                                        instance_profile_name = instance_profile,
-                                    )
+        reservation = ec2.run_instances(
+            hints['ami_id'],
+            min_count = hints['count'],
+            max_count = hints['count'],
+            instance_type = hints['instance_type'],
+            subnet_id = hints['subnet_id'],
+            security_group_ids = hints['security_group_ids'],
+            instance_profile_name = instance_profile,
+        )
 
     # Sleep a little bit.
     logging.info("Launch request sent.  Waiting for instances to be created...")
     time.sleep(5)
     reservation_id = reservation.id
     sentinel = 0
-    while len(reservation.instances) != hints['count'] or [ i for i in reservation.instances if i.private_ip_address == None ]:
+    while len(reservation.instances) != hints['count'] or [i for i in reservation.instances if i.private_ip_address is None]:
         print '.'
         time.sleep(2)
-        sentinel = sentinel + 1
+        sentinel += 1
         if sentinel > 30:
             logging.error("Giving up!")
             exit(11)            
@@ -189,7 +199,6 @@ def spawn(hints, ec2):
         hints['ips'][hints['names'][idx]] = instance.private_ip_address
 
 
-        
 def validate_request(opts, cfg, ec2_conn, vpc_conn):
     logging.info("Gathering info about your spawn request....")
 
@@ -215,7 +224,7 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
     # TODO: consider examining DNS instead of / in addition to the AWS tags
     logging.debug("Generating names and checking for collisions")
     instance_tags = ec2_conn.get_all_tags({'resource-type':'instance'})
-    existing_names = sorted([t.value for t in instance_tags if t.name == 'Name' and t.value.startswith('srl-' +  opts.app)])
+    existing_names = sorted([t.value for t in instance_tags if t.name == 'Name' and t.value.startswith('srl-' + opts.app)])
 
     new_start = opts.begin if opts.begin else 1
     hints['names'] = ["srl-{0}-{1}".format(opts.app, str(i).zfill(3)) for i in range(new_start, opts.count + new_start)]
@@ -296,14 +305,13 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
             logging.error("Could not find a unique security group {0} in vpc {1} - you shall not pass.".format(sgn, hints['vpc_id']))
             exit(5)
 
-        
     #------
     # Locate subnet within VPC using 'Tier' tag
     #------
     subnet_type = 'private' if not app_cfg.get('subnet_type') else app_cfg['subnet_type']
     subnets = vpc_conn.get_all_subnets()
     subnets = [s for s in subnets if s.vpc_id == hints['vpc_id']]
-    subnets = [s for s in subnets if str(s.tags.get('Tier')).lower() == subnet_type.lower() ]
+    subnets = [s for s in subnets if str(s.tags.get('Tier')).lower() == subnet_type.lower()]
 
     if len(subnets) < 1 or len(subnets) > 1:
         logging.error("Could not find a unique Subnet tagged for the {0} tier in VPC {1} - you shall not pass.".format(subnet_type, hints['vpc_id']))
@@ -317,7 +325,6 @@ def validate_request(opts, cfg, ec2_conn, vpc_conn):
         logging.error("Refusing to assign public IPs to a multi-instance request, because that is hard.")
         exit(9)
     hints['public_ip'] = app_cfg.get('public_ip')
-        
 
     if opts.run_ansible:
         playbook_name = opts.playbook if opts.playbook else opts.app
