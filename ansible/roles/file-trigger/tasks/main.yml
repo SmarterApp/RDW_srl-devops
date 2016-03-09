@@ -6,3 +6,6 @@
 - name: Configure file-trigger udl
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
   notify: restart edudl2-trigger
+
+- name: Ensure edudl2-trigger is running
+  service: name=edudl2-trigger state=started enabled=yes

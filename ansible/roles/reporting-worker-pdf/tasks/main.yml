@@ -6,3 +6,6 @@
     name: celeryd-services
     state: restarted
   when: smarter_ini|changed
+
+- name: Ensure celeryd-services is running
+  service: name=celeryd-services state=started enabled=yes

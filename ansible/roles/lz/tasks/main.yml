@@ -1,9 +1,13 @@
 ---
-- name: Configure lz 
+- name: Configure lz
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
+  notify: restart edsftp-watcher
 
 - name: Add authorized key
   authorized_key: user=root
                   key="{{ item }}"
   with_file:
     - files/{{ ec2_tag_environment }}/file-grabber-ssh.pub
+
+- name: Ensure edsftp-watcher is running
+  service: name=edsftp-watcher state=started enabled=yes

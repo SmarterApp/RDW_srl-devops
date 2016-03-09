@@ -1,7 +1,10 @@
 ---
-- name: Configure file-grabber 
+- name: Configure file-grabber
   template: src=roles/edware/templates/smarter.ini.j2 dest=/opt/edware/conf/smarter.ini
-  notify: restart edudl2-file-grabber 
+  notify: restart edudl2-file-grabber
+
+- name: Ensure edudl2-file-grabber is running
+  service: name=edudl2-file-grabber state=started enabled=yes
 
 - name: Install postgres rpm
   yum: name=postgresql92-server state=present

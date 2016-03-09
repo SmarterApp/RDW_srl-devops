@@ -28,7 +28,10 @@
 
 - name: Configure tsb-worker
   template: src=roles/edware/templates/smarter_score_batcher.ini.j2 dest=/opt/edware/conf/smarter_score_batcher.ini
-  notify: restart celeryd-smarter_score_batcher 
+  notify: restart celeryd-smarter_score_batcher
+
+- name: Ensure tsb-worker (celeryd-smarter_score_batcher) is running
+  service: name=celeryd-smarter_score_batcher state=started enabled=yes
 
 - name: copy asmt_type mapping file
   copy:
