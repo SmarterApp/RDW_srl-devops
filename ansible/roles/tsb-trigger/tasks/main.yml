@@ -4,6 +4,9 @@
   template: src=roles/edware/templates/smarter_score_batcher.ini.j2 dest=/opt/edware/conf/smarter_score_batcher.ini
   notify: restart file-monitor-smarter_score_batcher
 
+- name: Ensure file-monitor-smarter_score_batcher is running
+  service: name=file-monitor-smarter_score_batcher state=started enabled=yes
+
 - name: create gpg directory
   file: 
     path: /dev/shm/celery/gpg 

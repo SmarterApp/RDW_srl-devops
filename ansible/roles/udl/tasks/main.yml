@@ -3,11 +3,8 @@
   yum: name=edudl2 state=latest
   notify: Restart edudl2
 
-- name: enable celeryd-udl2
-  service:
-    name: celeryd-udl2
-    state: started
-    enabled: yes
+- name: Ensure celeryd-udl2 is running
+  service: name=celeryd-udl2 state=started enabled=yes
 
 - name: Configure udl 
   template: src=roles/edware/templates/udl2_conf.ini.j2 dest=/opt/edware/conf/udl2_conf.ini
