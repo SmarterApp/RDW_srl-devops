@@ -168,7 +168,7 @@ pdf.report_base_dir = /opt/edware/pdf
 pdf.retries_allowed = 3
 pdf.retry_delay = 0
 pdf.single_generate.queue = single_pdf_gen
-pdf.wkhtmltopdf.javascript_delay = 15000
+pdf.wkhtmltopdf.javascript_delay = 120000
 {% for tenant in tenants %}
 pickup.gatekeeper.{{ tenant.name }} = kswimberly
 {% endfor %}
