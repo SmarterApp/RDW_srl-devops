@@ -48,6 +48,13 @@ tenants:
     edware_db_password: "{{ edware_db_test_air_password }}"
     edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
     edware_db_port: 9999
+  - name: ap
+    schema_name: ap
+    state_code: AP
+    edware_db_username: "{{ edware_db_test_air_username }}"
+    edware_db_password: "{{ edware_db_test_air_password }}"
+    edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    edware_db_port: 9999
 
 migrate_tenants:
   - name: mt
@@ -90,6 +97,14 @@ migrate_tenants:
     migrate_source_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
     migrate_source_db_username: "{{ migrate_source_db_test_air_username }}"
     migrate_source_db_password: "{{ migrate_source_db_test_air_password }}"
+  - name: ap
+    schema_name: ap
+    migrate_dest_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    migrate_dest_db_username: "{{ migrate_dest_db_test_air_username }}"
+    migrate_dest_db_password: "{{ migrate_dest_db_test_air_password }}"
+    migrate_source_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    migrate_source_db_username: "{{ migrate_source_db_test_air_username }}"
+    migrate_source_db_password: "{{ migrate_source_db_test_air_password }}"
 
 staging_tenants:
   - name: mt
@@ -109,6 +124,10 @@ staging_tenants:
     staging_db_password: "{{ staging_db_test_air_password }}"
     staging_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
   - name: tx
+    staging_db_username: "{{ staging_db_test_air_username }}"
+    staging_db_password: "{{ staging_db_test_air_password }}"
+    staging_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+  - name: ap
     staging_db_username: "{{ staging_db_test_air_username }}"
     staging_db_password: "{{ staging_db_test_air_password }}"
     staging_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
@@ -172,6 +191,13 @@ extract_tenants:
   - name: tx
     schema_name: es
     state_code: TX
+    edware_db_username: "{{ edware_extract_db_test_air_username }}"
+    edware_db_password: "{{ edware_extract_db_test_air_password }}"
+    edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
+    edware_db_port: 9999
+  - name: ap
+    schema_name: ap
+    state_code: AP
     edware_db_username: "{{ edware_extract_db_test_air_username }}"
     edware_db_password: "{{ edware_extract_db_test_air_password }}"
     edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
