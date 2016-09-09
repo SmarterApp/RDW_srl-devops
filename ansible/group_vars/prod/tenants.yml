@@ -16,8 +16,8 @@ tenants:
   - name: ap
     schema_name: ap
     state_code: AP
-    edware_db_username: "{{ edware_db_ap_username }}"
-    edware_db_password: "{{ edware_db_ap_password }}"
+    edware_db_username: "{{ edware_db_ca_username }}"
+    edware_db_password: "{{ edware_db_ca_password }}"
     edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('reporting-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
     edware_db_port: 9999
 
@@ -33,11 +33,11 @@ migrate_tenants:
   - name: ap
     schema_name: ap
     migrate_dest_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('db-master', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-    migrate_dest_db_username: "{{ migrate_dest_db_ap_username }}"
-    migrate_dest_db_password: "{{ migrate_dest_db_ap_password }}"
+    migrate_dest_db_username: "{{ migrate_dest_db_ca_username }}"
+    migrate_dest_db_password: "{{ migrate_dest_db_ca_password }}"
     migrate_source_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
-    migrate_source_db_username: "{{ migrate_source_db_ap_username }}"
-    migrate_source_db_password: "{{ migrate_source_db_ap_password }}"
+    migrate_source_db_username: "{{ migrate_source_db_ca_username }}"
+    migrate_source_db_password: "{{ migrate_source_db_ca_password }}"
 
 staging_tenants:
   - name: ca
@@ -45,8 +45,8 @@ staging_tenants:
     staging_db_password: "{{ staging_db_ca_password }}"
     staging_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
   - name: ap
-    staging_db_username: "{{ staging_db_ap_username }}"
-    staging_db_password: "{{ staging_db_ap_password }}"
+    staging_db_username: "{{ staging_db_ca_username }}"
+    staging_db_password: "{{ staging_db_ca_password }}"
     staging_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('migrate-db', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
 
 public_tenants:
@@ -85,7 +85,7 @@ extract_tenants:
   - name: ap
     schema_name: ap
     state_code: AP
-    edware_db_username: "{{ edware_extract_db_ap_username }}"
-    edware_db_password: "{{ edware_extract_db_ap_password }}"
+    edware_db_username: "{{ edware_extract_db_ca_username }}"
+    edware_db_password: "{{ edware_extract_db_ca_password }}"
     edware_db_host: "{{ hostvars | srl_hostvars_lookup((groups.get('extracts-db-pgpool', []) | intersect(locals) | first))['ec2_tag_Name'] }}.{{ domain }}"
     edware_db_port: 9999
