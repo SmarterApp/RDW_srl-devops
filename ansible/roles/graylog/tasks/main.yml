@@ -1,0 +1,23 @@
+- name: Install EPEL
+  yum: name=epel-release state=present
+
+- name: Copy MongoDB Repo
+  copy: src=MongoDB.repo dest=/etc/yum.repos.d/MongoDB.repo
+  
+- name: Install MongoDB
+  yum: name=mongodb-org state=present
+
+- name: Start MongoDB  
+  service: name=mongod state=started enabled=yes
+
+- name: Copy ElasticSearch Repo
+  copy: src=ElasticSearch.repo dest=/etc/yum.repos.d/ElasticSearch.repo
+  
+- name: Copy ElasticSearch GPG
+  copy: src=GPG-KEY-elasticsearch dest=/etc/pki/rpm-gpg
+
+- name: Install ElasticSearch
+  yum: name=elasticsearch state=present
+
+  
+
